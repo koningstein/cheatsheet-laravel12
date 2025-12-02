@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M1.1: Model & Migration - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="../../index.html">« Overzicht</a>
+            <a href="../module2/m2-1.html">Module 2 »</a>
+        </div>
+        <div class="nav-group theme-switcher">
+            <label for="theme-switcher">Thema: </label>
+            <select id="theme-switcher">
+                <option value="blue">Blauw (Standaard)</option>
+                <option value="purple">Paars</option>
+                <option value="red">Rood</option>
+                <option value="orange">Oranje</option>
+                <option value="teal">Turquoise</option>
+                <option value="darkblue">Donkerblauw</option>
+                <option value="green">Groen</option>
+                <option value="material-dark">Dark (Material)</option>
+                <option value="monokai-pro">Dark (Monokai Pro)</option>
+                <option value="night-owl">Dark (Night Owl)</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 1: Basis CRUD</h1>
+            <p>De fundering: Database opzet, Models en een complete CRUD voor één tabel.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m1-1.html" class="active">M1.1: Model & Migration</a></li>
+                <li><a href="m1-2.html">M1.2: Factory & Seed</a></li>
+                <li><a href="m1-3.html">M1.3: Layouts & Tailwind</a></li>
+                <li><a href="m1-4.html">M1.4: Controller Index</a></li>
+                <li><a href="m1-5.html">M1.5: Create & Store</a></li>
+                <li><a href="m1-6.html">M1.6: Validatie & Flash</a></li>
+                <li><a href="m1-7.html">M1.7: Detail (Show)</a></li>
+                <li><a href="m1-8.html">M1.8: Edit & Update</a></li>
+                <li><a href="m1-9.html">M1.9: Delete & Destroy</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M1.1: Model & Migration</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan een model aanmaken met een Artisan commando.</li>
+            <li>Ik kan een migration aanmaken met een Artisan commando.</li>
+            <li>Ik kan kolommen toevoegen aan een migration.</li>
+            <li>Ik kan migrations uitvoeren.</li>
+        </ul>
+
+        <h3>1. Het Concept: MVC & Data</h3>
+        <p>Laravel werkt volgens het MVC-principe. De <strong>Model</strong> is verantwoordelijk voor alle data-interactie. Elke tabel in je database heeft een eigen Model.</p>
+
+        <div class="note-box">
+            <strong>Naming Conventions:</strong>
+            <ul>
+                <li><strong>Model:</strong> Enkelvoud, PascalCase (bijv. <code>Category</code>)</li>
+                <li><strong>Tabel:</strong> Meervoud, snake_case (bijv. <code>categories</code>)</li>
+            </ul>
+        </div>
+
+        <h3>2. Aanmaken met Artisan</h3>
+        <p>We maken een Model en Migration tegelijk met de <code>-m</code> vlag. In dit voorbeeld maken we een <strong>Category</strong>.</p>
+
+        <pre><code class="language-bash">
+php artisan make:model Category -m
+        </code></pre>
+
+        <h3>3. Migratie Bewerken</h3>
+        <p>In <code>database/migrations/</code> vind je nu een bestand. Hier definiëren we de kolommen. Standaard is <code>id()</code> en <code>timestamps()</code> aanwezig. We voegen een <code>name</code> toe.</p>
+
+        <pre><code class="language-php">
+public function up(): void
+{
+    Schema::create('categories', function (Blueprint $table) {
+        $table->id();
+
+        // Voeg hier je eigen kolommen toe
+        $table->string('name', 75); // Varchar(75)
+
+        $table->timestamps();
+    });
+}
+        </code></pre>
+
+        <h3>4. Uitvoeren</h3>
+        <p>Om de tabel daadwerkelijk in de database te zetten:</p>
+        <pre><code class="language-bash">php artisan migrate</code></pre>
+
+        <p>Heb je een fout gemaakt? Pas het bestand aan en draai:</p>
+        <pre><code class="language-bash">php artisan migrate:fresh</code></pre>
+    </main>
+</div>
+
+<footer>
+    <div class="footer-content">
+        <p>&copy; 2025 Techniek College Rotterdam - Laravel 12 Curriculum</p>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

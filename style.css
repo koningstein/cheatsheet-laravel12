@@ -1,0 +1,471 @@
+/* --- THEMA DEFINITIES --- */
+/* Standaard Thema: Blauw */
+:root {
+    --c-bg: #0a3d62; /* Donkerblauw */
+    --c-card: #ffffff;
+    --c-card-bg: #ffffff;
+    --c-header-nav: #0a3d62;
+    --c-header-nav-text: #ffffff;
+    --c-accent: #0c5b96;
+    --c-accent-text: #ffffff;
+    --c-text: #333;
+    --c-text-header: #0a3d62;
+    --c-text-header-nav: #ffffff;
+    --c-nav-link: #0a3d62;
+    --c-code-bg: #282c34;
+    --c-shadow: rgba(0, 0, 0, 0.3);
+    --c-border: #dfe2e5;
+    --c-hover-link: #e7f0f7;
+    --c-table-header: #f6f8fa;
+}
+
+[data-theme="purple"] {
+    --c-bg: #301934;
+    --c-header-nav: #301934;
+    --c-accent: #5d3a63;
+    --c-text-header: #301934;
+    --c-nav-link: #301934;
+    --c-hover-link: #f3eef4;
+}
+
+[data-theme="red"] {
+    --c-bg: #5a0d0d;
+    --c-header-nav: #5a0d0d;
+    --c-accent: #9b1a1a;
+    --c-text-header: #5a0d0d;
+    --c-nav-link: #5a0d0d;
+    --c-hover-link: #f9e8e8;
+}
+
+[data-theme="orange"] {
+    --c-bg: #612d05;
+    --c-header-nav: #612d05;
+    --c-accent: #a34e0c;
+    --c-text-header: #612d05;
+    --c-nav-link: #612d05;
+    --c-hover-link: #fcf0e7;
+}
+
+[data-theme="teal"] {
+    --c-bg: #004d40;
+    --c-header-nav: #004d40;
+    --c-accent: #00796b;
+    --c-text-header: #004d40;
+    --c-nav-link: #004d40;
+    --c-hover-link: #e0f2f1;
+}
+
+[data-theme="darkblue"] {
+    --c-bg: #0b2233;
+    --c-header-nav: #0b2233;
+    --c-accent: #144669;
+    --c-text-header: #0b2233;
+    --c-nav-link: #0b2233;
+    --c-hover-link: #e6f0f5;
+}
+
+[data-theme="green"] {
+    --c-bg: #0d3d0d;
+    --c-header-nav: #0d3d0d;
+    --c-accent: #3d7a3d;
+    --c-text-header: #0d3d0d;
+    --c-nav-link: #0d3d0d;
+    --c-hover-link: #e8f5e8;
+}
+
+/* --- Dark (Material) --- */
+[data-theme="material-dark"] {
+    --c-bg: #212121;
+    --c-card: #262626;
+    --c-card-bg: #262626;
+    --c-header-nav: #262626;
+    --c-header-nav-text: #EEFFFF;
+    --c-accent: #80CBC4; /* Material Teal */
+    --c-accent-text: #212121;
+    --c-text: #EEFFFF;
+    --c-text-header: #80CBC4;
+    --c-text-header-nav: #EEFFFF;
+    --c-nav-link: #80CBC4;
+    --c-code-bg: #2E2E2E;
+    --c-shadow: rgba(0, 0, 0, 0.5);
+    --c-border: #333333;
+    --c-hover-link: #373737;
+    --c-table-header: #373737;
+}
+
+/* --- Dark (Monokai Pro) --- */
+[data-theme="monokai-pro"] {
+    --c-bg: #2D2A2E;
+    --c-card: #38353D;
+    --c-card-bg: #38353D;
+    --c-header-nav: #38353D;
+    --c-header-nav-text: #FCFCFA;
+    --c-accent: #FFD866; /* Geel */
+    --c-accent-text: #2D2A2E;
+    --c-text: #FCFCFA;
+    --c-text-header: #FFD866; /* Geel */
+    --c-text-header-nav: #FCFCFA;
+    --c-nav-link: #FFD866; /* Geel */
+    --c-code-bg: #2D2A2E;
+    --c-shadow: rgba(0, 0, 0, 0.5);
+    --c-border: #4F4C55;
+    --c-hover-link: #4F4C55;
+    --c-table-header: #4F4C55;
+}
+
+/* --- AANGEPAST: Dark (Night Owl) --- */
+[data-theme="night-owl"] {
+    --c-bg: #011627; /* Main background */
+    --c-card: #0b2942; /* Kaart-achtergrond (donkerder blauw) */
+    --c-card-bg: #0b2942; /* Kaart-achtergrond (donkerder blauw) */
+    --c-header-nav: #0b2942; /* Header/nav block */
+    --c-header-nav-text: #d6deeb;
+    --c-accent: #FFD866; /* Geel accent */
+    --c-accent-text: #011627; /* Donkere tekst op geel */
+    --c-text: #d6deeb; /* Lichte tekst */
+    --c-text-header: #FFD866; /* Gele koppen */
+    --c-text-header-nav: #d6deeb;
+    --c-nav-link: #FFD866; /* Gele links */
+    --c-code-bg: #011627;
+    --c-shadow: rgba(0, 0, 0, 0.5);
+    --c-border: #1d3b53;
+    --c-hover-link: #1d3b53;
+    --c-table-header: #1d3b53;
+}
+
+
+/* --- BASIS STYLING (ONGEWIJZIGD) --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--c-text);
+    background: var(--c-bg);
+    padding: 0;
+    padding-top: 50px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- TOP BAR (Op alle pagina's) --- */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--c-card-bg);
+    padding: 0 20px;
+    box-shadow: 0 2px 10px var(--c-shadow);
+    z-index: 1000;
+    height: 50px;
+}
+
+.top-bar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.top-bar .nav-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.top-bar a {
+    color: var(--c-accent);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: background 0.2s;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.top-bar a:hover {
+    background: var(--c-hover-link);
+}
+
+.top-bar .theme-switcher select {
+    border: 1px solid var(--c-border);
+    background: var(--c-card-bg);
+    color: var(--c-nav-link);
+    padding: 5px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-family: inherit;
+    font-size: 0.9em;
+}
+
+/* --- HEADER & NAV BLOCK (Alleen op detailpagina's) --- */
+.header-nav-block {
+    background: var(--c-header-nav);
+    border-radius: 10px;
+    overflow: hidden;
+    color: var(--c-header-nav-text);
+    box-shadow: 0 10px 30px var(--c-shadow), 0 0 0 1px var(--c-card);
+    margin-top: 30px;
+}
+
+header {
+    padding: 40px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+    color: var(--c-text-header-nav);
+    border: none;
+}
+
+header p {
+    font-size: 1.2em;
+    opacity: 0.9;
+    margin: 0;
+}
+
+nav {
+    background: var(--c-card-bg);
+    padding: 15px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0 20px;
+}
+
+nav a {
+    color: var(--c-nav-link);
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+nav a.active {
+    background: var(--c-accent);
+    color: var(--c-accent-text);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* --- MAIN CONTENT (Op index en detailpagina's) --- */
+main {
+    background: var(--c-card-bg);
+    border-radius: 10px;
+    padding: 40px;
+    margin-top: 30px;
+    box-shadow: 0 10px 30px var(--c-shadow);
+    margin-bottom: 40px;
+}
+
+main h2, .intro h2 {
+    color: var(--c-text-header);
+    font-size: 2em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--c-text-header);
+}
+
+main h3 {
+    color: var(--c-accent);
+    font-size: 1.5em;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+/* --- INDEX PAGINA: MODULE GRID --- */
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.module-card {
+    background: var(--c-card-bg);
+    padding: 0;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px var(--c-shadow);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    overflow: hidden;
+}
+
+.module-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px var(--c-shadow);
+}
+
+.module-card h2 {
+    background: var(--c-accent);
+    color: var(--c-accent-text);
+    font-size: 1.5em;
+    margin: 0;
+    padding: 20px 30px;
+    font-weight: 600;
+    border: none;
+}
+
+.module-card p {
+    background: var(--c-accent);
+    color: var(--c-accent-text);
+    opacity: 0.9;
+    margin: 0;
+    padding: 0 30px 20px 30px;
+    line-height: 1.6;
+    font-size: 1.05em;
+}
+
+.module-card ul {
+    padding: 20px 30px 30px 30px;
+    background: var(--c-card-bg);
+    margin: 0;
+    list-style: none;
+    padding-left: 30px;
+}
+
+.module-card li {
+    margin: 8px 0;
+    color: var(--c-text); /* Aangepast */
+}
+
+.module-card li a {
+    text-decoration: none;
+    color: var(--c-nav-link);
+    font-weight: 500;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+.module-card li a:hover {
+    background: var(--c-hover-link);
+    color: var(--c-accent);
+}
+
+.intro {
+    background: var(--c-card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px var(--c-shadow);
+    margin: 30px 0 40px 0;
+    line-height: 1.8;
+    color: var(--c-text); /* Aangepast */
+}
+
+/* --- DETAIL PAGINA: ALGEMENE ELEMENTEN --- */
+pre {
+    background: var(--c-code-bg);
+    color: #f1f1f1;
+    padding: 20px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 15px 0;
+    border-left: 4px solid var(--c-accent);
+}
+
+pre code.hljs {
+    padding: 0;
+    background: none;
+}
+
+p > code, li > code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    background: var(--c-hover-link);
+    color: var(--c-text);
+    padding: 3px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--c-border);
+}
+
+ul, ol {
+    margin: 15px 0;
+    padding-left: 30px;
+}
+
+li {
+    margin: 8px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.95em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid var(--c-border);
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid var(--c-border);
+}
+
+table thead th {
+    background-color: var(--c-table-header);
+    color: var(--c-text-header);
+    font-weight: 600;
+    border-bottom: 2px solid var(--c-accent);
+}
+
+table tbody tr:nth-child(even) {
+    background-color: var(--c-card-bg);
+}
+table tbody tr:nth-child(odd) {
+    background-color: var(--c-card);
+}
+
+table tbody tr:hover {
+    background-color: var(--c-hover-link);
+}
+
+/* --- FOOTER --- */
+footer {
+    background: var(--c-card-bg);
+    color: var(--c-nav-link);
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+    box-shadow: 0 -2px 10px var(--c-shadow);
+    position: relative;
+    bottom: 0;
+    margin-top: 40px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+footer p {
+    margin: 0;
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M1.5: Create & Store - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="../../index.html">« Overzicht</a>
+            <a href="../module2/m2-1.html">Module 2 »</a>
+        </div>
+        <div class="nav-group theme-switcher">
+            <label for="theme-switcher">Thema: </label>
+            <select id="theme-switcher">
+                <option value="blue">Blauw (Standaard)</option>
+                <option value="purple">Paars</option>
+                <option value="red">Rood</option>
+                <option value="orange">Oranje</option>
+                <option value="teal">Turquoise</option>
+                <option value="darkblue">Donkerblauw</option>
+                <option value="green">Groen</option>
+                <option value="material-dark">Dark (Material)</option>
+                <option value="monokai-pro">Dark (Monokai Pro)</option>
+                <option value="night-owl">Dark (Night Owl)</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 1: Basis CRUD</h1>
+            <p>De fundering: Database opzet, Models en een complete CRUD voor één tabel.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m1-1.html">M1.1: Model & Migration</a></li>
+                <li><a href="m1-2.html">M1.2: Factory & Seed</a></li>
+                <li><a href="m1-3.html">M1.3: Layouts & Tailwind</a></li>
+                <li><a href="m1-4.html">M1.4: Controller Index</a></li>
+                <li><a href="m1-5.html" class="active">M1.5: Create & Store</a></li>
+                <li><a href="m1-6.html">M1.6: Validatie & Flash</a></li>
+                <li><a href="m1-7.html">M1.7: Detail (Show)</a></li>
+                <li><a href="m1-8.html">M1.8: Edit & Update</a></li>
+                <li><a href="m1-9.html">M1.9: Delete & Destroy</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M1.5: Create & Store</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan een formulier maken in Blade.</li>
+            <li>Ik kan POST data verwerken in de store methode.</li>
+            <li>Ik kan mass assignment voorkomen.</li>
+        </ul>
+
+        <h3>Stap 1: Create Methode</h3>
+        <p>De <code>create()</code> methode toont alleen het lege formulier.</p>
+        <pre><code class="language-php">
+public function create()
+{
+    return view('admin.categories.create');
+}
+        </code></pre>
+
+        <h3>Stap 2: Create View</h3>
+        <p>Maak <code>resources/views/admin/categories/create.blade.php</code>. Let op:</p>
+        <ul>
+            <li><strong>Action:</strong> Gebruik <code>route('categories.store')</code>.</li>
+            <li><strong>CSRF:</strong> Voeg <code>@csrf</code> toe voor beveiliging.</li>
+        </ul>
+
+        <pre><code class="language-html">
+@extends('layouts.layoutadmin')
+
+@section('content')
+    &lt;h1&gt;Nieuwe Categorie&lt;/h1&gt;
+
+    &lt;form action="{{ route('categories.store') }}" method="POST"&gt;
+        @csrf
+
+        &lt;label&gt;Naam:&lt;/label&gt;
+        &lt;input type="text" name="name" class="border p-2"&gt;
+
+        &lt;button type="submit"&gt;Opslaan&lt;/button&gt;
+    &lt;/form&gt;
+@endsection
+        </code></pre>
+
+        <h3>Stap 3: Mass Assignment (Model)</h3>
+        <p>Om data op te slaan via <code>create()</code>, moet je het Model toestemming geven. Zet in <code>Category.php</code>:</p>
+        <pre><code class="language-php">protected $guarded = []; // Alles mag gevuld worden</code></pre>
+
+        <h3>Stap 4: Store Methode</h3>
+        <p>In de controller vangen we de data op via <code>$request</code> en slaan het op.</p>
+        <pre><code class="language-php">
+public function store(Request $request)
+{
+    // Maak aan in database
+    Category::create([
+        'name' => $request->name
+    ]);
+
+    // Redirect naar index
+    return to_route('categories.index');
+}
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

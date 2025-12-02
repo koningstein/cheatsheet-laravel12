@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M1.3: Layouts - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="../../index.html">« Overzicht</a>
+            <a href="../module2/m2-1.html">Module 2 »</a>
+        </div>
+        <div class="nav-group theme-switcher">
+            <label for="theme-switcher">Thema: </label>
+            <select id="theme-switcher">
+                <option value="blue">Blauw (Standaard)</option>
+                <option value="purple">Paars</option>
+                <option value="red">Rood</option>
+                <option value="orange">Oranje</option>
+                <option value="teal">Turquoise</option>
+                <option value="darkblue">Donkerblauw</option>
+                <option value="green">Groen</option>
+                <option value="material-dark">Dark (Material)</option>
+                <option value="monokai-pro">Dark (Monokai Pro)</option>
+                <option value="night-owl">Dark (Night Owl)</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 1: Basis CRUD</h1>
+            <p>De fundering: Database opzet, Models en een complete CRUD voor één tabel.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m1-1.html">M1.1: Model & Migration</a></li>
+                <li><a href="m1-2.html">M1.2: Factory & Seed</a></li>
+                <li><a href="m1-3.html" class="active">M1.3: Layouts & Tailwind</a></li>
+                <li><a href="m1-4.html">M1.4: Controller Index</a></li>
+                <li><a href="m1-5.html">M1.5: Create & Store</a></li>
+                <li><a href="m1-6.html">M1.6: Validatie & Flash</a></li>
+                <li><a href="m1-7.html">M1.7: Detail (Show)</a></li>
+                <li><a href="m1-8.html">M1.8: Edit & Update</a></li>
+                <li><a href="m1-9.html">M1.9: Delete & Destroy</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M1.3: Layouts & Templates</h2>
+
+        <div class="note-box" style="border-left-color: #f0ad4e; background-color: #fcf8e3; color: #8a6d3b;">
+            <strong>LET OP VOOR DE OPDRACHTEN:</strong><br>
+            Laravel heeft tegenwoordig twee manieren voor layouts. <strong>Voor de opdrachten gebruiken we de KLASSIEKE methode (Deel 1).</strong><br>
+            De automatische tests zijn hierop gebaseerd. De moderne methode (Deel 2) staat hier ter info, omdat je die in de beroepspraktijk (en bij de Flux/Livewire starterkits) veel tegenkomt.
+        </div>
+
+        <hr style="margin: 2rem 0; border-top: 2px dashed var(--c-border);">
+
+        <h3>Deel 1: Klassieke Layouts (Voor de Opdrachten)</h3>
+        <p>Dit is de basismanier van Laravel met <code>@extends</code> en <code>@yield</code>.</p>
+
+        <h4>Stap 1: Bestand aanmaken</h4>
+        <p>Maak het bestand: <code>resources/views/layouts/layoutadmin.blade.php</code>.</p>
+
+        <h4>Stap 2: De Masterpage Code</h4>
+        <p>Hier definiëren we de plekken waar content moet komen met <code>@yield</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="nl"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Laravel Admin&lt;/title&gt;
+    &lt;!-- Tailwind laden via Vite --&gt;
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+&lt;/head&gt;
+&lt;body class="bg-gray-100"&gt;
+
+    &lt;nav class="bg-white shadow p-4"&gt;
+        &lt;a href="/admin/categories" class="font-bold"&gt;Categorieën&lt;/a&gt;
+        &lt;!-- Ruimte voor extra menu items --&gt;
+        @yield('topmenu')
+    &lt;/nav&gt;
+
+    &lt;main class="container mx-auto p-6"&gt;
+        &lt;!-- HIER komt de wisselende inhoud van subpagina's --&gt;
+        @yield('content')
+    &lt;/main&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+        </code></pre>
+
+        <h4>Stap 3: Gebruik in een View</h4>
+        <p>In je pagina's (zoals <code>index.blade.php</code>) verwijs je naar deze layout:</p>
+        <pre><code class="language-php">
+@extends('layouts.layoutadmin')
+
+@section('content')
+    &lt;h1&gt;Pagina Inhoud&lt;/h1&gt;
+@endsection
+        </code></pre>
+
+        <hr style="margin: 2rem 0; border-top: 2px dashed var(--c-border);">
+
+        <h3>Deel 2: Moderne Layouts (Livewire & Flux)</h3>
+        <p>Dit gebruikt <strong>Components</strong>. Dit is de standaard in de nieuwe Livewire starterkit.</p>
+
+        <div class="note-box">
+            <strong>Flux Documentatie:</strong> <a href="https://fluxui.dev" target="_blank">https://fluxui.dev</a>
+        </div>
+
+        <h4>Stap 1: Bestand Locatie (Anders!)</h4>
+        <p>Het bestand moet staan in: <code>resources/views/components/layouts/layoutadmin.blade.php</code>.</p>
+
+        <h4>Stap 2: De Component Code ($slot)</h4>
+        <p>In plaats van <code>@yield</code> gebruiken we <code>{{ $slot }}</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @fluxStyles
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;flux:sidebar&gt;...&lt;/flux:sidebar&gt;
+
+        &lt;flux:main&gt;
+            {{ $slot }} &lt;!-- Hier komt de inhoud --&gt;
+        &lt;/flux:main&gt;
+
+        @fluxScripts
+    &lt;/body&gt;
+&lt;/html&gt;
+        </code></pre>
+
+        <h4>Stap 3: Gebruik in een View</h4>
+        <p>Je gebruikt een HTML-achtige tag die verwijst naar de component:</p>
+        <pre><code class="language-html">
+&lt;x-layouts.layoutadmin&gt;
+    &lt;h1&gt;Pagina Inhoud&lt;/h1&gt;
+&lt;/x-layouts.layoutadmin&gt;
+        </code></pre>
+
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

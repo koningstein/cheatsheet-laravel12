@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laravel 12 Curriculum</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="./script.js" defer></script>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="index.html" style="font-weight: bold; background-color: var(--c-hover-link);">Overzicht</a>
+        </div>
+        <div class="nav-group theme-switcher">
+            <label for="theme-switcher">Thema: </label>
+            <select id="theme-switcher">
+                <option value="blue">Blauw (Standaard)</option>
+                <option value="purple">Paars</option>
+                <option value="red">Rood</option>
+                <option value="orange">Oranje</option>
+                <option value="teal">Turquoise</option>
+                <option value="darkblue">Donkerblauw</option>
+                <option value="green">Groen</option>
+                <option value="material-dark">Dark (Material)</option>
+                <option value="monokai-pro">Dark (Monokai Pro)</option>
+                <option value="night-owl">Dark (Night Owl)</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="intro">
+        <h2>Welkom bij het Laravel 12 Curriculum</h2>
+        <p>Dit is de interactieve cheatsheet voor de Software Development opleiding. De modules volgen de opdrachtenstructuur van basis tot gevorderd, aangevuld met thematische modules als naslagwerk.</p>
+    </div>
+
+    <h3 style="margin-bottom: 1.5rem; color: var(--c-text-header-nav); border-bottom: 1px solid var(--c-text-header-nav); padding-bottom: 0.5rem; opacity: 0.9;">Deel A: Het Opdrachtentraject</h3>
+
+    <div class="modules-grid" style="margin-bottom: 3rem;">
+
+        <div class="module-card">
+            <h2>Module 1: Basis CRUD</h2>
+            <p>De fundering: Database opzet, Models en een complete CRUD voor één tabel (Opdracht 1-9).</p>
+            <ul>
+                <li><a href="pages/module1/m1-1.html">M1.1: Model & Migration</a></li>
+                <li><a href="pages/module1/m1-2.html">M1.2: Factory & Seeding</a></li>
+                <li><a href="pages/module1/m1-3.html">M1.3: Layouts & Tailwind</a></li>
+                <li><a href="pages/module1/m1-4.html">M1.4: Controller Index</a></li>
+                <li><a href="pages/module1/m1-5.html">M1.5: Create & Store</a></li>
+                <li><a href="pages/module1/m1-6.html">M1.6: Validatie & Flash</a></li>
+                <li><a href="pages/module1/m1-7.html">M1.7: Detailpagina (Show)</a></li>
+                <li><a href="pages/module1/m1-8.html">M1.8: Edit & Update</a></li>
+                <li><a href="pages/module1/m1-9.html">M1.9: Delete & Destroy</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 2: Users & Security</h2>
+            <p>Toegangsbeheer, publieke pagina's en beveiliging met Roles & Permissions (Opdracht 10-15).</p>
+            <ul>
+                <li><a href="pages/module2/m2-1.html">M2.1: Publieke Layout</a></li>
+                <li><a href="pages/module2/m2-2.html">M2.2: Permissions Installatie</a></li>
+                <li><a href="pages/module2/m2-3.html">M2.3: Users Seeden & Hashing</a></li>
+                <li><a href="pages/module2/m2-4.html">M2.4: Middleware & Auth</a></li>
+                <li><a href="pages/module2/m2-5.html">M2.5: Blade Authorisatie (@can)</a></li>
+                <li><a href="pages/module2/m2-6.html">M2.6: Controller Authorisatie</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 3: Advanced Admin</h2>
+            <p>Relaties beheren in de backend: Foreign keys en geavanceerde formulieren (Opdracht 16-27).</p>
+            <ul>
+                <li><a href="pages/module3/m3-1.html">M3.1: Relational Models</a></li>
+                <li><a href="pages/module3/m3-2.html">M3.2: Factories met Relaties</a></li>
+                <li><a href="pages/module3/m3-3.html">M3.3: Eager Loading (N+1)</a></li>
+                <li><a href="pages/module3/m3-4.html">M3.4: Dropdowns in Forms</a></li>
+                <li><a href="pages/module3/m3-5.html">M3.5: Foreign Key Validatie</a></li>
+                <li><a href="pages/module3/m3-6.html">M3.6: Cascade Delete</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 4: Webshop Features</h2>
+            <p>De klantkant van de applicatie: Winkelwagen, Orders, PDF en Excel Import (Workshop).</p>
+            <ul>
+                <li><a href="pages/module4/m4-1.html">M4.1: Product Grid & Filters</a></li>
+                <li><a href="pages/module4/m4-2.html">M4.2: Reviews & Details</a></li>
+                <li><a href="pages/module4/m4-3.html">M4.3: Winkelwagen Logica</a></li>
+                <li><a href="pages/module4/m4-4.html">M4.4: Checkout & Orders</a></li>
+                <li><a href="pages/module4/m4-5.html">M4.5: PDF Facturen</a></li>
+                <li><a href="pages/module4/m4-6.html">M4.6: Excel Import Data</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <h3 style="margin-bottom: 1.5rem; color: var(--c-text-header-nav); border-bottom: 1px solid var(--c-text-header-nav); padding-bottom: 0.5rem; opacity: 0.9;">Deel B: Thematisch Naslagwerk</h3>
+
+    <div class="modules-grid">
+
+        <div class="module-card">
+            <h2>Module 5: Database</h2>
+            <p>Architectuur van de dataopslag, migraties en seeding strategieën.</p>
+            <ul>
+                <li><a href="pages/module5/m5-1.html">M5.1: Migrations & Schema</a></li>
+                <li><a href="pages/module5/m5-2.html">M5.2: Foreign Key Constraints</a></li>
+                <li><a href="pages/module5/m5-3.html">M5.3: Seeding & DatabaseState</a></li>
+                <li><a href="pages/module5/m5-4.html">M5.4: Factories & Faker</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 6: Eloquent ORM</h2>
+            <p>Geavanceerd werken met data, relaties, accessors en scopes.</p>
+            <ul>
+                <li><a href="pages/module6/m6-1.html">M6.1: Relatietypes (HasMany/BelongsTo)</a></li>
+                <li><a href="pages/module6/m6-2.html">M6.2: Accessors & Mutators</a></li>
+                <li><a href="pages/module6/m6-3.html">M6.3: Query Scopes & Builder</a></li>
+                <li><a href="pages/module6/m6-4.html">M6.4: Collections Methods</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 7: Controllers</h2>
+            <p>Routing, dependency injection en het verwerken van requests.</p>
+            <ul>
+                <li><a href="pages/module7/m7-1.html">M7.1: Route Groups & Prefix</a></li>
+                <li><a href="pages/module7/m7-2.html">M7.2: Route Model Binding</a></li>
+                <li><a href="pages/module7/m7-3.html">M7.3: Resource Controllers</a></li>
+                <li><a href="pages/module7/m7-4.html">M7.4: Redirects & Responses</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 8: Blade & Frontend</h2>
+            <p>De presentatielaag: Components, layouts en directives.</p>
+            <ul>
+                <li><a href="pages/module8/m8-1.html">M8.1: Layout Inheritance</a></li>
+                <li><a href="pages/module8/m8-2.html">M8.2: Components & Slots</a></li>
+                <li><a href="pages/module8/m8-3.html">M8.3: Directives (@auth, @guest)</a></li>
+                <li><a href="pages/module8/m8-4.html">M8.4: Tailwind Utility Patterns</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 9: Validatie</h2>
+            <p>Data integriteit, form requests en custom regels.</p>
+            <ul>
+                <li><a href="pages/module9/m9-1.html">M9.1: FormRequests (Best Practice)</a></li>
+                <li><a href="pages/module9/m9-2.html">M9.2: Custom Rules</a></li>
+                <li><a href="pages/module9/m9-3.html">M9.3: Error Messages (NL)</a></li>
+                <li><a href="pages/module9/m9-4.html">M9.4: Complex Validation</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 10: Security</h2>
+            <p>Beveiliging, authenticatie en autorisatie stromen.</p>
+            <ul>
+                <li><a href="pages/module10/m10-1.html">M10.1: Auth Flow (Login/Register)</a></li>
+                <li><a href="pages/module10/m10-2.html">M10.2: Policies & Gates</a></li>
+                <li><a href="pages/module10/m10-3.html">M10.3: Spatie Permissions</a></li>
+                <li><a href="pages/module10/m10-4.html">M10.4: Middleware Security</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 11: Features</h2>
+            <p>Externe packages en tools: PDF, Excel, Mail en Storage.</p>
+            <ul>
+                <li><a href="pages/module11/m11-1.html">M11.1: PDF Generatie (DomPDF)</a></li>
+                <li><a href="pages/module11/m11-2.html">M11.2: Excel Import/Export</a></li>
+                <li><a href="pages/module11/m11-3.html">M11.3: Mail & Notifications</a></li>
+                <li><a href="pages/module11/m11-4.html">M11.4: File Storage (S3/Local)</a></li>
+            </ul>
+        </div>
+
+        <div class="module-card">
+            <h2>Module 12: Testing</h2>
+            <p>Code kwaliteit, debugging en geautomatiseerd testen.</p>
+            <ul>
+                <li><a href="pages/module12/m12-1.html">M12.1: Pest Testing Framework</a></li>
+                <li><a href="pages/module12/m12-2.html">M12.2: Unit vs Feature Tests</a></li>
+                <li><a href="pages/module12/m12-3.html">M12.3: Debuggen (Dump/Log)</a></li>
+                <li><a href="pages/module12/m12-4.html">M12.4: Git & Version Control</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <div class="footer-content">
+        <p>&copy; 2025 Techniek College Rotterdam - Laravel 12 Curriculum</p>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+    hljs.highlightAll();
+</script>
+</body>
+</html>
