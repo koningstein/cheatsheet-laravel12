@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M3.1: Models & Migrations - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="../module2/m2-6.html">« Module 2</a>
+            <a href="../module4/m4-1.html">Module 4 »</a>
+        </div>
+        <div class="nav-group theme-switcher">
+            <label for="theme-switcher">Thema: </label>
+            <select id="theme-switcher"><option value="blue">Blauw</option></select>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 3: Advanced Admin</h1>
+            <p>Werken met relaties, foreign keys en complexe data structuren.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m3-1.html" class="active">M3.1: Models & Migrations</a></li>
+                <li><a href="m3-2.html">M3.2: Factories</a></li>
+                <li><a href="m3-3.html">M3.3: Seeders</a></li>
+                <li><a href="m3-4.html">M3.4: Index & Eager Loading</a></li>
+                <li><a href="m3-5.html">M3.5: Permissions</a></li>
+                <li><a href="m3-6.html">M3.6: Create & Dropdowns</a></li>
+                <li><a href="m3-7.html">M3.7: Store & Validatie</a></li>
+                <li><a href="m3-8.html">M3.8: Show & Relaties</a></li>
+                <li><a href="m3-9.html">M3.9: Edit & Pre-select</a></li>
+                <li><a href="m3-10.html">M3.10: Update & Logica</a></li>
+                <li><a href="m3-11.html">M3.11: Delete View</a></li>
+                <li><a href="m3-12.html">M3.12: Destroy & Constraints</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M3.1: Models & Migrations</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan models en migrations maken voor gerelateerde tabellen.</li>
+            <li>Ik kan foreign keys en constraints (cascade/restrict) toepassen.</li>
+            <li>Ik kan relatie-methodes schrijven (<code>belongsTo</code>, <code>hasMany</code>).</li>
+        </ul>
+
+        <h3>1. Casus: Producten en Prijzen</h3>
+        <p>Een product heeft een categorie en een prijsgeschiedenis. Omdat prijzen veranderen, slaan we ze op in een aparte tabel <code>prices</code>.</p>
+
+        <h3>2. Bestanden Genereren</h3>
+        <p>We gebruiken de <code>--all</code> vlag om in één keer alles aan te maken.</p>
+
+        <pre><code class="language-bash">
+php artisan make:model --all Product
+php artisan make:model --all Price
+        </code></pre>
+
+        <h3>3. Migratie: Product</h3>
+        <p>Een product hoort bij een categorie. We gebruiken <code>constrained()</code> om de foreign key te leggen. We kiezen voor <code>restrict</code> bij delete, zodat je een categorie niet zomaar kunt verwijderen als er nog producten aan hangen.</p>
+
+        <pre><code class="language-php">
+// database/migrations/xxxx_create_products_table.php
+Schema::create('products', function (Blueprint $table) {
+    $table->id();
+    $table->string('name', 75);
+    $table->mediumText('description')->nullable();
+
+    // Relatie met categories
+    $table->foreignId('category_id')
+          ->constrained()
+          ->onUpdate('restrict')
+          ->onDelete('restrict');
+
+    $table->timestamps();
+});
+        </code></pre>
+
+        <h3>4. Migratie: Price</h3>
+        <p>Een prijs hoort bij een product. Als een product verwijderd wordt, moeten de prijzen ook weg (cascade).</p>
+
+        <pre><code class="language-php">
+// database/migrations/xxxx_create_prices_table.php
+Schema::create('prices', function (Blueprint $table) {
+    $table->id();
+    $table->decimal('price', 8, 2);
+    $table->dateTime('effdate');
+
+    // Relatie met products
+    $table->foreignId('product_id')
+          ->constrained()
+          ->onUpdate('cascade')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+});
+        </code></pre>
+
+        <h3>5. Relaties in Models</h3>
+        <p>Definieer de relaties in de Models zodat Laravel ze snapt.</p>
+
+        <pre><code class="language-php">
+// app/Models/Product.php
+public function category(): BelongsTo
+{
+    return $this->belongsTo(Category::class);
+}
+
+public function prices(): HasMany
+{
+    return $this->hasMany(Price::class);
+}
+        </code></pre>
+
+        <pre><code class="language-php">
+// app/Models/Price.php
+public function product(): BelongsTo
+{
+    return $this->belongsTo(Product::class);
+}
+        </code></pre>
+
+        <div class="note-box">
+            <strong>Opdracht 16:</strong> Pas deze kennis nu toe op de tabellen <code>tasks</code> en <code>activities</code>. Zorg dat Task relaties heeft met User, Project en Activity. Let goed op de constraints (restrict vs cascade)!
+        </div>
+
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

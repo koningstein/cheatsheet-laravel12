@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M5.1: Orders Structuur - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module4/m4-8.html">« Module 4</a><a href="../module6/m6-1.html">Module 6 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 5: Orders & Validatie</h1>
+            <p>Het verwerken van bestellingen, PDF generatie en validatie vertalingen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m5-1.html" class="active">M5.1: Orders Structuur</a></li>
+                <li><a href="m5-2.html">M5.2: Order Seeds</a></li>
+                <li><a href="m5-3.html">M5.3: Orders Opslaan</a></li>
+                <li><a href="m5-4.html">M5.4: Orders Tonen</a></li>
+                <li><a href="m5-5.html">M5.5: Order naar PDF</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M5.1: Orders Structuur</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan databasestructuren opzetten voor orders (kop) en orderregels.</li>
+            <li>Ik kan statussen beheren in een aparte tabel (states).</li>
+            <li>Ik kan relaties leggen tussen orders, users en producten.</li>
+        </ul>
+
+        <h3>Stap 1: Models & Migrations Aanmaken</h3>
+        <p>We hebben drie tabellen nodig: <code>states</code> (voor de status, bijv. 'Betaald'), <code>orders</code> (de bestelling zelf) en <code>orderrows</code> (welke producten zitten erin). We maken ze in één keer aan.</p>
+
+        <pre><code class="language-bash">
+php artisan make:model State -m
+php artisan make:model Order -m
+php artisan make:model Orderrow -m
+        </code></pre>
+
+        <h3>Stap 2: Migratie States</h3>
+        <p>Open de migratie voor <code>states</code>. Dit is een simpele tabel.</p>
+
+        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_states_table.php</code></div>
+        <pre><code class="language-php">
+Schema::create('states', function (Blueprint $table) {
+    $table->id();
+    $table->string('name', 45); // Bijv: 'Pending', 'Paid'
+    $table->timestamps();
+});
+        </code></pre>
+
+        <h3>Stap 3: Migratie Orders</h3>
+        <p>De <code>orders</code> tabel koppelt een gebruiker aan een status. Let op de volgorde van migraties (states moet bestaan).</p>
+
+        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_orders_table.php</code></div>
+        <pre><code class="language-php">
+Schema::create('orders', function (Blueprint $table) {
+    $table->id();
+    $table->dateTime('orderdate'); // Datum van bestellen
+
+    // Relaties
+    $table->foreignId('user_id')->constrained()->onDelete('restrict'); // User mag niet weg als er orders zijn
+    $table->foreignId('state_id')->constrained()->onDelete('restrict');
+
+    $table->timestamps();
+});
+        </code></pre>
+
+        <h3>Stap 4: Migratie Orderrows</h3>
+        <p>Dit is de koppeltabel tussen Order en Product. Hier slaan we ook de prijs op van <em>dat moment</em> en het aantal.</p>
+
+        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_orderrows_table.php</code></div>
+        <pre><code class="language-php">
+Schema::create('orderrows', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('order_id')->constrained()->onDelete('cascade'); // Order weg? Regels weg.
+    $table->foreignId('product_id')->constrained()->onDelete('restrict'); // Product mag niet weg als het verkocht is.
+
+    $table->integer('qty'); // Aantal
+    $table->decimal('price', 8, 2); // Prijs op moment van koop
+    $table->timestamps();
+});
+        </code></pre>
+
+        <h3>Stap 5: Relaties in Models</h3>
+        <p>Vergeet niet de relaties in de Models te zetten, zodat we straks makkelijk <code>$order->orderrows</code> kunnen doen.</p>
+
+        <div class="note-box">Bestand: <code>app/Models/Order.php</code></div>
+        <pre><code class="language-php">
+public function user(): BelongsTo { return $this->belongsTo(User::class); }
+public function state(): BelongsTo { return $this->belongsTo(State::class); }
+public function orderrows(): HasMany { return $this->hasMany(Orderrow::class); }
+        </code></pre>
+
+        <div class="note-box">Bestand: <code>app/Models/Orderrow.php</code></div>
+        <pre><code class="language-php">
+public function product(): BelongsTo { return $this->belongsTo(Product::class); }
+public function order(): BelongsTo { return $this->belongsTo(Order::class); }
+        </code></pre>
+
+        <p>Voer tenslotte de migraties uit:</p>
+        <pre><code class="language-bash">php artisan migrate</code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

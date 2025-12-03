@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M3.8: Show & Relaties - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group"><a href="../module2/m2-6.html">« Module 2</a><a href="../module4/m4-1.html">Module 4 »</a></div>
+        <div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div>
+    </div>
+</div>
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 3: Advanced Admin</h1>
+            <p>Werken met relaties, foreign keys en complexe data structuren.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m3-1.html">M3.1: Models & Migrations</a></li>
+                <li><a href="m3-2.html">M3.2: Factories</a></li>
+                <li><a href="m3-3.html">M3.3: Seeders</a></li>
+                <li><a href="m3-4.html">M3.4: Index & Eager Loading</a></li>
+                <li><a href="m3-5.html">M3.5: Permissions</a></li>
+                <li><a href="m3-6.html">M3.6: Create & Dropdowns</a></li>
+                <li><a href="m3-7.html">M3.7: Store & Validatie</a></li>
+                <li><a href="m3-8.html" class="active">M3.8: Show & Relaties</a></li>
+                <li><a href="m3-9.html">M3.9: Edit & Pre-select</a></li>
+                <li><a href="m3-10.html">M3.10: Update & Logica</a></li>
+                <li><a href="m3-11.html">M3.11: Delete View</a></li>
+                <li><a href="m3-12.html">M3.12: Destroy & Constraints</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M3.8: Show met Relaties</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan een detail view maken met gerelateerde data (historie).</li>
+            <li>Ik kan conditionele weergave gebruiken (N/A bij null).</li>
+            <li>Ik kan via relaties doorlijsten (bijv. alle prijzen van een product).</li>
+        </ul>
+
+        <h3>Stap 1: Controller</h3>
+        <p>De <code>show</code> methode is simpel dankzij Route Model Binding. We sturen het product naar de view.</p>
+        <pre><code class="language-php">
+public function show(Product $product)
+{
+    // Omdat we 'prices' relatie hebben in Model, hoeven we niets extra's te doen hier
+    return view('admin.products.show', ['product' => $product]);
+}
+        </code></pre>
+
+        <h3>Stap 2: De View (Details)</h3>
+        <p>In de view tonen we de product details én de categorie naam.</p>
+        <pre><code class="language-html">
+&lt;h1&gt;{{ $product->name }}&lt;/h1&gt;
+&lt;p&gt;Categorie: {{ $product->category->name }}&lt;/p&gt;
+        </code></pre>
+
+        <h3>Stap 3: Relaties Tonen (Lijst)</h3>
+        <p>Omdat een product meerdere prijzen heeft (historie), kunnen we die ook tonen. We loopen door de relatie <code>prices</code>.</p>
+
+        <pre><code class="language-html">
+&lt;h3&gt;Prijs Historie&lt;/h3&gt;
+&lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Datum&lt;/th&gt;&lt;th&gt;Prijs&lt;/th&gt;&lt;/tr&gt;
+
+    {{-- Sorteer in de view op datum (nieuwste eerst) --}}
+    @foreach($product->prices->sortByDesc('effdate') as $price)
+        &lt;tr&gt;
+            &lt;td&gt;{{ $price->effdate }}&lt;/td&gt;
+            &lt;td&gt;&euro; {{ $price->price }}&lt;/td&gt;
+        &lt;/tr&gt;
+    @endforeach
+&lt;/table&gt;
+        </code></pre>
+
+        <div class="note-box">
+            <strong>Opdracht 23:</strong> Maak de Show pagina voor Tasks. Toon de taak naam, project naam en activity naam. Let op: User is optioneel. Als er geen user is (<code>$task->user == null</code>), toon dan "N/A".
+        </div>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

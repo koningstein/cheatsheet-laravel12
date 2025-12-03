@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M5.5: Order naar PDF - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module4/m4-8.html">« Module 4</a><a href="../module6/m6-1.html">Module 6 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 5: Orders & Validatie</h1>
+            <p>Het verwerken van bestellingen, PDF generatie en validatie vertalingen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m5-1.html">M5.1: Orders Structuur</a></li>
+                <li><a href="m5-2.html">M5.2: Order Seeds</a></li>
+                <li><a href="m5-3.html">M5.3: Orders Opslaan</a></li>
+                <li><a href="m5-4.html">M5.4: Orders Tonen</a></li>
+                <li><a href="m5-5.html" class="active">M5.5: Order naar PDF</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M5.5: Order naar PDF</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan de <code>barryvdh/laravel-dompdf</code> package installeren.</li>
+            <li>Ik kan een view renderen naar een PDF bestand.</li>
+            <li>Ik kan een PDF downloaden of streamen naar de browser.</li>
+        </ul>
+
+        <h3>Stap 1: Installatie</h3>
+        <pre><code class="language-bash">composer require barryvdh/laravel-dompdf</code></pre>
+
+        <h3>Stap 2: Controller Methode</h3>
+        <p>We maken een methode die de PDF genereert. We gebruiken een speciale view (bijvoorbeeld een factuur lay-out).</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Controllers/Open/OrderController.php</code></div>
+        <pre><code class="language-php">
+use Barryvdh\DomPDF\Facade\Pdf; // Importeer de PDF facade
+
+public function downloadPdf(Order $order)
+{
+    // 1. Data ophalen
+    if ($order->user_id !== Auth::id()) abort(403);
+    $order->load('orderrows.product');
+
+    // 2. PDF genereren op basis van een view
+    $pdf = Pdf::loadView('open.orders.pdf', ['order' => $order]);
+
+    // 3. Downloaden (of stream() voor bekijken)
+    return $pdf->download('factuur-' . $order->id . '.pdf');
+}
+        </code></pre>
+
+        <h3>Stap 3: PDF View</h3>
+        <p>Maak <code>resources/views/open/orders/pdf.blade.php</code>. Let op: PDF's ondersteunen geen complexe CSS zoals Tailwind. Gebruik simpele HTML/CSS (tabellen werken goed).</p>
+
+        <pre><code class="language-html">
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body { font-family: sans-serif; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Factuur #{{ $order->id }}&lt;/h1&gt;
+    &lt;table&gt;
+        &lt;tr&gt;&lt;th&gt;Product&lt;/th&gt;&lt;th&gt;Prijs&lt;/th&gt;&lt;/tr&gt;
+        @foreach($order->orderrows as $row)
+            &lt;tr&gt;
+                &lt;td&gt;{{ $row->product->name }}&lt;/td&gt;
+                &lt;td&gt;&euro; {{ $row->price }}&lt;/td&gt;
+            &lt;/tr&gt;
+        @endforeach
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </code></pre>
+
+        <h3>Stap 4: Route & Link</h3>
+        <p>Voeg de route toe in <code>web.php</code>:</p>
+        <pre><code class="language-php">Route::get('/orders/{order}/pdf', [OrderController::class, 'downloadPdf'])->name('open.orders.pdf');</code></pre>
+
+        <p>Plaats een knop op de detailpagina:</p>
+        <pre><code class="language-html">&lt;a href="{{ route('open.orders.pdf', $order) }}"&gt;Download Factuur&lt;/a&gt;</code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

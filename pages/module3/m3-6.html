@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M3.6: Create & Dropdowns - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="../module2/m2-6.html">« Module 2</a>
+            <a href="../module4/m4-1.html">Module 4 »</a>
+        </div>
+        <div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div>
+    </div>
+</div>
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 3: Advanced Admin</h1>
+            <p>Werken met relaties, foreign keys en complexe data structuren.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m3-1.html">M3.1: Models & Migrations</a></li>
+                <li><a href="m3-2.html">M3.2: Factories</a></li>
+                <li><a href="m3-3.html">M3.3: Seeders</a></li>
+                <li><a href="m3-4.html">M3.4: Index & Eager Loading</a></li>
+                <li><a href="m3-5.html">M3.5: Permissions</a></li>
+                <li><a href="m3-6.html" class="active">M3.6: Create & Dropdowns</a></li>
+                <li><a href="m3-7.html">M3.7: Store & Validatie</a></li>
+                <li><a href="m3-8.html">M3.8: Show & Relaties</a></li>
+                <li><a href="m3-9.html">M3.9: Edit & Pre-select</a></li>
+                <li><a href="m3-10.html">M3.10: Update & Logica</a></li>
+                <li><a href="m3-11.html">M3.11: Delete View</a></li>
+                <li><a href="m3-12.html">M3.12: Destroy & Constraints</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M3.6: Create met Dropdowns</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan data voor dropdowns ophalen in de create methode.</li>
+            <li>Ik kan een formulier maken met <code>select</code> velden.</li>
+            <li>Ik kan dropdown options vullen met gerelateerde data (foreach).</li>
+        </ul>
+
+        <h3>Stap 1: Data ophalen in Controller</h3>
+        <p>Om een product aan te maken, moet je een categorie kiezen. We moeten dus alle categorieën ophalen en meesturen naar de view.</p>
+
+        <pre><code class="language-php">
+// ProductController.php
+
+public function create(): View
+{
+    // Haal alle categorieën op voor de dropdown
+    $categories = Category::all();
+
+    return view('admin.products.create', [
+        'categories' => $categories
+    ]);
+}
+        </code></pre>
+
+        <h3>Stap 2: Dropdown in Blade</h3>
+        <p>In de view maken we een <code>&lt;select&gt;</code> element. We loopen door de categorieën heen om de <code>&lt;option&gt;</code> tags te maken.</p>
+
+        <pre><code class="language-html">
+&lt;label&gt;Categorie:&lt;/label&gt;
+&lt;select name="category_id" class="border p-2"&gt;
+
+    @foreach($categories as $category)
+        &lt;option value="{{ $category->id }}"
+            {{-- Zorg dat de keuze blijft staan bij validatiefouten --}}
+            @selected(old('category_id') == $category->id)
+        &gt;
+            {{ $category->name }}
+        &lt;/option&gt;
+    @endforeach
+
+&lt;/select&gt;
+        </code></pre>
+
+        <h3>Stap 3: Overige Velden</h3>
+        <p>Vergeet niet de andere velden toe te voegen, zoals Prijs. Omdat Prijs in een andere tabel zit, vangen we die hier op als een 'los' veld in het formulier.</p>
+        <pre><code class="language-html">
+&lt;label&gt;Start Prijs:&lt;/label&gt;
+&lt;input type="number" step="0.01" name="price" value="{{ old('price') }}"&gt;
+        </code></pre>
+
+        <div class="note-box">
+            <strong>Opdracht 21:</strong> Maak de create-pagina voor <strong>Tasks</strong>. Een taak heeft dropdowns nodig voor <code>User</code>, <code>Project</code> en <code>Activity</code>. Haal deze allemaal op in de controller!
+        </div>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

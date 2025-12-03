@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M3.2: Factories - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="../module2/m2-6.html">« Module 2</a>
+            <a href="../module4/m4-1.html">Module 4 »</a>
+        </div>
+        <div class="nav-group theme-switcher">
+            <label for="theme-switcher">Thema: </label>
+            <select id="theme-switcher"><option value="blue">Blauw</option></select>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 3: Advanced Admin</h1>
+            <p>Werken met relaties, foreign keys en complexe data structuren.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m3-1.html">M3.1: Models & Migrations</a></li>
+                <li><a href="m3-2.html" class="active">M3.2: Factories</a></li>
+                <li><a href="m3-3.html">M3.3: Seeders</a></li>
+                <li><a href="m3-4.html">M3.4: Index & Eager Loading</a></li>
+                <li><a href="m3-5.html">M3.5: Permissions</a></li>
+                <li><a href="m3-6.html">M3.6: Create & Dropdowns</a></li>
+                <li><a href="m3-7.html">M3.7: Store & Validatie</a></li>
+                <li><a href="m3-8.html">M3.8: Show & Relaties</a></li>
+                <li><a href="m3-9.html">M3.9: Edit & Pre-select</a></li>
+                <li><a href="m3-10.html">M3.10: Update & Logica</a></li>
+                <li><a href="m3-11.html">M3.11: Delete View</a></li>
+                <li><a href="m3-12.html">M3.12: Destroy & Constraints</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M3.2: Factories met Relaties</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan factories maken voor gerelateerde modellen.</li>
+            <li>Ik kan foreign keys automatisch vullen in een factory.</li>
+            <li>Ik kan datums genereren met Carbon en Faker.</li>
+        </ul>
+
+        <h3>1. Foreign Keys Vullen</h3>
+        <p>Een product heeft een <code>category_id</code> nodig. Om te voorkomen dat we een ID kiezen die niet bestaat, halen we alle categorieën op en kiezen er willekeurig eentje uit.</p>
+
+        <pre><code class="language-php">
+// database/factories/ProductFactory.php
+public function definition(): array
+{
+    // Zorg dat je de classes importeert!
+    return [
+        'name' => $this->faker->word,
+        'description' => $this->faker->paragraph(15),
+
+        // Pak een willekeurig ID uit de Categories tabel
+        'category_id' => Category::all()->random()->id,
+    ];
+}
+        </code></pre>
+
+        <h3>2. Datums met Carbon</h3>
+        <p>Voor de prijzen tabel willen we een datum in het verleden. We gebruiken <strong>Carbon</strong> om makkelijk met datums te rekenen.</p>
+
+        <pre><code class="language-php">
+// database/factories/PriceFactory.php
+use Carbon\Carbon;
+
+public function definition(): array
+{
+    return [
+        'price' => $this->faker->randomFloat(2, 2, 100),
+
+        // Vandaag min een willekeurig aantal dagen (0-365)
+        'effdate' => Carbon::today()->subDays(random_int(0, 365)),
+
+        'product_id' => Product::all()->random()->id,
+    ];
+}
+        </code></pre>
+
+        <div class="note-box">
+            <strong>Opdracht 17:</strong> Maak nu factories voor <code>Activity</code> en <code>Task</code>. Een taak heeft een start- en einddatum (10 dagen later) en koppelingen met user, project en activity.
+        </div>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

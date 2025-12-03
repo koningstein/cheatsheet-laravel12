@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M4.5: Reviews Plaatsen - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module3/m3-12.html">« Module 3</a><a href="../module5/m5-1.html">Module 5 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 4: Webshop Features</h1>
+            <p>De klantkant van de applicatie: Producten, Reviews en Winkelwagen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m4-1.html">M4.1: Publieke Productpagina</a></li>
+                <li><a href="m4-2.html">M4.2: De Product Show</a></li>
+                <li><a href="m4-3.html">M4.3: Reviews Setup</a></li>
+                <li><a href="m4-4.html">M4.4: Reviews Tonen</a></li>
+                <li><a href="m4-5.html" class="active">M4.5: Reviews Plaatsen</a></li>
+                <li><a href="m4-6.html">M4.6: Winkelwagen Setup</a></li>
+                <li><a href="m4-7.html">M4.7: Winkelwagen Tonen</a></li>
+                <li><a href="m4-8.html">M4.8: Winkelwagen Wijzigen</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M4.5: Reviews Plaatsen</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan een formulier maken dat alleen zichtbaar is voor ingelogde gebruikers.</li>
+            <li>Ik kan een <strong>FormRequest</strong> maken voor validatie.</li>
+            <li>Ik kan een review opslaan en koppelen aan de huidige gebruiker.</li>
+        </ul>
+
+        <h3>Stap 1: Formulier in View</h3>
+        <p>Op de productpagina voegen we een formulier toe. Dit mag alleen zichtbaar zijn als je bent ingelogd (<code>@auth</code>). We voegen dit toe aan <code>resources/views/open/products/show.blade.php</code>.</p>
+
+        <pre><code class="language-html">
+@auth
+    &lt;form action="{{ route('open.reviews.store') }}" method="POST" class="bg-white p-6 rounded shadow mb-8"&gt;
+        @csrf
+        &lt;input type="hidden" name="product_id" value="{{ $product->id }}"&gt;
+
+        &lt;h3 class="text-xl font-bold mb-4"&gt;Schrijf een review&lt;/h3&gt;
+
+        &lt;div class="mb-4"&gt;
+            &lt;label class="block text-sm font-bold mb-2"&gt;Titel&lt;/label&gt;
+            &lt;input type="text" name="title" class="w-full border p-2 rounded" value="{{ old('title') }}" required&gt;
+            @error('title') &lt;p class="text-red-500 text-xs"&gt;{{ $message }}&lt;/p&gt; @enderror
+        &lt;/div&gt;
+
+        &lt;div class="mb-4"&gt;
+            &lt;label class="block text-sm font-bold mb-2"&gt;Beoordeling&lt;/label&gt;
+            &lt;select name="rating" class="w-full border p-2 rounded"&gt;
+                @foreach(range(1,5) as $i)
+                    &lt;option value="{{ $i }}" @selected(old('rating') == $i)&gt;{{ $i }} Sterren&lt;/option&gt;
+                @endforeach
+            &lt;/select&gt;
+        &lt;/div&gt;
+
+        &lt;div class="mb-4"&gt;
+            &lt;label class="block text-sm font-bold mb-2"&gt;Jouw ervaring&lt;/label&gt;
+            &lt;textarea name="body" class="w-full border p-2 rounded" rows="4" required&gt;{{ old('body') }}&lt;/textarea&gt;
+            @error('body') &lt;p class="text-red-500 text-xs"&gt;{{ $message }}&lt;/p&gt; @enderror
+        &lt;/div&gt;
+
+        &lt;button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded"&gt;Plaats Review&lt;/button&gt;
+    &lt;/form&gt;
+@else
+    &lt;div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8"&gt;
+        &lt;p class="text-yellow-700"&gt;
+            Wil je een review schrijven? &lt;a href="{{ route('login') }}" class="underline font-bold"&gt;Log dan eerst in.&lt;/a&gt;
+        &lt;/p&gt;
+    &lt;/div&gt;
+@endauth
+        </code></pre>
+
+        <h3>Stap 2: Form Request Maken</h3>
+        <p>We houden de controller schoon en zetten de validatie in een apart bestand.</p>
+        <pre><code class="language-bash">php artisan make:request ReviewStoreRequest</code></pre>
+
+        <p>Open <code>app/Http/Requests/ReviewStoreRequest.php</code>:</p>
+        <pre><code class="language-php">
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+
+class ReviewStoreRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return Auth::check(); // Alleen ingelogde users mogen posten
+    }
+
+    public function rules(): array
+    {
+        return [
+            'title' => 'required|string|min:3|max:100',
+            'rating' => 'required|integer|min:1|max:5',
+            'body' => 'required|string|min:10',
+            'product_id' => 'required|exists:products,id'
+        ];
+    }
+}
+        </code></pre>
+
+        <h3>Stap 3: Controller Methode</h3>
+        <p>In de controller gebruiken we de request om de data op te slaan. We maken hiervoor een nieuwe controller aan: <code>Open/ReviewController</code>. We gebruiken hier de expliciete manier van opslaan (<code>new Review</code>), zodat je precies ziet wat er gebeurt.</p>
+
+        <pre><code class="language-php">
+// app/Http/Controllers/Open/ReviewController.php
+
+namespace App\Http\Controllers\Open;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ReviewStoreRequest;
+use App\Models\Review;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+
+class ReviewController extends Controller
+{
+    public function store(ReviewStoreRequest $request): RedirectResponse
+    {
+        $review = new Review();
+
+        // Vul de velden met de gevalideerde data
+        $review->title = $request->title;
+        $review->rating = $request->rating;
+        $review->body = $request->body;
+        $review->product_id = $request->product_id;
+
+        // Koppel de ingelogde gebruiker
+        $review->user_id = Auth::id();
+
+        $review->save();
+
+        return back()->with('status', 'Bedankt voor je review!');
+    }
+}
+        </code></pre>
+
+        <h3>Stap 4: Route Toevoegen</h3>
+        <p>Voeg de route toe aan <code>routes/web.php</code> zodat het formulier werkt.</p>
+        <pre><code class="language-php">
+// routes/web.php
+use App\Http\Controllers\Open\ReviewController;
+
+Route::post('/reviews', [ReviewController::class, 'store'])->name('open.reviews.store');
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
