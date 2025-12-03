@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Migrations & Datatypes - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module5/m5-5.html">« Module 5</a><a href="../module7/m7-1.html">Module 7 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Thema: Database & Models</h1>
+            <p>Alles over datastructuur: Migrations, Factories, Seeders en Model conventies.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m6-1.html" class="active">Migrations & Datatypes</a></li>
+                <li><a href="m6-2.html">Foreign Key Constraints</a></li>
+                <li><a href="m6-3.html">Model Conventions</a></li>
+                <li><a href="m6-4.html">Mass Assignment</a></li>
+                <li><a href="m6-5.html">Factories & Faker</a></li>
+                <li><a href="m6-6.html">Seeders & DatabaseState</a></li>
+                <li><a href="m6-7.html">Soft Deletes</a></li>
+                <li><a href="m6-8.html">Casts & Accessors</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Migrations & Datatypes</h2>
+        <p>Migrations zijn versiebeheer voor je database. Ze zorgen ervoor dat je tabellen kunt aanmaken en wijzigen op een gestructureerde manier.</p>
+
+        <h3>1. Migration Aanmaken</h3>
+        <p>Je maakt een migratie meestal samen met een model, maar het kan ook los.</p>
+        <pre><code class="language-bash">
+# Samen met model (aanbevolen)
+php artisan make:model Product -m
+
+# Losse migratie
+php artisan make:migration create_products_table
+        </code></pre>
+
+        <h3>2. Veelgebruikte Kolomtypes</h3>
+        <p>In de <code>up()</code> methode definieer je de kolommen.</p>
+
+        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_products_table.php</code></div>
+        <pre><code class="language-php">
+public function up(): void
+{
+    Schema::create('products', function (Blueprint $table) {
+        // Primary Key (Auto Increment BigInt)
+        $table->id();
+
+        // Tekst
+        $table->string('name', 100);       // VARCHAR(100)
+        $table->text('description');       // TEXT (veel data)
+
+        // Nummers
+        $table->integer('stock');          // INT
+        $table->decimal('price', 8, 2);    // DECIMAL(8,2) -> bijv. 123456.78
+        $table->boolean('is_active');      // TINYINT(1) (0 of 1)
+
+        // Datums
+        $table->date('release_date');      // DATE (2023-01-01)
+        $table->dateTime('published_at');  // DATETIME (2023-01-01 12:00:00)
+
+        // Created_at & Updated_at
+        $table->timestamps();
+    });
+}
+        </code></pre>
+
+        <h3>3. Modifiers (Aanpassingen)</h3>
+        <p>Je kunt eigenschappen aan kolommen toevoegen (chainen).</p>
+
+        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_users_table.php</code></div>
+        <pre><code class="language-php">
+$table->string('email')->unique();            // Moet uniek zijn
+$table->string('phone')->nullable();          // Mag leeg (NULL) zijn
+$table->boolean('is_admin')->default(false);  // Standaardwaarde
+$table->integer('score')->unsigned();         // Alleen positieve getallen
+        </code></pre>
+
+        <h3>4. Uitvoeren</h3>
+        <pre><code class="language-bash">
+php artisan migrate        # Voer uit
+php artisan migrate:fresh  # Gooi alles weg en begin opnieuw
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

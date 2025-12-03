@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Collections Methods - Eloquent ORM - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module6/m6-8.html">« Database & Models</a><a href="../module8/m8-1.html">Routing & Controllers »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Eloquent ORM</h1>
+            <p>Geavanceerd werken met data, relaties, accessors en scopes.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m7-1.html">One to One</a></li>
+                <li><a href="m7-2.html">One to Many</a></li>
+                <li><a href="m7-3.html">Many to Many</a></li>
+                <li><a href="m7-4.html">Eager Loading</a></li>
+                <li><a href="m7-5.html">Query Scopes</a></li>
+                <li><a href="m7-6.html" class="active">Collections Methods</a></li>
+                <li><a href="m7-7.html">Pivot Tabellen</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Collections Methods</h2>
+        <p>Wanneer je data ophaalt met Eloquent (bijvoorbeeld <code>Product::all()</code> of <code>$order->products</code>), krijg je <strong>geen</strong> simpele array terug, maar een <code>Illuminate\Database\Eloquent\Collection</code> object.</p>
+        <p>Dit object is een "super-array" met honderden handige methodes om je data te filteren, sorteren en manipuleren <em>nadat</em> het uit de database is gehaald.</p>
+
+        <div class="note-box">
+            <strong>Let op:</strong> Collection methods werken <strong>in het geheugen</strong> (PHP), niet in de database (SQL). Als je miljoenen rijen hebt, gebruik dan Query Builder methods (<code>where</code>, <code>orderBy</code>) om te filteren <em>voordat</em> je de data ophaalt.
+        </div>
+
+        <h3>1. Filteren (filter)</h3>
+        <p>Met <code>filter</code> kun je items uit de lijst halen op basis van complexe logica die je misschien niet makkelijk in SQL kunt schrijven.</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Controllers/ProductController.php</code></div>
+        <pre><code class="language-php">
+$products = Product::all(); // Haal alles op (Collection)
+
+// Filter producten die duurder zijn dan 100 euro
+// De originele $products blijft ongewijzigd, $expensive is een nieuwe collection
+$expensive = $products->filter(function ($product) {
+    // Return true om het item te bewaren, false om weg te gooien
+    return $product->price > 100;
+});
+        </code></pre>
+
+        <h3>2. Lijstjes maken (pluck)</h3>
+        <p>Vaak heb je alleen een lijstje van namen of ID's nodig, bijvoorbeeld voor een dropdown menu in een formulier. <code>pluck</code> is daar perfect voor.</p>
+
+        <pre><code class="language-php">
+// Geeft een simpele array terug: ['Laptop', 'Muis', 'Toetsenbord']
+$names = $products->pluck('name');
+
+// Geeft een key-value array (handig voor <option>): [1 => 'Laptop', 5 => 'Muis']
+// Eerste parameter is de waarde, tweede parameter is de key (ID)
+$list = $products->pluck('name', 'id');
+        </code></pre>
+
+        <h3>3. Transformeren (map)</h3>
+        <p>Met <code>map</code> kun je elk item in de collectie aanpassen. Dit is handig als je data wilt formatteren voor je view of API.</p>
+
+        <pre><code class="language-php">
+$formatted = $products->map(function ($product) {
+    // We voegen een eigenschap toe (tijdelijk, niet in DB)
+    $product->price_inc_tax = $product->price * 1.21;
+
+    return $product;
+});
+        </code></pre>
+
+        <h3>4. Zoeken (firstWhere)</h3>
+        <p>Als je snel één item uit de collectie wilt halen op basis van een waarde.</p>
+
+        <pre><code class="language-php">
+// Vind het eerste product waar 'is_active' true is
+$firstActive = $products->firstWhere('is_active', true);
+
+// Vind het product met ID 5 (alternatief voor find() als je de data al hebt)
+$specific = $products->firstWhere('id', 5);
+        </code></pre>
+
+        <h3>5. Chaining (Kettingreactie)</h3>
+        <p>De echte kracht van Collections is dat je methodes aan elkaar kunt rijgen ("chainen"). Dit maakt je code zeer leesbaar.</p>
+
+        <pre><code class="language-php">
+$result = $products
+    ->filter(fn($p) => $p->is_active)      // 1. Pak alleen actieve producten
+    ->sortByDesc('price')                  // 2. Sorteer hoogste prijs eerst
+    ->take(5)                              // 3. Pak de top 5
+    ->pluck('name');                       // 4. Geef alleen de namen terug
+
+// $result is nu een lijstje met de namen van de 5 duurste actieve producten.
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

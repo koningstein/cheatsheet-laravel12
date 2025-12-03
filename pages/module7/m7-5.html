@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Query Scopes - Eloquent ORM - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module6/m6-8.html">« Database & Models</a><a href="../module8/m8-1.html">Routing & Controllers »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Eloquent ORM</h1>
+            <p>Geavanceerd werken met data, relaties, accessors en scopes.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m7-1.html">One to One</a></li>
+                <li><a href="m7-2.html">One to Many</a></li>
+                <li><a href="m7-3.html">Many to Many</a></li>
+                <li><a href="m7-4.html">Eager Loading</a></li>
+                <li><a href="m7-5.html" class="active">Query Scopes</a></li>
+                <li><a href="m7-6.html">Collections Methods</a></li>
+                <li><a href="m7-7.html">Pivot Tabellen</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Query Scopes</h2>
+        <p>Query Scopes zijn herbruikbare stukjes query-logica die je in je Model definieert. Dit houdt je Controllers schoon.</p>
+
+        <h3>1. Scope Definiëren</h3>
+        <p>Maak een methode die begint met <code>scope</code>, gevolgd door de naam (CamelCase).</p>
+
+        <div class="note-box">Bestand: <code>app/Models/Product.php</code></div>
+        <pre><code class="language-php">
+use Illuminate\Database\Eloquent\Builder;
+
+// Scope: Active
+public function scopeActive(Builder $query): void
+{
+    $query->where('is_active', true);
+}
+
+// Scope: PriceBelow (met parameter)
+public function scopePriceBelow(Builder $query, float $amount): void
+{
+    $query->where('price', '<', $amount);
+}
+        </code></pre>
+
+        <h3>2. Scope Gebruiken</h3>
+        <p>Je roept de scope aan zonder het voorvoegsel <code>scope</code>.</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Controllers/ProductController.php</code></div>
+        <pre><code class="language-php">
+// Haal alle actieve producten onder de 50 euro
+$deals = Product::active()
+                ->priceBelow(50)
+                ->get();
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

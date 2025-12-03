@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Routing - Routing & Controllers - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module7/m7-7.html">« Eloquent ORM</a><a href="../module9/m9-1.html">Blade & Frontend »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Routing & Controllers</h1>
+            <p>Het verwerken van verzoeken, parameters en de structuur van controllers.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m8-1.html" class="active">Basic Routing</a></li>
+                <li><a href="m8-2.html">Named Routes & Groups</a></li>
+                <li><a href="m8-3.html">Route Model Binding</a></li>
+                <li><a href="m8-4.html">Resource Controllers</a></li>
+                <li><a href="m8-5.html">Single Action Controllers</a></li>
+                <li><a href="m8-6.html">Redirects & Responses</a></li>
+                <li><a href="m8-7.html">Dependency Injection</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Basic Routing & Parameters</h2>
+        <p>Routes definiëren de URL's van je applicatie. Ze koppelen een URL (zoals <code>/contact</code>) aan logica (een Closure of Controller).</p>
+
+        <h3>1. Basis HTTP Verbs</h3>
+        <p>Je definieert routes in <code>routes/web.php</code>. Laravel ondersteunt alle HTTP werkwoorden.</p>
+
+        <div class="note-box">Bestand: <code>routes/web.php</code></div>
+        <pre><code class="language-php">
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::post('/contact', [ContactController::class, 'send']);
+Route::put('/users/{id}', [UserController::class, 'update']);
+Route::delete('/users/{id}', [UserController::class, 'destroy']);
+        </code></pre>
+
+        <h3>2. Parameters</h3>
+        <p>Soms wil je dynamische waarden uit de URL halen, zoals een ID. Dit doe je met accolades <code>{ }</code>.</p>
+
+        <pre><code class="language-php">
+// URL: /products/5
+Route::get('/products/{id}', function (string $id) {
+    return 'Product ID: ' . $id;
+});
+        </code></pre>
+
+        <h3>3. Optionele Parameters</h3>
+        <p>Wil je dat een parameter niet verplicht is? Zet er een vraagteken achter <code>{name?}</code> en geef de variabele een standaardwaarde.</p>
+
+        <pre><code class="language-php">
+// URL: /user  OF  /user/Jan
+Route::get('/user/{name?}', function (?string $name = 'Gast') {
+    return 'Hallo ' . $name;
+});
+        </code></pre>
+
+        <h3>4. Constraints (Beperkingen)</h3>
+        <p>Je kunt met RegEx (Regular Expressions) afdwingen wat voor data een parameter mag bevatten. Bijvoorbeeld: een ID mag alleen cijfers zijn.</p>
+
+        <pre><code class="language-php">
+Route::get('/user/{id}', function (string $id) {
+    // ...
+})->whereNumber('id'); // Alleen 0-9 toegestaan
+
+Route::get('/category/{name}', function (string $name) {
+    // ...
+})->whereAlpha('name'); // Alleen letters toegestaan
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

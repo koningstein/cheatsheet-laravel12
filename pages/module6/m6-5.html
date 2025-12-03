@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Factories & Faker - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module5/m5-5.html">« Module 5</a><a href="../module7/m7-1.html">Module 7 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Thema: Database & Models</h1>
+            <p>Alles over datastructuur: Migrations, Factories, Seeders en Model conventies.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m6-1.html">Migrations & Datatypes</a></li>
+                <li><a href="m6-2.html">Foreign Key Constraints</a></li>
+                <li><a href="m6-3.html">Model Conventions</a></li>
+                <li><a href="m6-4.html">Mass Assignment</a></li>
+                <li><a href="m6-5.html" class="active">Factories & Faker</a></li>
+                <li><a href="m6-6.html">Seeders & DatabaseState</a></li>
+                <li><a href="m6-7.html">Soft Deletes</a></li>
+                <li><a href="m6-8.html">Casts & Accessors</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Factories & Faker</h2>
+        <p>Factories genereren nepdata voor je database. Laravel gebruikt de <strong>Faker</strong> bibliotheek hiervoor.</p>
+
+        <h3>1. Factory Maken</h3>
+        <pre><code class="language-bash">php artisan make:factory ProductFactory</code></pre>
+
+        <h3>2. Definitie Schrijven</h3>
+        <p>In de <code>definition</code> methode geef je aan hoe de data eruit moet zien.</p>
+
+        <div class="note-box">Bestand: <code>database/factories/ProductFactory.php</code></div>
+        <pre><code class="language-php">
+public function definition(): array
+{
+    // Datum logica: Eerst een random startdatum kiezen in het verleden
+    $startDate = $this->faker->dateTimeBetween('-1 year', 'now');
+
+    // De einddatum moet NA de startdatum liggen (bijv. 10 dagen later)
+    // We gebruiken Carbon::instance() om van het DateTime object een Carbon object te maken
+    $endDate = Carbon::instance($startDate)->addDays(10);
+
+    return [
+        // Datums met logica (Start en Eind)
+        'start_date' => $startDate,
+        'end_date'   => $endDate,
+
+        // Willekeurige naam (2 woorden)
+        'name' => $this->faker->words(2, true),
+
+        // Willekeurige tekst
+        'description' => $this->faker->paragraph(),
+
+        // String met specifieke lengte (voor validatie tests: min 5, max 15)
+        'short_code' => $this->faker->realTextBetween(5, 15),
+
+        // Getal tussen 1 en 100
+        'stock' => $this->faker->numberBetween(1, 100),
+
+        // Decimaal getal (2 cijfers precisie, min 10, max 500)
+        'price' => $this->faker->randomFloat(2, 10, 500),
+
+        // Willekeurig element uit een array
+        'status' => $this->faker->randomElement(['draft', 'published', 'archived']),
+
+        // Foreign Key vullen met bestaande data
+        // Haal alle Users op en kies er willekeurig één (zodat de relatie klopt)
+        'user_id' => User::all()->random()->id,
+    ];
+}
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
