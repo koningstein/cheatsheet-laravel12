@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Layout Inheritance - Blade & Frontend - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module8/m8-7.html">« Routing & Controllers</a><a href="../module10/m10-1.html">Validatie & Forms »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Blade & Frontend</h1>
+            <p>De presentatielaag: Layouts, Components en slimme directives.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m9-1.html" class="active">Layout Inheritance</a></li>
+                <li><a href="m9-2.html">Components & Slots</a></li>
+                <li><a href="m9-3.html">Stacks & Push</a></li>
+                <li><a href="m9-4.html">Control Structures</a></li>
+                <li><a href="m9-5.html">Auth Directives</a></li>
+                <li><a href="m9-6.html">Service Injection</a></li>
+                <li><a href="m9-7.html">Tailwind Utility Patterns</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Layout Inheritance</h2>
+        <p>Een van de belangrijkste functies van een template engine is het voorkomen van herhaling (DRY - Don't Repeat Yourself). In plaats van op elke pagina de <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> en navigatiebalk te kopiëren, gebruik je <strong>Layout Inheritance</strong>.</p>
+
+        <h3>1. De Masterpage (De ouder)</h3>
+        <p>Je maakt één bestand dat de structuur van je applicatie bevat. Op de plekken waar de inhoud per pagina verschilt, plaats je een <code>@yield</code> directive.</p>
+
+        <div class="note-box">Bestand: <code>resources/views/layouts/app.blade.php</code></div>
+        <pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="nl"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Mijn App - @yield('title', 'Home')&lt;/title&gt;
+    @vite(['resources/css/app.css'])
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;nav&gt;
+        &lt;!-- Hier staat je menu, altijd zichtbaar --&gt;
+        &lt;a href="/"&gt;Home&lt;/a&gt;
+    &lt;/nav&gt;
+
+    &lt;main class="container"&gt;
+        &lt;!-- HIER injecteren we de unieke inhoud van sub-pagina's --&gt;
+        @yield('content')
+    &lt;/main&gt;
+
+    &lt;footer&gt;
+        &copy; 2025
+    &lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+        </code></pre>
+        <p><em>Tip: Het tweede argument van <code>@yield('title', 'Default')</code> is een standaardwaarde voor als de sub-pagina geen titel opgeeft.</em></p>
+
+        <h3>2. De Sub-pagina (Het kind)</h3>
+        <p>Een specifieke pagina (zoals het dashboard) "breidt de master uit" (<code>@extends</code>). Vervolgens vul je de gaten in met <code>@section</code>.</p>
+
+        <div class="note-box">Bestand: <code>resources/views/dashboard.blade.php</code></div>
+        <pre><code class="language-html">
+{{-- 1. Verwijs naar de master file (map.bestandsnaam) --}}
+@extends('layouts.app')
+
+{{-- 2. Vul de 'title' yield --}}
+@section('title', 'Dashboard')
+
+{{-- 3. Vul de 'content' yield --}}
+@section('content')
+    &lt;h1&gt;Welkom op je Dashboard&lt;/h1&gt;
+    &lt;p&gt;Dit is de unieke inhoud van deze pagina.&lt;/p&gt;
+@endsection
+        </code></pre>
+
+        <h3>3. @section vs @yield</h3>
+        <ul>
+            <li><code>@yield('naam')</code>: Gebruik dit in de <strong>Layout</strong> om aan te geven: "Hier komt iets".</li>
+            <li><code>@section('naam')</code>: Gebruik dit in de <strong>View</strong> om te zeggen: "Dit is de inhoud voor 'naam'".</li>
+            <li><code>@parent</code>: Als je in een sectie de inhoud van de layout wilt behouden én iets wilt toevoegen (bijv. in een sidebar), gebruik je <code>@parent</code> binnen de section.</li>
+        </ul>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
