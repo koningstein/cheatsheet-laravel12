@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Email & Password Confirm - Security & Auth - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module10/m10-6.html">« Validatie & Forms</a>
+    <a href="../module12/m12-1.html">Services & Features »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Security & Auth</h1>
+            <p>Beveiliging, gebruikersbeheer en permissies met Livewire.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m11-1.html">Authenticatie Basis</a></li>
+                <li><a href="m11-2.html">Middleware Beveiliging</a></li>
+                <li><a href="m11-3.html">Wachtwoorden & Hashing</a></li>
+                <li><a href="m11-4.html">Gates</a></li>
+                <li><a href="m11-5.html">Policies</a></li>
+                <li><a href="m11-6.html">Spatie Permissions</a></li>
+                <li><a href="m11-7.html" class="active">Email & Password Confirm</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Extra Beveiligingslagen</h2>
+        <p>Soms is simpelweg "ingelogd zijn" niet genoeg. Voor bepaalde acties of voor de betrouwbaarheid van je gebruikersbestand biedt Laravel extra beveiligingsmechanismen die standaard ingebouwd zijn.</p>
+
+        <h3>1. E-mail Verificatie</h3>
+        <p><strong>Waarom?</strong> Veel webapplicaties willen zeker weten dat een gebruiker een geldig e-mailadres heeft opgegeven. Dit voorkomt spam-accounts en zorgt dat je gebruikers altijd kunt bereiken voor wachtwoord resets.</p>
+
+        <p><strong>Hoe?</strong> Laravel maakt dit kinderlijk eenvoudig. Je hoeft alleen maar een interface te implementeren in je User model. Laravel (en starter kits zoals Breeze) bevatten al de benodigde Livewire components (`VerifyEmail`) om de verificatie-link te versturen en te valideren.</p>
+
+        <div class="note-box">Bestand: <code>app/Models/User.php</code></div>
+        <pre><code class="language-php">
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+// Voeg 'implements MustVerifyEmail' toe
+class User extends Authenticatable implements MustVerifyEmail
+{
+    // ...
+}
+        </code></pre>
+
+        <p>Vervolgens kun je routes beschermen met de <code>verified</code> middleware. Gebruikers die hun mail nog niet hebben bevestigd, kunnen deze pagina's niet bezoeken en worden doorgestuurd naar een scherm met "Controleer je inbox".</p>
+
+        <div class="note-box">Bestand: <code>routes/web.php</code></div>
+        <pre><code class="language-php">
+Route::get('/dashboard', Dashboard::class)
+    ->middleware(['auth', 'verified']) // Nu verplicht!
+    ->name('dashboard');
+        </code></pre>
+
+        <h3>2. Password Confirmation (Sudo Mode)</h3>
+        <p><strong>Waarom?</strong> Stel je zit op een openbare computer en loopt even weg. Je bent nog ingelogd. Iemand anders kan achter de computer gaan zitten en jouw account verwijderen of je factuurgegevens inzien. </p>
+        <p>Om dit te voorkomen, vragen applicaties zoals GitHub of Amazon vaak om <strong>nogmaals</strong> je wachtwoord in te voeren voordat je een "gevaarlijke" actie uitvoert, zelfs als je al ingelogd bent. In Laravel heet dit <em>Password Confirmation</em>.</p>
+
+        <p><strong>Hoe?</strong> Laravel heeft hier een ingebouwde middleware voor: <code>password.confirm</code>. </p>
+
+        <div class="note-box">Bestand: <code>routes/web.php</code></div>
+        <pre><code class="language-php">
+// Gevoelige route: Billing instellingen
+Route::get('/billing', \App\Livewire\Billing::class)
+    ->middleware(['auth', 'password.confirm']);
+        </code></pre>
+
+        <p><strong>Wat gebeurt er?</strong></p>
+        <ol>
+            <li>De gebruiker klikt op "Billing".</li>
+            <li>De middleware merkt dat de gebruiker dit nog niet recent heeft bevestigd.</li>
+            <li>Laravel redirect de gebruiker naar een speciaal scherm (`auth.confirm-password`).</li>
+            <li>De gebruiker voert zijn wachtwoord in.</li>
+            <li>Indien correct, wordt de gebruiker doorgestuurd naar de Billing pagina.</li>
+            <li>De gebruiker hoeft dit de komende paar uur (standaard 3 uur) niet meer te doen.</li>
+        </ol>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Generatie - Services & Features - Laravel 12</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module11/m11-7.html">« Security & Auth</a><a href="../module13/m13-1.html">Quality Assurance »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Services & Features</h1>
+            <p>Externe integraties, bestandsbeheer en systeemtaken.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m12-1.html" class="active">PDF Generatie</a></li>
+                <li><a href="m12-2.html">Excel Import & Export</a></li>
+                <li><a href="m12-3.html">Mail & Notifications</a></li>
+                <li><a href="m12-4.html">File Storage</a></li>
+                <li><a href="m12-5.html">HTTP Client</a></li>
+                <li><a href="m12-6.html">Events & Listeners</a></li>
+                <li><a href="m12-7.html">Artisan Commands</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>PDF Generatie met DomPDF</h2>
+        <p>In zakelijke applicaties is het genereren van PDF-bestanden bijna onvermijdelijk. Denk aan facturen, pakbonnen, contracten of certificaten. Hoewel je HTML in de browser kunt printen, heb je daar geen controle over de exacte paginanummering, pagina-einden en lay-out op verschillende printers.</p>
+
+        <h3>Waarom: Een vaste lay-out</h3>
+        <p>Een PDF garandeert dat de ontvanger het document precies zo ziet als jij bedoeld hebt, ongeacht of ze het op een telefoon of desktop openen. In Laravel gebruiken we hiervoor de standaard package <strong>laravel-dompdf</strong>. Dit is een 'wrapper' om de DomPDF library, die HTML/CSS omzet naar PDF.</p>
+
+        <h3>Hoe: Installatie en Basisgebruik</h3>
+        <p>Na installatie via Composer (<code>composer require barryvdh/laravel-dompdf</code>), kun je de `Pdf` facade gebruiken. De kracht zit hem in het feit dat je gewoon <strong>Blade Views</strong> kunt hergebruiken. Je hoeft dus geen nieuwe taal te leren om PDF's te maken; je bouwt gewoon HTML.</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Controllers/InvoiceController.php</code></div>
+        <pre><code class="language-php">
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Order;
+
+public function show(Order $order)
+{
+    // 1. Data verzamelen (zoals je gewend bent)
+    $data = [
+        'order' => $order,
+        'customer' => $order->user,
+        'lines' => $order->orderLines,
+    ];
+
+    // 2. View laden in het PDF object
+    // 'pdf.invoice' is gewoon een blade file in resources/views/pdf/invoice.blade.php
+    $pdf = Pdf::loadView('pdf.invoice', $data);
+
+    // 3. Optie A: Downloaden (forceer opslaan bij client)
+    return $pdf->download('factuur-'.$order->id.'.pdf');
+
+    // 3. Optie B: Streamen (toon in browser)
+    // return $pdf->stream();
+}
+        </code></pre>
+
+        <h3>Styling en Beperkingen</h3>
+        <p>Let op: PDF-engines zijn geen moderne webbrowsers. DomPDF ondersteunt CSS 2.1 en een beetje CSS 3. Moderne snufjes zoals Flexbox en CSS Grid werken vaak <strong>niet</strong> of slecht. </p>
+        <p><strong>Advies:</strong> Gebruik voor PDF's ouderwetse <code>&lt;table&gt;</code> structuren voor lay-out en inline CSS of een simpele <code>&lt;style&gt;</code> blok in de head. Externe stylesheets (Tailwind) werken vaak niet goed tenzij je ze compileert naar pure CSS en inline inlaadt.</p>
+
+        <div class="note-box">Bestand: <code>resources/views/pdf/invoice.blade.php</code></div>
+        <pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Factuur&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: sans-serif; }
+        .table { width: 100%; border-collapse: collapse; }
+        .table th, .table td { border: 1px solid #ddd; padding: 8px; }
+        .page-break { page-break-after: always; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Factuur #{{ $order->id }}&lt;/h1&gt;
+
+    &lt;table class="table"&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Product&lt;/th&gt;
+                &lt;th&gt;Prijs&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            @foreach($lines as $line)
+                &lt;tr&gt;
+                    &lt;td&gt;{{ $line->product_name }}&lt;/td&gt;
+                    &lt;td&gt;€ {{ number_format($line->price, 2, ',', '.') }}&lt;/td&gt;
+                &lt;/tr&gt;
+            @endforeach
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;div class="page-break"&gt;&lt;/div&gt;
+    &lt;p&gt;Voorwaarden op pagina 2...&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
