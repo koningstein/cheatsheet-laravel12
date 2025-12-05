@@ -59,7 +59,17 @@
         <p>Als we in de view voor elk product de categorie naam opvragen (<code>$product->category->name</code>), voert Laravel op de achtergrond steeds een nieuwe query uit. Bij 100 producten zijn dat 101 queries! Dit maakt de applicatie traag.</p>
 
         <h3>2. Eager Loading</h3>
-        <p>Met <code>with()</code> halen we de relaties in één keer op. We maken ook meteen een speciale relatie <code>latest_price</code> om de huidige prijs te tonen.</p>
+        <p>Met <code>with()</code> halen we de relaties in één keer op. Standaard is net zoals database relaties een 1 op 1 of 1 op veel relate.
+            Bij 1 op veel moeten we aan de ene kant HasMany gebruiken, en de andere kan BelongsTo. We maken ook meteen een speciale relatie
+            <code>latest_price</code> om de huidige prijs te tonen.</p>
+
+        <pre><code class="language-php">
+// app/Models/Product.php
+public function category(): BelongsTo
+{
+    return $this->BelongsTo(Category::class);
+}
+        </code></pre>
 
         <pre><code class="language-php">
 // app/Models/Product.php
