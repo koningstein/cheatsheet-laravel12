@@ -1,4 +1,4 @@
-// script.js
+// v2/script.js
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -7,26 +7,79 @@ document.addEventListener('DOMContentLoaded', () => {
         hljs.highlightAll();
     }
 
-    // 2. Thema Toggle Logica
-    const themeBtn = document.getElementById('theme-toggle');
     const html = document.documentElement;
 
-    // Check localstorage of systeem voorkeur
+    // 2. Thema (Dark/Light) Logica
+    const themeBtn = document.getElementById('theme-toggle');
     const savedTheme = localStorage.getItem('theme');
+
     if (savedTheme) {
         html.setAttribute('data-theme', savedTheme);
     }
 
     if(themeBtn){
         themeBtn.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
         });
     }
 
-    // 3. Mobile Menu Toggle
+    // 3. Kleur Thema's Logica (Cycle door kleuren)
+    const colorBtn = document.getElementById('color-toggle');
+    const colors = ['red', 'blue', 'green', 'purple', 'orange'];
+
+    // Check saved color
+    const savedColor = localStorage.getItem('color') || 'red';
+    html.setAttribute('data-color', savedColor);
+
+    if(colorBtn) {
+        colorBtn.addEventListener('click', () => {
+            let currentColor = html.getAttribute('data-color') || 'red';
+            let index = colors.indexOf(currentColor);
+            let nextIndex = (index + 1) % colors.length;
+            let nextColor = colors[nextIndex];
+
+            html.setAttribute('data-color', nextColor);
+            localStorage.setItem('color', nextColor);
+        });
+    }
+
+    // 4. Sidebar Accordion Logica (Direct scrollen)
+    const navToggles = document.querySelectorAll('.nav-toggle');
+
+    // A. Open direct de groep waar de huidige pagina in zit (bij laden pagina)
+    const currentLink = document.querySelector('.submenu a.current');
+    if(currentLink) {
+        const parentGroup = currentLink.closest('.nav-item-container');
+        if(parentGroup) {
+            parentGroup.classList.add('active');
+            // Direct scrollen bij laden (zonder animatie want de pagina laadt net)
+            parentGroup.scrollIntoView({ block: 'nearest' });
+        }
+    }
+
+    // B. Click events voor het openen/sluiten
+    navToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const container = toggle.closest('.nav-item-container');
+            const wasActive = container.classList.contains('active');
+
+            // Toggle de geklikte container
+            container.classList.toggle('active');
+
+            // Scroll logica: Als we hem openen, scroll direct
+            if (!wasActive) {
+                container.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            }
+        });
+    });
+
+    // 5. Mobile Menu
     const menuBtn = document.getElementById('menu-toggle');
     const sidebarLeft = document.querySelector('.sidebar-left');
 
@@ -36,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Automatische Table of Contents (Rechter Sidebar)
+    // 6. Table of Contents (Rechter Sidebar)
     const content = document.querySelector('.main-content');
     const tocList = document.getElementById('toc-list');
 
@@ -45,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const headers = content.querySelectorAll('h2, h3');
 
         headers.forEach((header, index) => {
-            // Voeg ID toe als die er niet is
             if (!header.id) {
                 header.id = `section-${index}`;
             }
@@ -55,12 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
             a.href = `#${header.id}`;
             a.textContent = header.textContent;
 
-            // Indentatie voor H3
             if(header.tagName === 'H3') {
                 a.style.paddingLeft = '1.5rem';
             }
 
-            // Click event voor smooth scroll
             a.addEventListener('click', (e) => {
                 e.preventDefault();
                 document.getElementById(header.id).scrollIntoView({
@@ -72,17 +122,18 @@ document.addEventListener('DOMContentLoaded', () => {
             tocList.appendChild(li);
         });
 
-        // Scroll Spy (Active link highlighten tijdens scrollen)
+        // Scroll Spy
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const id = entry.target.id;
                     document.querySelectorAll('.toc-list a').forEach(link => {
                         link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${id}`) {
-                            link.classList.add('active');
-                        }
                     });
+
+                    const activeLink = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+                    if(activeLink) {
+                        activeLink.classList.add('active');
+                    }
                 }
             });
         }, { rootMargin: '-100px 0px -60% 0px' });
