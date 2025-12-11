@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1 - Laravel 12 Cheatsheet</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../../index.html" class="logo">
+        <svg width="30" height="30" viewBox="0 0 100 100" fill="#ef3b2d"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
+        Laravel 12 Cheatsheet
+    </a>
+    <div class="header-controls">
+        <button class="theme-btn" id="theme-toggle">🌓 Thema</button>
+        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
+    </div>
+</header>
+
+<div class="layout-wrapper">
+    <nav class="sidebar-left">
+        <div class="nav-group">
+            <h3>Start</h3>
+            <ul>
+                <li><a href="../../index.html">Home & Introductie</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-group">
+            <h3>Opdracht Modules</h3>
+            <ul>
+                <li><a href="m1-1.html" class="active">Module 1: Introductie</a></li>
+                <li><a href="#">Module 2: Layouts & Views</a></li>
+                <li><a href="#">Module 3: Controllers</a></li>
+                <li><a href="#">Module 4: Database & Migrations</a></li>
+                <li><a href="#">Module 5: Security</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-group">
+            <h3>Thematisch</h3>
+            <ul>
+                <li><a href="#">Routing</a></li>
+                <li><a href="#">Eloquent ORM</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1>Module 1: Introductie & Installatie</h1>
+
+        <p>In deze eerste module leer je hoe je een Laravel 12 project opzet, de mappenstructuur begrijpt en je eerste routes maakt.</p>
+
+        <h2>Een nieuw project starten</h2>
+        <p>Om een nieuw Laravel project te starten gebruik je de composer create-project command of de Laravel installer.</p>
+
+        <pre><code class="language-bash">composer create-project laravel/laravel:^12.0 mijn-webshop
+cd mijn-webshop
+php artisan serve</code></pre>
+
+        <h2>De mappenstructuur</h2>
+        <p>Laravel heeft een specifieke mappenstructuur. De belangrijkste mappen voor nu zijn:</p>
+        <ul>
+            <li><strong>app/</strong>: Hier komt al je PHP logica (Models, Controllers).</li>
+            <li><strong>routes/</strong>: Hier definieer je de URL's van je applicatie.</li>
+            <li><strong>resources/views/</strong>: Hier staan je HTML bestanden (Blade templates).</li>
+        </ul>
+
+        <h2>Je eerste Route</h2>
+        <p>Open het bestand <code>routes/web.php</code>. Hier zie je de standaard route definitie.</p>
+
+        <pre><code class="language-php">use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Een nieuwe test route
+Route::get('/hello', function () {
+    return 'Hallo Wereld uit Laravel 12!';
+});</code></pre>
+
+        <h3>Parameters in routes</h3>
+        <p>Je kunt ook data meegeven via de URL:</p>
+        <pre><code class="language-php">Route::get('/user/{id}', function (string $id) {
+    return 'User '.$id;
+});</code></pre>
+
+    </main>
+
+    <aside class="sidebar-right">
+        <div class="toc-container">
+            <h4>Op deze pagina</h4>
+            <ul id="toc-list" class="toc-list">
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="../../script.js"></script>
+</body>
+</html>
