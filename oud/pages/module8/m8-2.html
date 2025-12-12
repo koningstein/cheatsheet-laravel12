@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Named Routes & Groups - Routing & Controllers - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="m8-1.html">« Basic Routing</a><a href="m8-3.html">Route Model Binding »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Routing & Controllers</h1>
+            <p>Het verwerken van verzoeken, parameters en de structuur van controllers.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m8-1.html">Basic Routing</a></li>
+                <li><a href="m8-2.html" class="active">Named Routes & Groups</a></li>
+                <li><a href="m8-3.html">Route Model Binding</a></li>
+                <li><a href="m8-4.html">Resource Controllers</a></li>
+                <li><a href="m8-5.html">Single Action Controllers</a></li>
+                <li><a href="m8-6.html">Redirects & Responses</a></li>
+                <li><a href="m8-7.html">Dependency Injection</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Named Routes & Groups</h2>
+        <p>Om je code georganiseerd en onderhoudbaar te houden, kun je routes namen geven en groeperen.</p>
+
+        <h3>1. Named Routes (Routes een naam geven)</h3>
+        <p>Geef elke route een unieke naam met <code>->name()</code>. Als je later de URL <code>/user/profile</code> verandert naar <code>/account/me</code>, hoef je je links niet aan te passen, zolang de naam <code>profile.show</code> maar hetzelfde blijft.</p>
+
+        <div class="note-box">Bestand: <code>routes/web.php</code></div>
+        <pre><code class="language-php">
+Route::get('/user/profile', [UserProfileController::class, 'show'])
+    ->name('profile.show');
+        </code></pre>
+
+        <p>Gebruik in je code:</p>
+        <pre><code class="language-php">
+// In een Controller (Redirect)
+return to_route('profile.show');
+
+// In een Blade View (Link)
+&lt;a href="{{ route('profile.show') }}"&gt;Mijn Profiel&lt;/a&gt;
+        </code></pre>
+
+        <h3>2. Route Prefixing (URL Voorvoegsels)</h3>
+        <p>Stel je bouwt een admin-paneel. Al je routes beginnen met <code>/admin</code>. In plaats van dit elke keer te typen, gebruik je een groep met een <strong>prefix</strong>.</p>
+
+        <pre><code class="language-php">
+// ZONDER groep (herhaling = foutgevoelig)
+Route::get('/admin/dashboard', ...);
+Route::get('/admin/users', ...);
+Route::get('/admin/settings', ...);
+
+// MET groep (schoon en duidelijk)
+Route::prefix('admin')->group(function () {
+
+    // De URL wordt automatisch: /admin/dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    // De URL wordt automatisch: /admin/users
+    Route::get('/users', [UserController::class, 'index']);
+
+});
+        </code></pre>
+
+        <h3>3. Name Prefixing (Naam Voorvoegsels)</h3>
+        <p>Net zoals de URL, wil je ook dat de <em>namen</em> van je routes logisch zijn (bijv. <code>admin.dashboard</code>). Je kunt <code>->name()</code> ook op een groep zetten.</p>
+        <p>Let op de punt <code>.</code> aan het einde van de naam-prefix!</p>
+
+        <pre><code class="language-php">
+Route::name('admin.')->group(function () {
+
+    // De volledige naam wordt: admin.dashboard
+    Route::get('/dashboard', ...)->name('dashboard');
+
+    // De volledige naam wordt: admin.users.index
+    Route::get('/users', ...)->name('users.index');
+
+});
+        </code></pre>
+
+        <h3>4. De Complete Groep (Alles samen)</h3>
+        <p>In de praktijk combineer je vaak <strong>Middleware</strong> (beveiliging), <strong>Prefix</strong> (URL) en <strong>Name</strong> (route naam).</p>
+
+        <pre><code class="language-php">
+// Alle routes binnen deze groep:
+// 1. Zijn beveiligd (moet ingelogd zijn EN admin zijn)
+// 2. Beginnen met /admin
+// 3. Hebben namen die beginnen met admin.
+
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        // URL: /admin/products
+        // Route Naam: admin.products.index
+        Route::resource('products', ProductController::class);
+
+        // URL: /admin/orders/archive
+        // Route Naam: admin.orders.archive
+        Route::get('/orders/archive', [OrderController::class, 'archive'])
+            ->name('orders.archive');
+
+    });
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

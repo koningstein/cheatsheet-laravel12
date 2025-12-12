@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M5.2: Order Seeds - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module4/m4-8.html">« Module 4</a><a href="../module6/m6-1.html">Module 6 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 5: Orders & Validatie</h1>
+            <p>Het verwerken van bestellingen, PDF generatie en validatie vertalingen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m5-1.html">M5.1: Orders Structuur</a></li>
+                <li><a href="m5-2.html" class="active">M5.2: Order Seeds</a></li>
+                <li><a href="m5-3.html">M5.3: Orders Opslaan</a></li>
+                <li><a href="m5-4.html">M5.4: Orders Tonen</a></li>
+                <li><a href="m5-5.html">M5.5: Order naar PDF</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M5.2: Order Seeds</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan seeders maken voor statische data (States).</li>
+            <li>Ik kan de DatabaseSeeder configureren voor de juiste volgorde.</li>
+        </ul>
+
+        <h3>Stap 1: State Seeder</h3>
+        <p>Voordat we orders kunnen maken, moeten er statussen zijn. Maak een seeder aan:</p>
+        <pre><code class="language-bash">php artisan make:seeder StateSeeder</code></pre>
+
+        <h3>Stap 2: Statussen Vullen</h3>
+        <p>We vullen de tabel met vaste waardes.</p>
+
+        <div class="note-box">Bestand: <code>database/seeders/StateSeeder.php</code></div>
+        <pre><code class="language-php">
+use App\Models\State;
+
+public function run(): void
+{
+    // Vaste statussen aanmaken
+    State::create(['name' => 'Pending']); // ID 1
+    State::create(['name' => 'Paid']);    // ID 2
+    State::create(['name' => 'Shipped']); // ID 3
+    State::create(['name' => 'Delivered']); // ID 4
+}
+        </code></pre>
+
+        <h3>Stap 3: DatabaseSeeder Aanpassen</h3>
+        <p>Zorg dat de <code>StateSeeder</code> wordt aangeroepen in de <code>DatabaseSeeder</code>. De volgorde is belangrijk: States moeten bestaan voordat je Orders (of testdata daarvan) zou seeden.</p>
+
+        <div class="note-box">Bestand: <code>database/seeders/DatabaseSeeder.php</code></div>
+        <pre><code class="language-php">
+public function run(): void
+{
+    $this->call([
+        RoleAndPermissionSeeder::class,
+        UserSeeder::class,
+        ProductSeeder::class, // Maakt categorieën, producten en prijzen
+        StateSeeder::class,   // NIEUW: Maakt statussen
+    ]);
+}
+        </code></pre>
+
+        <h3>Stap 4: Uitvoeren</h3>
+        <p>Ververs de database om de nieuwe tabellen en data te krijgen.</p>
+        <pre><code class="language-bash">php artisan migrate:fresh --seed</code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

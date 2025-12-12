@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Authenticatie Basis - Security & Auth - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module10/m10-6.html">« Validatie & Forms</a>
+    <a href="../module12/m12-1.html">Services & Features »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Security & Auth</h1>
+            <p>Beveiliging, gebruikersbeheer en permissies met Livewire.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m11-1.html" class="active">Authenticatie Basis</a></li>
+                <li><a href="m11-2.html">Middleware Beveiliging</a></li>
+                <li><a href="m11-3.html">Wachtwoorden & Hashing</a></li>
+                <li><a href="m11-4.html">Gates</a></li>
+                <li><a href="m11-5.html">Policies</a></li>
+                <li><a href="m11-6.html">Spatie Permissions</a></li>
+                <li><a href="m11-7.html">Email & Password Confirm</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Authenticatie in Laravel 12</h2>
+        <p>Authenticatie (vaak afgekort als "Auth") is het proces van verifiëren <strong>wie</strong> een gebruiker is. Dit is de basis van bijna elke moderne webapplicatie. Zonder authenticatie kun je geen onderscheid maken tussen een beheerder, een klant of een willekeurige bezoeker. Laravel maakt dit proces extreem eenvoudig, maar het is belangrijk om te begrijpen wat er onder de motorkap gebeurt.</p>
+
+        <h3>Van Controllers naar Livewire Components</h3>
+        <p>In oudere versies van Laravel (en in de standaard documentatie zonder starter kits) wordt authenticatie vaak afgehandeld door Controllers (bijvoorbeeld `LoginController`). Echter, in Laravel 12 met moderne starter kits zoals <strong>Breeze</strong> of <strong>Jetstream</strong> kiezen we vaak voor de <strong>Livewire</strong> stack.</p>
+        <p>Dit betekent dat de logica voor het inloggen niet meer in een klassieke Controller zit, maar in een <strong>Livewire Component</strong>. Dit biedt grote voordelen: validatie errors verschijnen direct zonder pagina-herlaad (real-time feedback) en de gebruikerservaring is veel vloeiender ("SPA-like feel").</p>
+
+        <div class="note-box">Bestand: <code>app/Livewire/Auth/Login.php</code></div>
+        <pre><code class="language-php">
+namespace App\Livewire\Auth;
+
+use Livewire\Component;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
+
+#[Layout('components.layouts.auth')]
+class Login extends Component
+{
+    // Properties die gekoppeld zijn aan de input velden met wire:model
+    public string $email = '';
+    public string $password = '';
+    public bool $remember = false;
+
+    public function login()
+    {
+        // 1. Validatie: Livewire handelt dit intern af.
+        // Bij een fout stopt de functie en toont de view de error.
+        $credentials = $this->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        // 2. Auth::attempt probeert de gebruiker in te loggen.
+        // Het hasht het ingevoerde wachtwoord en vergelijkt dit met de database.
+        if (! Auth::attempt($credentials, $this->remember)) {
+            // Als het mislukt, voegen we handmatig een error toe aan het 'email' veld.
+            $this->addError('email', trans('auth.failed'));
+            return;
+        }
+
+        // 3. Sessie regeneratie is cruciaal om 'Session Fixation' aanvallen te voorkomen.
+        session()->regenerate();
+
+        // 4. Stuur de gebruiker naar waar hij heen wilde (of default naar dashboard)
+        return $this->redirectIntended(route('dashboard'), navigate: true);
+    }
+}
+        </code></pre>
+
+        <h3>De Huidige Gebruiker Ophalen (De `auth()` helper)</h3>
+        <p>Zodra een gebruiker is ingelogd, houdt Laravel de sessie bij. Je hoeft niet zelf sessie-variabelen uit te lezen. Laravel biedt de krachtige <code>auth()</code> helper functie. Deze is globaal beschikbaar: in je Controllers, in je Livewire Components, in je Models en in je Views.</p>
+
+        <p>Het meest gebruikte commando is <code>auth()->user()</code>. Dit geeft je een instantie van het <code>User</code> model terug, gevuld met de data van de ingelogde persoon. Als niemand is ingelogd, geeft het <code>null</code> terug.</p>
+
+        <div class="note-box">Voorbeeld in een Livewire Component (bijv. <code>CreateOrder.php</code>)</div>
+        <pre><code class="language-php">
+public function save()
+{
+    // Haal de volledig ingelogde gebruiker op
+    $user = auth()->user();
+
+    // Omdat $user een instantie is van het User model,
+    // kun je direct relaties aanspreken!
+    // Hier maken we een order aan die direct gekoppeld is aan deze user.
+    $user->orders()->create([
+        'total' => $this->total,
+        'status' => 'pending',
+    ]);
+
+    // Soms heb je alleen het ID nodig voor een query.
+    // Dit is efficiënter dan het hele user object ophalen.
+    $userId = auth()->id();
+}
+        </code></pre>
+
+        <h3>Controleren of iemand is ingelogd</h3>
+        <p>Soms wil je alleen weten <em>of</em> er iemand is ingelogd, bijvoorbeeld om een "Log in" of "Log uit" knop te tonen. Hiervoor gebruik je <code>auth()->check()</code>. Dit geeft een simpele <code>true</code> of <code>false</code>.</p>
+        <p>In Blade views zijn hier nog specifiekere directives voor, zoals <code>@auth</code> en <code>@guest</code>, die we in Blade & Frontend hebben besproken.</p>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

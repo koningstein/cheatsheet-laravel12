@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M3.5: Permissions - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="../module2/m2-6.html">« Module 2</a>
+            <a href="../module4/m4-1.html">Module 4 »</a>
+        </div>
+        <div class="nav-group theme-switcher">
+            <label for="theme-switcher">Thema: </label>
+            <select id="theme-switcher"><option value="blue">Blauw</option></select>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 3: Advanced Admin</h1>
+            <p>Werken met relaties, foreign keys en complexe data structuren.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m3-1.html">M3.1: Models & Migrations</a></li>
+                <li><a href="m3-2.html">M3.2: Factories</a></li>
+                <li><a href="m3-3.html">M3.3: Seeders</a></li>
+                <li><a href="m3-4.html">M3.4: Index & Eager Loading</a></li>
+                <li><a href="m3-5.html" class="active">M3.5: Permissions</a></li>
+                <li><a href="m3-6.html">M3.6: Create & Dropdowns</a></li>
+                <li><a href="m3-7.html">M3.7: Store & Validatie</a></li>
+                <li><a href="m3-8.html">M3.8: Show & Relaties</a></li>
+                <li><a href="m3-9.html">M3.9: Edit & Pre-select</a></li>
+                <li><a href="m3-10.html">M3.10: Update & Logica</a></li>
+                <li><a href="m3-11.html">M3.11: Delete View</a></li>
+                <li><a href="m3-12.html">M3.12: Destroy & Constraints</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M3.5: Permissions in Controllers</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan permissies aanmaken en koppelen aan roles.</li>
+            <li>Ik kan permissies toepassen op controller methodes met <code>HasMiddleware</code>.</li>
+            <li>Ik kan routes beveiligen met permissies.</li>
+        </ul>
+
+        <h3>Stap 1: Permissies Aanmaken (Seeder)</h3>
+        <p>Voordat we de controller kunnen beveiligen, moeten de permissies bestaan. We voegen deze toe in <code>RoleAndPermissionSeeder</code>.</p>
+
+        <pre><code class="language-php">
+// database/seeders/RoleAndPermissionSeeder.php
+
+// 1. Maak permissies aan voor Product CRUD
+Permission::create(['name' => 'index product']);
+Permission::create(['name' => 'show product']);
+Permission::create(['name' => 'create product']); // dekt create & store
+Permission::create(['name' => 'edit product']);   // dekt edit & update
+Permission::create(['name' => 'delete product']); // dekt delete & destroy
+
+// 2. Koppel aan rol (bijv. admin mag alles)
+$role = Role::findByName('admin');
+$role->givePermissionTo(Permission::all());
+        </code></pre>
+        <p><em>Vergeet niet <code>php artisan migrate:fresh --seed</code> te draaien na wijzigingen!</em></p>
+
+        <h3>Stap 2: Controller Setup</h3>
+        <p>Open de <code>ProductController</code>. In Laravel 12 implementeren we de <code>HasMiddleware</code> interface om permissies te koppelen.</p>
+
+        <pre><code class="language-php">
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+
+// Voeg 'implements HasMiddleware' toe
+class ProductController extends Controller implements HasMiddleware
+{
+    // ...
+}
+        </code></pre>
+
+        <h3>Stap 3: Middleware Methode</h3>
+        <p>Voeg de statische <code>middleware</code> functie toe. Hier koppel je de permissie-naam aan de controller-acties.</p>
+
+        <pre><code class="language-php">
+public static function middleware(): array
+{
+    return [
+        // Iedereen met 'index product' mag de lijst zien
+        new Middleware(PermissionMiddleware::using('index product'), only:['index']),
+
+        // Alleen met 'create product' mag je toevoegen
+        new Middleware(PermissionMiddleware::using('create product'), only:['create', 'store']),
+
+        // Enzovoort...
+        new Middleware(PermissionMiddleware::using('edit product'), only:['edit', 'update']),
+        new Middleware(PermissionMiddleware::using('delete product'), only:['delete', 'destroy']),
+    ];
+}
+        </code></pre>
+
+        <div class="note-box">
+            <strong>Opdracht 20:</strong> Pas dit toe op de <code>TaskController</code>. Maak permissies aan (<code>index task</code>, etc.), koppel ze aan rollen (student/teacher/admin) en beveilig de controller methodes.
+        </div>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

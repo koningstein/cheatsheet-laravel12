@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Auth Directives - Blade & Frontend - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module8/m8-7.html">« Routing & Controllers</a><a href="../module10/m10-1.html">Validatie & Forms »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Blade & Frontend</h1>
+            <p>De presentatielaag: Layouts, Components en slimme directives.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m9-1.html">Layout Inheritance</a></li>
+                <li><a href="m9-2.html">Components & Slots</a></li>
+                <li><a href="m9-3.html">Stacks & Push</a></li>
+                <li><a href="m9-4.html">Control Structures</a></li>
+                <li><a href="m9-5.html" class="active">Auth Directives</a></li>
+                <li><a href="m9-6.html">Service Injection</a></li>
+                <li><a href="m9-7.html">Tailwind Utility Patterns</a></li>
+                <li><a href="m9-8.html">Pagination</a></li>
+                <li><a href="m9-9.html">Flash Messages</a></li>
+                <li><a href="m9-10.html">Livewire</a></li>
+                <li><a href="m9-11.html">Flux UI</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Auth Directives</h2>
+        <p>Het tonen of verbergen van elementen op basis van of iemand is ingelogd (of bepaalde rechten heeft) is essentieel voor de User Experience (UX).</p>
+
+        <h3>1. Ingelogd of Gast? (@auth / @guest)</h3>
+        <p>Gebruik deze directives om bijvoorbeeld de login-knop te verbergen als iemand al is ingelogd.</p>
+
+        <pre><code class="language-html">
+@auth
+    &lt;!-- Alleen zichtbaar voor ingelogde gebruikers --&gt;
+    &lt;a href="/dashboard"&gt;Mijn Dashboard&lt;/a&gt;
+    &lt;form method="POST" action="/logout"&gt;
+        @csrf
+        &lt;button&gt;Uitloggen&lt;/button&gt;
+    &lt;/form&gt;
+@endauth
+
+@guest
+    &lt;!-- Alleen zichtbaar voor bezoekers --&gt;
+    &lt;a href="/login"&gt;Inloggen&lt;/a&gt;
+    &lt;a href="/register"&gt;Registreren&lt;/a&gt;
+@endguest
+        </code></pre>
+
+        <h3>2. Permissies (@can)</h3>
+        <p>Als je gebruik maakt van Policies of Gates (zie Module 2), kun je in Blade controleren of een gebruiker een specifieke actie mag uitvoeren. Dit is handig voor het tonen/verbergen van bijvoorbeeld een "Verwijder" knop.</p>
+
+        <pre><code class="language-html">
+{{-- Check of de huidige user het $post model mag updaten --}}
+@can('update', $post)
+    &lt;a href="/posts/{{ $post->id }}/edit"&gt;Bewerken&lt;/a&gt;
+@else
+    &lt;span class="text-gray-500"&gt;Je mag dit bericht niet bewerken.&lt;/span&gt;
+@endcan
+
+@cannot('delete', $post)
+    &lt;!-- Toon een slotje icoon als je niet mag verwijderen --&gt;
+    &lt;i class="icon-lock"&gt;&lt;/i&gt;
+@endcannot
+        </code></pre>
+
+        <div class="note-box">
+            <strong>Let op:</strong> Het verbergen van een knop in HTML is <strong>geen</strong> beveiliging! Een slimme gebruiker kan de URL alsnog raden. Zorg dat je <strong>altijd</strong> ook je Controllers/Routes beveiligt met Middleware of Policies.
+        </div>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

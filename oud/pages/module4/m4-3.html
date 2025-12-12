@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M4.3: Reviews Setup - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module3/m3-12.html">« Module 3</a><a href="../module5/m5-1.html">Module 5 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 4: Webshop Features</h1>
+            <p>De klantkant van de applicatie: Producten, Reviews en Winkelwagen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m4-1.html">M4.1: Publieke Productpagina</a></li>
+                <li><a href="m4-2.html">M4.2: De Product Show</a></li>
+                <li><a href="m4-3.html" class="active">M4.3: Reviews Setup</a></li>
+                <li><a href="m4-4.html">M4.4: Reviews Tonen</a></li>
+                <li><a href="m4-5.html">M4.5: Reviews Plaatsen</a></li>
+                <li><a href="m4-6.html">M4.6: Winkelwagen Setup</a></li>
+                <li><a href="m4-7.html">M4.7: Winkelwagen Tonen</a></li>
+                <li><a href="m4-8.html">M4.8: Winkelwagen Wijzigen</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M4.3: Reviews Setup (Database)</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan een Model en Migratie maken voor Reviews.</li>
+            <li>Ik kan relaties definiëren tussen Review, User en Product.</li>
+            <li>Ik kan testdata genereren met een Factory en Seeder.</li>
+        </ul>
+
+        <h3>Stap 1: Model & Migratie Genereren</h3>
+        <p>We gebruiken het artisan commando om in één keer het Model, de Migration, de Factory en de Seeder aan te maken.</p>
+        <pre><code class="language-bash">php artisan make:model Review -mfs</code></pre>
+
+        <h3>Stap 2: Migratie Configureren</h3>
+        <p>In de migration file definiëren we de tabelstructuur. Een review heeft een titel, inhoud, rating (score) en is gekoppeld aan een gebruiker en een product.</p>
+
+        <pre><code class="language-php">
+// database/migrations/xxxx_xx_xx_create_reviews_table.php
+Schema::create('reviews', function (Blueprint $table) {
+    $table->id();
+    $table->string('title');
+    $table->text('body');
+    $table->integer('rating'); // Cijfer van 1 tot 5
+
+    // Relaties met cascade delete (als user/product weg is, review ook weg)
+    $table->foreignId('user_id')->constrained()->onDelete('cascade');
+    $table->foreignId('product_id')->constrained()->onDelete('cascade');
+
+    $table->timestamps();
+});
+        </code></pre>
+
+        <h3>Stap 3: Relaties in Models</h3>
+        <p>Zorg dat Laravel de relaties snapt door ze in de Models te zetten.</p>
+
+        <pre><code class="language-php">
+// app/Models/Review.php
+public function user() {
+    return $this->belongsTo(User::class);
+}
+public function product() {
+    return $this->belongsTo(Product::class);
+}
+        </code></pre>
+
+        <pre><code class="language-php">
+// app/Models/Product.php
+public function reviews() {
+    return $this->hasMany(Review::class);
+}
+        </code></pre>
+
+        <h3>Stap 4: Factory & Seeding</h3>
+        <p>Vul de `ReviewFactory.php` met neodata via Faker.</p>
+        <pre><code class="language-php">
+return [
+    'title' => $this->faker->sentence,
+    'body' => $this->faker->paragraph,
+    'rating' => $this->faker->numberBetween(1, 5),
+    'user_id' => User::all()->random()->id, // Kies een willekeurige user
+    'product_id' => Product::all()->random()->id, // Kies een willekeurig product
+];
+        </code></pre>
+
+        <p><strong>Belangrijk:</strong> Voeg de seeder toe aan <code>database/seeders/DatabaseSeeder.php</code> zodat hij ook daadwerkelijk wordt uitgevoerd.</p>
+
+        <pre><code class="language-php">
+// DatabaseSeeder.php
+public function run(): void
+{
+    $this->call([
+        // ... andere seeders ...
+        ReviewSeeder::class,
+    ]);
+}
+        </code></pre>
+
+        <p>Voer daarna het commando uit om alles te verversen:</p>
+        <pre><code class="language-bash">php artisan migrate:fresh --seed</code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

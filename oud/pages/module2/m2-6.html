@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M2.6: Rolgebaseerde Toegang - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="../module1/m1-9.html">« Module 1</a>
+            <a href="../module3/m3-1.html">Module 3 »</a>
+        </div>
+        <div class="nav-group theme-switcher">
+            <label for="theme-switcher">Thema: </label>
+            <select id="theme-switcher">
+                <option value="blue">Blauw (Standaard)</option>
+                <option value="purple">Paars</option>
+                <option value="red">Rood</option>
+                <option value="orange">Oranje</option>
+                <option value="teal">Turquoise</option>
+                <option value="darkblue">Donkerblauw</option>
+                <option value="green">Groen</option>
+                <option value="material-dark">Dark (Material)</option>
+                <option value="monokai-pro">Dark (Monokai Pro)</option>
+                <option value="night-owl">Dark (Night Owl)</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 2: Users & Permissions</h1>
+            <p>Authenticatie, autorisatie en beveiliging van de applicatie.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m2-1.html">M2.1: Publieke Layout</a></li>
+                <li><a href="m2-2.html">M2.2: Simpele Publieke Pagina</a></li>
+                <li><a href="m2-3.html">M2.3: Roles & Permissions</a></li>
+                <li><a href="m2-4.html">M2.4: Aanmaken van Users</a></li>
+                <li><a href="m2-5.html">M2.5: Middleware bij Routes</a></li>
+                <li><a href="m2-6.html" class="active">M2.6: Rolgebaseerde Toegang</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M2.6: Rolgebaseerde Toegang</h2>
+        <p>We hebben de routes beveiligd, maar soms wil je in de view knoppen verbergen of in de controller specifieke methodes beveiligen.</p>
+
+        <h3>Stap 1: Blade Directives (@role & @can)</h3>
+        <p>In <code>resources/views/admin/categories/index.blade.php</code> willen we de "Delete" knop verbergen voor gebruikers die dit niet mogen.</p>
+        <p>Je kunt <code>@role('admin')</code> gebruiken, maar beter is <code>@can('delete category')</code>. Dit kijkt naar de permissie, wat flexibeler is.</p>
+
+        <pre><code class="language-html">
+&lt;td&gt;
+    &lt;a href="..."&gt;Edit&lt;/a&gt;
+
+    @can('delete category')
+        | &lt;a href="..."&gt;Delete&lt;/a&gt;
+    @endcan
+&lt;/td&gt;
+        </code></pre>
+
+        <h3>Stap 2: Controller Beveiliging (Middleware)</h3>
+        <p>In de <code>CategoryController</code> moeten we ook checks inbouwen. We gebruiken hiervoor de <code>HasMiddleware</code> interface (nieuw in Laravel 11/12).</p>
+
+        <pre><code class="language-php">
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+
+class CategoryController extends Controller implements HasMiddleware
+{
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(PermissionMiddleware::using('index category'), only:['index']),
+            new Middleware(PermissionMiddleware::using('create category'), only:['create', 'store']),
+            new Middleware(PermissionMiddleware::using('edit category'), only:['edit', 'update']),
+            new Middleware(PermissionMiddleware::using('delete category'), only:['delete', 'destroy']),
+        ];
+    }
+
+    // ... rest van de controller ...
+}
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

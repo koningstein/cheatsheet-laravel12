@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Middleware Beveiliging - Security & Auth - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module10/m10-6.html">« Validatie & Forms</a>
+    <a href="../module12/m12-1.html">Services & Features »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Security & Auth</h1>
+            <p>Beveiliging, gebruikersbeheer en permissies met Livewire.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m11-1.html">Authenticatie Basis</a></li>
+                <li><a href="m11-2.html" class="active">Middleware Beveiliging</a></li>
+                <li><a href="m11-3.html">Wachtwoorden & Hashing</a></li>
+                <li><a href="m11-4.html">Gates</a></li>
+                <li><a href="m11-5.html">Policies</a></li>
+                <li><a href="m11-6.html">Spatie Permissions</a></li>
+                <li><a href="m11-7.html">Email & Password Confirm</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Middleware: De Poortwachters</h2>
+        <p>Alleen een inlogfunctionaliteit bouwen is niet genoeg. Je moet je applicatie ook daadwerkelijk beschermen. Stel je voor dat je een `dashboard` pagina hebt. Zonder beveiliging kan iedereen die de URL `/dashboard` raadt, deze pagina bezoeken, zelfs zonder in te loggen.</p>
+        <p>Hiervoor gebruiken we <strong>Middleware</strong>. Zie middleware als een reeks "poortwachters" waar een verzoek doorheen moet voordat het bij je applicatie (je Livewire component of controller) komt. Als de poortwachter zegt "Stop, je mag er niet in", wordt het verzoek afgebroken of doorgestuurd (bijvoorbeeld naar de login pagina).</p>
+
+        <h3>Routes Beveiligen met `auth`</h3>
+        <p>De belangrijkste middleware is <code>auth</code>. Deze controleert of de gebruiker is ingelogd. Zo niet, dan redirect hij de gebruiker naar de login route. In Laravel 12 (zeker met Livewire Volt/Class components) definieer je routes vaak direct gekoppeld aan de component.</p>
+        <p>Het is 'best practice' om routes te groeperen. Zo vergeet je nooit per ongeluk één specifieke route te beveiligen.</p>
+
+        <div class="note-box">Bestand: <code>routes/web.php</code></div>
+        <pre><code class="language-php">
+use App\Livewire\Dashboard;
+use App\Livewire\Projects\Index as ProjectIndex;
+use App\Livewire\Projects\Create as ProjectCreate;
+
+// Alle routes binnen deze groep zijn ALLEEN toegankelijk voor ingelogde users.
+// We voegen vaak ook 'verified' toe, zodat mensen eerst hun e-mail moeten bevestigen.
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+
+    // Projecten beheer
+    Route::get('/projects', ProjectIndex::class)->name('projects.index');
+    Route::get('/projects/create', ProjectCreate::class)->name('projects.create');
+});
+        </code></pre>
+
+        <h3>De `guest` Middleware</h3>
+        <p>Er is ook een omgekeerd scenario. Pagina's zoals <strong>Login</strong>, <strong>Registreren</strong> en <strong>Wachtwoord Vergeten</strong> zijn bedoeld voor gasten (niet-ingelogde gebruikers). Als je al bent ingelogd, is het verwarrend en nutteloos om het inlogscherm te zien.</p>
+        <p>Hiervoor gebruik je de <code>guest</code> middleware. Als een ingelogde gebruiker een route met deze middleware probeert te bezoeken, stuurt Laravel ze automatisch door naar de `HOME` route (meestal `/dashboard`).</p>
+
+        <div class="note-box">Bestand: <code>routes/auth.php</code> (of web.php)</div>
+        <pre><code class="language-php">
+use App\Livewire\Auth\Login;
+use App\Livewire\Auth\Register;
+
+// Deze routes zijn alleen voor GASTEN
+Route::middleware('guest')->group(function () {
+
+    Route::get('register', Register::class)
+        ->name('register');
+
+    Route::get('login', Login::class)
+        ->name('login');
+
+    // ... wachtwoord reset routes ...
+});
+        </code></pre>
+
+        <h3>Hoe werkt de Redirect?</h3>
+        <p>Je vraagt je misschien af: "Hoe weet Laravel waar hij naartoe moet redirecten?".</p>
+        <ul>
+            <li><strong>Niet ingelogd (auth fail):</strong> Laravel kijkt in <code>bootstrap/app.php</code> (of vroeger `Authenticate` middleware) en stuurt je naar de route genaamd `login`.</li>
+            <li><strong>Wel ingelogd (guest fail):</strong> Laravel kijkt in de <code>App\Providers\AppServiceProvider</code> (of de hardcoded `RouteServiceProvider` in oudere versies) naar de `HOME` constante. Vaak is dit `/dashboard`.</li>
+        </ul>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

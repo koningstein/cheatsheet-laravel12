@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Unit & Feature Tests (Pest) - Quality Assurance - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module12/m12-7.html">« Services & Features</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Quality Assurance</h1>
+            <p>Codekwaliteit, testen met PHPUnit, Pest & Dusk, en debugging.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m13-1.html">Introductie & PHPUnit</a></li>
+                <li><a href="m13-2.html">Unit vs Feature Tests</a></li>
+                <li><a href="m13-3.html">Introductie Pest</a></li>
+                <li><a href="m13-4.html" class="active">Unit & Feature Tests (Pest)</a></li>
+                <li><a href="m13-5.html">Database Testing & Seeding</a></li>
+                <li><a href="m13-6.html">Mocking & Spies</a></li>
+                <li><a href="m13-7.html">Browser Testing (Dusk)</a></li>
+                <li><a href="m13-8.html">Static Analysis & Debugging</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Refactoring naar Pest</h2>
+        <p>We hebben gezien hoe PHPUnit werkt met classes en methodes. Dat is prima, maar het kan veel beknopter. Nu gaan we dezelfde tests herschrijven naar Pest. Dit laat goed zien hoe je bestaande kennis toepast in de nieuwe, modernere syntax.</p>
+
+        <h3>1. Unit Test (Refactored)</h3>
+        <p>Herinner je de <code>PriceCalculatorTest</code>? In PHPUnit moesten we een class maken die overerfde van <code>TestCase</code>. In Pest hebben we geen class structuur nodig. We kunnen direct beginnen met testen.</p>
+
+        <div class="note-box">Bestand: <code>tests/Unit/PriceCalculatorTest.php</code></div>
+        <pre><code class="language-php">
+use App\Services\PriceCalculator;
+
+// In plaats van 'public function test_it_calculates...'
+// gebruiken we gewoon de test() functie.
+test('it calculates 21 percent vat correctly', function () {
+    // 1. Arrange
+    $calculator = new PriceCalculator();
+
+    // 2. Act
+    $result = $calculator->calculateVat(100.00, 21);
+
+    // 3. Assert (met de fijne expect syntax)
+    expect($result)->toBe(121.00);
+});
+        </code></pre>
+
+        <h3>2. Feature Test (Refactored)</h3>
+        <p>Ook Feature tests zijn veel compacter. Je hebt nog steeds toegang tot alle handige Laravel helpers zoals <code>get()</code>, <code>post()</code> en <code>actingAs()</code>. Deze zijn beschikbaar via <code>$this</code> binnen de closure, of zelfs direct als functie in sommige Pest-configuraties.</p>
+        <p>We gebruiken hier <code>it()</code> omdat dat lekkerder leest: "It shows the projects page".</p>
+
+        <div class="note-box">Bestand: <code>tests/Feature/ProjectTest.php</code></div>
+        <pre><code class="language-php">
+it('shows the projects page with correct content', function () {
+    // We kunnen assertions ketenen (chaining)
+    $this->get('/projects')
+        ->assertStatus(200)
+        ->assertSee('Onze Projecten')
+        ->assertDontSee('Server Error');
+});
+        </code></pre>
+
+        <h3>Grouping met `describe()`</h3>
+        <p>In PHPUnit groepeer je tests door ze in één class te zetten (bijv. <code>AuthenticationTest</code>). Omdat Pest geen classes gebruikt, zou je kunnen denken dat je het overzicht verliest. Gelukkig is er de <code>describe()</code> functie.</p>
+        <p>Hiermee kun je tests logisch bij elkaar clusteren. Dit is niet alleen voor de leesbaarheid van je code, maar ook voor de output in je terminal.</p>
+
+        <pre><code class="language-php">
+describe('authentication', function () {
+
+    // Al deze tests horen bij 'authentication'
+
+    test('login page is visible', function () {
+        $this->get('/login')->assertStatus(200);
+    });
+
+    test('users can authenticate', function () {
+        // ... login logica ...
+    });
+
+    test('invalid password gives error', function () {
+        // ... error logica ...
+    });
+
+});
+        </code></pre>
+
+        <p>Als je dit draait, zie je in de terminal een mooi kopje "Authentication" met daaronder de specifieke tests.</p>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

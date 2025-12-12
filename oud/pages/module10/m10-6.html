@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>CSRF & Old Input - Validatie & Forms - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module9/m9-11.html">« Blade & Frontend</a>
+    <a href="../module11/m11-1.html">Security & Auth »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Validatie & Forms</h1>
+            <p>Data integriteit, veiligheid en gebruiksvriendelijke foutmeldingen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m10-1.html">Controller Validatie</a></li>
+                <li><a href="m10-2.html">Errors Weergeven</a></li>
+                <li><a href="m10-3.html">Form Requests</a></li>
+                <li><a href="m10-4.html">Database Regels</a></li>
+                <li><a href="m10-5.html">Custom Messages</a></li>
+                <li><a href="m10-6.html" class="active">CSRF & Old Input</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Beveiliging & UX</h2>
+        <p>Bij het werken met formulieren zijn twee dingen cruciaal: beveiliging tegen aanvallen en gebruiksvriendelijkheid bij fouten.</p>
+
+        <h3>CSRF Beveiliging</h3>
+        <p>CSRF staat voor <em>Cross-Site Request Forgery</em>. Dit is een aanval waarbij een kwaadaardige site een formulier verstuurt naar jouw applicatie namens een ingelogde gebruiker. Laravel beschermt je hiertegen, maar je moet wel een token meesturen in elk POST, PUT of DELETE formulier.</p>
+        <p>Gebruik hiervoor de <code>@csrf</code> directive direct na de opening van je formulier.</p>
+
+        <div class="note-box">Bestand: <code>resources/views/projects/create.blade.php</code></div>
+        <pre><code class="language-html">
+&lt;form method="POST" action="/projects"&gt;
+    @csrf
+    &lt;!-- inputs... --&gt;
+&lt;/form&gt;
+        </code></pre>
+        <p>Zonder dit token zal Laravel het verzoek blokkeren met een "419 Page Expired" error.</p>
+
+        <h3>Old Input (Data Onthouden)</h3>
+        <p>Er is niets vervelender dan een heel formulier invullen, één foutje maken, en alles opnieuw moeten typen. Laravel stuurt bij een validatiefout de ingevulde data terug naar de sessie.</p>
+        <p>Je kunt deze data terugplaatsen met de <code>old('veldnaam')</code> helper. Het tweede argument is de standaardwaarde (bijvoorbeeld de huidige waarde bij een edit-formulier).</p>
+
+        <div class="note-box">Bestand: <code>resources/views/projects/create.blade.php</code></div>
+        <pre><code class="language-html">
+&lt;!-- Input veld --&gt;
+&lt;input type="text" name="title" value="{{ old('title') }}"&gt;
+
+&lt;!-- Textarea (let op: tussen de tags, niet in value attribute!) --&gt;
+&lt;textarea name="description"&gt;{{ old('description') }}&lt;/textarea&gt;
+
+&lt;!-- Selectbox --&gt;
+&lt;select name="category_id"&gt;
+    @foreach($categories as $cat)
+        &lt;option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}&gt;
+            {{ $cat->name }}
+        &lt;/option&gt;
+    @endforeach
+&lt;/select&gt;
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Mass Assignment - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module5/m5-5.html">« Module 5</a><a href="../module7/m7-1.html">Module 7 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Thema: Database & Models</h1>
+            <p>Alles over datastructuur: Migrations, Factories, Seeders en Model conventies.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m6-1.html">Migrations & Datatypes</a></li>
+                <li><a href="m6-2.html">Foreign Key Constraints</a></li>
+                <li><a href="m6-3.html">Model Conventions</a></li>
+                <li><a href="m6-4.html" class="active">Mass Assignment</a></li>
+                <li><a href="m6-5.html">Factories & Faker</a></li>
+                <li><a href="m6-6.html">Seeders & DatabaseState</a></li>
+                <li><a href="m6-7.html">Soft Deletes</a></li>
+                <li><a href="m6-8.html">Casts & Accessors</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Mass Assignment</h2>
+        <p>Als je <code>Product::create($data)</code> of <code>$product->update($data)</code> gebruikt, heet dat Mass Assignment. Laravel beschermt je standaard tegen het onbedoeld overschrijven van kolommen.</p>
+
+        <h3>1. $fillable (Allow-list)</h3>
+        <p>Je geeft expliciet aan welke kolommen gewijzigd mogen worden. Dit is de veiligste optie.</p>
+
+        <div class="note-box">Bestand: <code>app/Models/Product.php</code></div>
+        <pre><code class="language-php">
+protected $fillable = [
+    'name',
+    'price',
+    'description'
+];
+// 'is_admin' staat er niet bij, dus kan niet via formulier gezet worden!
+        </code></pre>
+
+        <h3>2. $guarded (Block-list)</h3>
+        <p>Je geeft aan welke kolommen <strong>NIET</strong> gewijzigd mogen worden. Vaak zetten we dit op een lege array, wat betekent: "Ik let zelf wel op wat ik doorgeef".</p>
+
+        <div class="note-box">Bestand: <code>app/Models/Product.php</code></div>
+        <pre><code class="language-php">
+// Alles mag ingevuld worden (gevaarlijker, maar makkelijker)
+protected $guarded = [];
+
+// Of specifieke beveiliging:
+// protected $guarded = ['id', 'is_admin'];
+        </code></pre>
+
+        <div class="note-box" style="background-color: #fff3cd; border-color: #ffecb5; color: #856404;">
+            <strong>Let op:</strong> Als je <code>$guarded = []</code> gebruikt, moet je ALTIJD <code>$request->validate()</code> of een FormRequest gebruiken om te filteren wat er binnenkomt. Gebruik nooit direct <code>$request->all()</code> zonder validatie!
+        </div>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

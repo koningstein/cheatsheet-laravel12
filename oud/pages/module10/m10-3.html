@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Requests - Validatie & Forms - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module9/m9-11.html">« Blade & Frontend</a>
+    <a href="../module11/m11-1.html">Security & Auth »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Validatie & Forms</h1>
+            <p>Data integriteit, veiligheid en gebruiksvriendelijke foutmeldingen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m10-1.html">Controller Validatie</a></li>
+                <li><a href="m10-2.html">Errors Weergeven</a></li>
+                <li><a href="m10-3.html" class="active">Form Requests</a></li>
+                <li><a href="m10-4.html">Database Regels</a></li>
+                <li><a href="m10-5.html">Custom Messages</a></li>
+                <li><a href="m10-6.html">CSRF & Old Input</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Form Request Classes</h2>
+        <p>Validatie direct in de controller is prima voor kleine formulieren, maar je controller wordt snel rommelig ("Fat Controller"). De professionele manier in Laravel is het gebruik van <strong>Form Requests</strong>. Hiermee verplaats je de validatielogica naar een aparte class.</p>
+
+        <h3>Aanmaken</h3>
+        <p>Door de naam te laten beginnen met het model (<code>Project...</code>) staan straks je Store en Update requests netjes bij elkaar in de map.</p>
+        <div class="note-box">Terminal</div>
+        <pre><code class="language-bash">php artisan make:request ProjectStoreRequest</code></pre>
+
+        <h3>De Class Configureren</h3>
+        <p>De gegenereerde class heeft twee methodes: <code>authorize()</code> en <code>rules()</code>.</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Requests/ProjectStoreRequest.php</code></div>
+        <pre><code class="language-php">
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class ProjectStoreRequest extends FormRequest
+{
+    // Bepaal of de gebruiker dit mag doen.
+    // Zet op 'true' als je permissies elders regelt (of als het openbaar is).
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    // Hier komen je validatieregels
+    public function rules(): array
+    {
+        return [
+            'title'       => 'required|min:3|max:255',
+            'description' => 'required',
+            'budget'      => 'nullable|numeric',
+        ];
+    }
+}
+        </code></pre>
+
+        <h3>Gebruik in Controller</h3>
+        <p>Je vervangt in je controller de standaard <code>Request</code> door jouw nieuwe <code>ProjectStoreRequest</code>. Laravel voert de validatie <strong>automatisch</strong> uit voordat de methode begint. Als de validatie faalt, wordt de code in de methode niet eens uitgevoerd.</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Controllers/ProjectController.php</code></div>
+        <pre><code class="language-php">
+// Vergeet niet te importeren!
+use App\Http\Requests\ProjectStoreRequest;
+
+public function store(ProjectStoreRequest $request)
+{
+    // Als we hier zijn, is de validatie al geslaagd!
+
+    // Haal de gevalideerde data op
+    Project::create($request->validated());
+
+    return redirect()->route('projects.index');
+}
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

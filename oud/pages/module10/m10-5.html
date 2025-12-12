@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Messages - Validatie & Forms - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module9/m9-11.html">« Blade & Frontend</a>
+    <a href="../module11/m11-1.html">Security & Auth »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Validatie & Forms</h1>
+            <p>Data integriteit, veiligheid en gebruiksvriendelijke foutmeldingen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m10-1.html">Controller Validatie</a></li>
+                <li><a href="m10-2.html">Errors Weergeven</a></li>
+                <li><a href="m10-3.html">Form Requests</a></li>
+                <li><a href="m10-4.html">Database Regels</a></li>
+                <li><a href="m10-5.html" class="active">Custom Messages</a></li>
+                <li><a href="m10-6.html">CSRF & Old Input</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Custom Messages & Vertalingen</h2>
+        <p>Standaard geeft Laravel Engelse foutmeldingen zoals <em>"The title field is required"</em>. Dit wil je in een Nederlandse applicatie aanpassen. Dit kan eenvoudig binnen je Form Request.</p>
+
+        <h3>Berichten Aanpassen</h3>
+        <p>Voeg de <code>messages()</code> methode toe aan je Request class. Hierin map je "veldnaam.regel" naar een tekst.</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Requests/StoreProjectRequest.php</code></div>
+        <pre><code class="language-php">
+public function messages(): array
+{
+    return [
+        'title.required' => 'Je bent vergeten een titel in te vullen.',
+        'title.min'      => 'De titel is wel erg kort, gebruik minimaal :min tekens.',
+        'budget.numeric' => 'Het budget moet een geldbedrag zijn.',
+    ];
+}
+        </code></pre>
+
+        <h3>Attributen Vertalen</h3>
+        <p>Vaak zijn de standaard zinnen (zoals gedefinieerd in je <code>lang</code> files) prima, maar wil je alleen de veldnaam vertalen. In plaats van "The title field...", wil je "Het Titel veld...". Hiervoor gebruik je <code>attributes()</code>.</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Requests/StoreProjectRequest.php</code></div>
+        <pre><code class="language-php">
+public function attributes(): array
+{
+    return [
+        'title'       => 'projecttitel',
+        'description' => 'omschrijving',
+        'start_date'  => 'startdatum',
+    ];
+}
+        </code></pre>
+        <p>Als nu de validatie faalt, maakt Laravel er automatisch van: <em>"Het projecttitel veld is verplicht."</em> (afhankelijk van je taalbestanden).</p>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

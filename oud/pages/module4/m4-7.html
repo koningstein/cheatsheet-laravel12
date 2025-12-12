@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M4.7: Winkelwagen Tonen - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module3/m3-12.html">« Module 3</a><a href="../module5/m5-1.html">Module 5 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 4: Webshop Features</h1>
+            <p>De klantkant van de applicatie: Producten, Reviews en Winkelwagen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m4-1.html">M4.1: Publieke Productpagina</a></li>
+                <li><a href="m4-2.html">M4.2: De Product Show</a></li>
+                <li><a href="m4-3.html">M4.3: Reviews Setup</a></li>
+                <li><a href="m4-4.html">M4.4: Reviews Tonen</a></li>
+                <li><a href="m4-5.html">M4.5: Reviews Plaatsen</a></li>
+                <li><a href="m4-6.html">M4.6: Winkelwagen Setup</a></li>
+                <li><a href="m4-7.html" class="active">M4.7: Winkelwagen Tonen</a></li>
+                <li><a href="m4-8.html">M4.8: Winkelwagen Wijzigen</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M4.7: Winkelwagen Tonen</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan de inhoud van de winkelwagen ophalen met <code>Cart::content()</code>.</li>
+            <li>Ik kan totalen tonen met <code>Cart::total()</code>.</li>
+            <li>Ik kan een route en view maken voor het winkelwagen overzicht.</li>
+        </ul>
+
+        <h3>Stap 1: Controller Index</h3>
+        <p>In de <code>CartController</code> maken we de index methode. We sturen de items en het totaal naar de view.</p>
+
+        <pre><code class="language-php">
+// app/Http/Controllers/Open/CartController.php
+
+public function index()
+{
+    return view('open.cart.index', [
+        'cartItems' => Cart::content(),
+        'total' => Cart::total()
+    ]);
+}
+        </code></pre>
+
+        <h3>Stap 2: Route Toevoegen</h3>
+        <p>We moeten een URL hebben waar de winkelwagen zichtbaar is. Voeg deze toe aan <code>routes/web.php</code>.</p>
+
+        <pre><code class="language-php">
+// routes/web.php
+use App\Http\Controllers\Open\CartController;
+
+Route::get('/cart', [CartController::class, 'index'])->name('open.cart.index');
+        </code></pre>
+
+        <h3>Stap 3: View (Tabel)</h3>
+        <p>Maak <code>resources/views/open/cart/index.blade.php</code>. Hierin tonen we de producten in een tabel.</p>
+
+        <pre><code class="language-html">
+@extends('layouts.layoutpublic')
+
+@section('content')
+    &lt;h1 class="text-3xl font-bold mb-6"&gt;Winkelwagen&lt;/h1&gt;
+
+    @if(Cart::count() > 0)
+        &lt;table class="w-full bg-white shadow rounded"&gt;
+            &lt;thead class="bg-gray-100"&gt;
+                &lt;tr&gt;
+                    &lt;th class="p-3 text-left"&gt;Product&lt;/th&gt;
+                    &lt;th class="p-3 text-left"&gt;Prijs&lt;/th&gt;
+                    &lt;th class="p-3 text-left"&gt;Aantal&lt;/th&gt;
+                    &lt;th class="p-3 text-left"&gt;Totaal&lt;/th&gt;
+                    &lt;th class="p-3"&gt;&lt;/th&gt;
+                &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+                @foreach($cartItems as $item)
+                    &lt;tr class="border-b"&gt;
+                        &lt;td class="p-3"&gt;{{ $item->name }}&lt;/td&gt;
+                        &lt;td class="p-3"&gt;&euro; {{ $item->price }}&lt;/td&gt;
+                        &lt;td class="p-3"&gt;{{ $item->qty }}&lt;/td&gt;
+                        &lt;td class="p-3"&gt;&euro; {{ $item->subtotal }}&lt;/td&gt;
+                        &lt;td class="p-3"&gt;
+                            &lt;!-- Acties komen hier (M4.8) --&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+                @endforeach
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+
+        &lt;div class="mt-6 text-right"&gt;
+            &lt;h3 class="text-2xl font-bold"&gt;Totaal: &euro; {{ $total }}&lt;/h3&gt;
+            &lt;a href="#" class="inline-block mt-4 bg-green-600 text-white px-6 py-3 rounded"&gt;
+                Afrekenen
+            &lt;/a&gt;
+        &lt;/div&gt;
+    @else
+        &lt;p&gt;Je winkelwagen is nog leeg.&lt;/p&gt;
+    @endif
+@endsection
+        </code></pre>
+
+        <h3>Stap 4: Menu Teller</h3>
+        <p>Het is handig als je in de navigatiebalk ziet hoeveel items er in je kar zitten. Voeg dit toe aan je <code>layoutpublic.blade.php</code>.</p>
+        <pre><code class="language-html">
+&lt;a href="{{ route('open.cart.index') }}"&gt;
+    Winkelwagen ({{ \Gloudemans\Shoppingcart\Facades\Cart::count() }})
+&lt;/a&gt;
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

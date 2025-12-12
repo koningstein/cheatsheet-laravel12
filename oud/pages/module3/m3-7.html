@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M3.7: Store & Validatie - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group"><a href="../module2/m2-6.html">« Module 2</a><a href="../module4/m4-1.html">Module 4 »</a></div>
+        <div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div>
+    </div>
+</div>
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 3: Advanced Admin</h1>
+            <p>Werken met relaties, foreign keys en complexe data structuren.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m3-1.html">M3.1: Models & Migrations</a></li>
+                <li><a href="m3-2.html">M3.2: Factories</a></li>
+                <li><a href="m3-3.html">M3.3: Seeders</a></li>
+                <li><a href="m3-4.html">M3.4: Index & Eager Loading</a></li>
+                <li><a href="m3-5.html">M3.5: Permissions</a></li>
+                <li><a href="m3-6.html">M3.6: Create & Dropdowns</a></li>
+                <li><a href="m3-7.html" class="active">M3.7: Store & Validatie</a></li>
+                <li><a href="m3-8.html">M3.8: Show & Relaties</a></li>
+                <li><a href="m3-9.html">M3.9: Edit & Pre-select</a></li>
+                <li><a href="m3-10.html">M3.10: Update & Logica</a></li>
+                <li><a href="m3-11.html">M3.11: Delete View</a></li>
+                <li><a href="m3-12.html">M3.12: Destroy & Constraints</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M3.7: Store & Validatie</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan een StoreRequest maken met complexe validatie (foreign keys).</li>
+            <li>Ik kan data opslaan in meerdere tabellen (Product + Price).</li>
+            <li>Ik kan transacties of volgordelijkheid beheren.</li>
+        </ul>
+
+        <h3>Stap 1: Validatie Request</h3>
+        <p>We maken <code>ProductStoreRequest</code>. Let op de validatie van de foreign key: deze MOET bestaan in de database (<code>exists</code>).</p>
+        <pre><code class="language-php">
+public function rules(): array
+{
+    return [
+        'name' => 'required|string|max:75',
+        // Foreign key validatie: moet bestaan in tabel categories, kolom id
+        'category_id' => 'required|integer|exists:categories,id',
+        // Prijs validatie (voor de andere tabel)
+        'price' => 'required|numeric|min:0|max:999999.99',
+    ];
+}
+        </code></pre>
+
+        <h3>Stap 2: Opslaan (Store Methode)</h3>
+        <p>In de controller moeten we twee dingen doen: eerst het Product aanmaken, en daarna de Prijs (want de prijs heeft het product_id nodig).</p>
+
+        <pre><code class="language-php">
+public function store(ProductStoreRequest $request)
+{
+    // 1. Maak Product
+    $product = new Product();
+    $product->name = $request->name;
+    $product->category_id = $request->category_id;
+    $product->save(); // Nu heeft $product een ID!
+
+    // 2. Maak Prijs (gekoppeld aan product)
+    $price = new Price();
+    $price->price = $request->price;
+    $price->effdate = now(); // Huidige datum/tijd
+    $price->product_id = $product->id; // Koppel ID van stap 1
+    $price->save();
+
+    return to_route('products.index')
+            ->with('status', 'Product en prijs opgeslagen!');
+}
+        </code></pre>
+
+        <div class="note-box">
+            <strong>Opdracht 22:</strong> Pas dit toe op Tasks. Een Task heeft foreign keys naar <code>project_id</code> en <code>activity_id</code> (verplicht) en <code>user_id</code> (optioneel/nullable). Vergeet de <code>exists</code> validatie niet!
+        </div>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

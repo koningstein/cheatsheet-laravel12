@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Control Structures - Blade & Frontend - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module8/m8-7.html">« Routing & Controllers</a><a href="../module10/m10-1.html">Validatie & Forms »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Blade & Frontend</h1>
+            <p>De presentatielaag: Layouts, Components en slimme directives.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m9-1.html">Layout Inheritance</a></li>
+                <li><a href="m9-2.html">Components & Slots</a></li>
+                <li><a href="m9-3.html">Stacks & Push</a></li>
+                <li><a href="m9-4.html" class="active">Control Structures</a></li>
+                <li><a href="m9-5.html">Auth Directives</a></li>
+                <li><a href="m9-6.html">Service Injection</a></li>
+                <li><a href="m9-7.html">Tailwind Utility Patterns</a></li>
+                <li><a href="m9-8.html">Pagination</a></li>
+                <li><a href="m9-9.html">Flash Messages</a></li>
+                <li><a href="m9-10.html">Livewire</a></li>
+                <li><a href="m9-11.html">Flux UI</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Control Structures</h2>
+        <p>Blade biedt krachtige shortcuts voor PHP logica zoals if-statements en loops. Dit houdt je views schoon en leesbaar.</p>
+
+        <h3>1. Conditionals (@if)</h3>
+        <p>De basis voor het wel of niet tonen van content.</p>
+        <pre><code class="language-html">
+@if($products->count() > 0)
+    &lt;p&gt;Er zijn producten.&lt;/p&gt;
+@elseif($products->count() < 0)
+    {{-- Dit gebeurt natuurlijk nooit --}}
+@else
+    &lt;p&gt;Geen producten gevonden.&lt;/p&gt;
+@endif
+
+{{-- Handige shortcuts --}}
+@unless($isPaid)
+    &lt;p&gt;Betaling nodig! (Hetzelfde als if !isPaid)&lt;/p&gt;
+@endunless
+        </code></pre>
+
+        <h3>2. Loops (@foreach & @forelse)</h3>
+        <p><code>@forelse</code> is een geweldige toevoeging in Blade. Het combineert een <code>foreach</code> met een check of de lijst leeg is. Dit bespaart je een <code>if/else</code> blok.</p>
+
+        <pre><code class="language-html">
+@forelse($users as $user)
+    &lt;li&gt;{{ $user->name }}&lt;/li&gt;
+@empty
+    &lt;li&gt;Er zijn nog geen gebruikers.&lt;/li&gt;
+@endforelse
+        </code></pre>
+
+        <h3>3. De $loop Variabele</h3>
+        <p>Binnen elke loop heb je toegang tot de magische <code>$loop</code> variabele. Hiermee kun je checken waar je bent in de iteratie.</p>
+
+        <pre><code class="language-html">
+@foreach($users as $user)
+    @if($loop->first)
+        &lt;span&gt;Dit is de eerste!&lt;/span&gt;
+    @endif
+
+    @if($loop->last)
+        &lt;span&gt;Dit is de laatste!&lt;/span&gt;
+    @endif
+
+    &lt;p&gt;{{ $loop->iteration }}. {{ $user->name }}&lt;/p&gt;
+@endforeach
+        </code></pre>
+
+        <h3>4. Conditionele Classes (@class)</h3>
+        <p>Sinds Laravel 9 kun je heel makkelijk CSS classes toevoegen op basis van een voorwaarde. Dit voorkomt rommelige ternary operators in je HTML.</p>
+
+        <pre><code class="language-html">
+@php
+    $isActive = true;
+    $hasError = false;
+@endphp
+
+&lt;!-- OUDE manier --&gt;
+&lt;div class="p-4 {{ $isActive ? 'bg-green' : '' }} {{ $hasError ? 'text-red' : '' }}"&gt;...&lt;/div&gt;
+
+&lt;!-- NIEUWE manier (@class) --&gt;
+&lt;div @class([
+    'p-4',
+    'bg-green' => $isActive,
+    'text-red' => $hasError,
+])&gt;
+    Status Bericht
+&lt;/div&gt;
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

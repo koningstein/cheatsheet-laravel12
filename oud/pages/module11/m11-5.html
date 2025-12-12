@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Policies - Security & Auth - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module10/m10-6.html">« Validatie & Forms</a>
+    <a href="../module12/m12-1.html">Services & Features »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Security & Auth</h1>
+            <p>Beveiliging, gebruikersbeheer en permissies met Livewire.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m11-1.html">Authenticatie Basis</a></li>
+                <li><a href="m11-2.html">Middleware Beveiliging</a></li>
+                <li><a href="m11-3.html">Wachtwoorden & Hashing</a></li>
+                <li><a href="m11-4.html">Gates</a></li>
+                <li><a href="m11-5.html" class="active">Policies</a></li>
+                <li><a href="m11-6.html">Spatie Permissions</a></li>
+                <li><a href="m11-7.html">Email & Password Confirm</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Policies: Model-gebaseerde Autorisatie</h2>
+        <p>Waar Gates handig zijn voor algemene checks, zijn <strong>Policies</strong> bedoeld voor autorisatie rondom een specifiek Model. De vraag is niet "Mag ik in het admin panel?", maar "Mag ik <em>dit specifieke</em> project bewerken?".</p>
+        <p>Een Policy is een PHP class die hoort bij een Model (bijv. <code>ProjectPolicy</code> hoort bij <code>Project</code>). Hierin definieer je methodes voor de standaard CRUD-acties: `view`, `create`, `update`, `delete`.</p>
+
+        <h3>Stap 1: Policy Aanmaken</h3>
+        <p>Gebruik Artisan om een policy te genereren. Als je de optie `--model` meegeeft, vult Laravel de methodes alvast voor je in.</p>
+
+        <div class="note-box">Terminal</div>
+        <pre><code class="language-bash">php artisan make:policy ProjectPolicy --model=Project</code></pre>
+
+        <h3>Stap 2: Logica Schrijven</h3>
+        <p>Open <code>app/Policies/ProjectPolicy.php</code>. Elke methode krijgt automatisch de ingelogde <code>User</code> en het betreffende <code>Project</code> object mee. Je returnt <code>true</code> als het mag, en <code>false</code> als het niet mag.</p>
+
+        <div class="note-box">Bestand: <code>app/Policies/ProjectPolicy.php</code></div>
+        <pre><code class="language-php">
+namespace App\Policies;
+
+use App\Models\Project;
+use App\Models\User;
+
+class ProjectPolicy
+{
+    // Mag de user dit project bekijken?
+    public function view(User $user, Project $project): bool
+    {
+        // Ja, als de user lid is van het team van dit project
+        return $user->team_id === $project->team_id;
+    }
+
+    // Mag de user dit project bewerken?
+    public function update(User $user, Project $project): bool
+    {
+        // Ja, alleen als de user de eigenaar (maker) is
+        return $user->id === $project->user_id;
+    }
+
+    // Voor admins kun je de 'before' methode gebruiken
+    // Deze wordt ALTIJD als eerst uitgevoerd.
+    public function before(User $user, string $ability): bool|null
+    {
+        if ($user->is_admin) {
+            return true; // Admins mogen alles
+        }
+        return null; // Anders: ga door naar de specifieke regel
+    }
+}
+        </code></pre>
+
+        <h3>Stap 3: Gebruik in Livewire</h3>
+        <p>In je Livewire component kun je de <code>$this->authorize()</code> helper gebruiken. Omdat je een Model object (hier `$project`) meegeeft, snapt Laravel automatisch dat hij in de <code>ProjectPolicy</code> moet kijken.</p>
+
+        <div class="note-box">Bestand: <code>app/Livewire/Projects/Edit.php</code></div>
+        <pre><code class="language-php">
+use App\Models\Project;
+
+class Edit extends Component
+{
+    public Project $project;
+
+    public function mount(Project $project)
+    {
+        // Laravel ziet: Model is Project -> check ProjectPolicy -> method 'update'
+        // Als dit faalt: 403 error.
+        $this->authorize('update', $project);
+
+        $this->project = $project;
+    }
+
+    public function save()
+    {
+        // Goede gewoonte: ook bij het opslaan nogmaals checken!
+        $this->authorize('update', $this->project);
+
+        $this->project->update([/* ... */]);
+    }
+}
+        </code></pre>
+
+        <h3>Stap 4: Gebruik in Blade</h3>
+        <p>Ook hier werkt de <code>@can</code> directive, maar nu geef je het model object mee als tweede parameter.</p>
+
+        <div class="note-box">Bestand: <code>resources/views/projects/index.blade.php</code></div>
+        <pre><code class="language-html">
+@foreach($projects as $project)
+    &lt;div class="card"&gt;
+        &lt;h2&gt;{{ $project->title }}&lt;/h2&gt;
+
+        {{-- De knop 'Bewerken' is alleen zichtbaar als de policy 'true' geeft --}}
+        @can('update', $project)
+            &lt;a href="{{ route('projects.edit', $project) }}"&gt;
+                Bewerken
+            &lt;/a&gt;
+        @endcan
+    &lt;/div&gt;
+@endforeach
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

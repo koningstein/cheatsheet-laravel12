@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M3.4: Index & Eager Loading - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar">
+    <div class="top-bar-content">
+        <div class="nav-group">
+            <a href="../module2/m2-6.html">« Module 2</a>
+            <a href="../module4/m4-1.html">Module 4 »</a>
+        </div>
+        <div class="nav-group theme-switcher">
+            <label for="theme-switcher">Thema: </label>
+            <select id="theme-switcher"><option value="blue">Blauw</option></select>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 3: Advanced Admin</h1>
+            <p>Werken met relaties, foreign keys en complexe data structuren.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m3-1.html">M3.1: Models & Migrations</a></li>
+                <li><a href="m3-2.html">M3.2: Factories</a></li>
+                <li><a href="m3-3.html">M3.3: Seeders</a></li>
+                <li><a href="m3-4.html" class="active">M3.4: Index & Eager Loading</a></li>
+                <li><a href="m3-5.html">M3.5: Permissions</a></li>
+                <li><a href="m3-6.html">M3.6: Create & Dropdowns</a></li>
+                <li><a href="m3-7.html">M3.7: Store & Validatie</a></li>
+                <li><a href="m3-8.html">M3.8: Show & Relaties</a></li>
+                <li><a href="m3-9.html">M3.9: Edit & Pre-select</a></li>
+                <li><a href="m3-10.html">M3.10: Update & Logica</a></li>
+                <li><a href="m3-11.html">M3.11: Delete View</a></li>
+                <li><a href="m3-12.html">M3.12: Destroy & Constraints</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M3.4: Index & Eager Loading</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan gerelateerde data (categorie, prijs) tonen in een tabel.</li>
+            <li>Ik begrijp het <strong>N+1 probleem</strong>.</li>
+            <li>Ik kan <strong>Eager Loading</strong> (<code>with()</code>) gebruiken om dit op te lossen.</li>
+        </ul>
+
+        <h3>1. Het N+1 Probleem</h3>
+        <p>Als we in de view voor elk product de categorie naam opvragen (<code>$product->category->name</code>), voert Laravel op de achtergrond steeds een nieuwe query uit. Bij 100 producten zijn dat 101 queries! Dit maakt de applicatie traag.</p>
+
+        <h3>2. Eager Loading</h3>
+        <p>Met <code>with()</code> halen we de relaties in één keer op. Standaard is net zoals database relaties een 1 op 1 of 1 op veel relate.
+            Bij 1 op veel moeten we aan de ene kant HasMany gebruiken, en de andere kan BelongsTo. We maken ook meteen een speciale relatie
+            <code>latest_price</code> om de huidige prijs te tonen.</p>
+
+        <pre><code class="language-php">
+// app/Models/Product.php
+public function category(): BelongsTo
+{
+    return $this->BelongsTo(Category::class);
+}
+        </code></pre>
+
+        <pre><code class="language-php">
+// app/Models/Product.php
+public function latest_price(): HasOne
+{
+    return $this->hasOne(Price::class)->orderBy('effdate', 'desc');
+}
+        </code></pre>
+
+        <p>In de controller:</p>
+        <pre><code class="language-php">
+public function index()
+{
+    // Haal alles in 1x op
+    $products = Product::with('category', 'latest_price')->paginate(15);
+
+    return view('admin.products.index', ['products' => $products]);
+}
+        </code></pre>
+
+        <h3>3. De View</h3>
+        <pre><code class="language-html">
+@foreach($products as $product)
+    &lt;tr&gt;
+        &lt;td&gt;{{ $product->name }}&lt;/td&gt;
+
+        &lt;!-- Gerelateerde data --&gt;
+        &lt;td&gt;{{ $product->category->name }}&lt;/td&gt;
+        &lt;td&gt;&euro; {{ $product->latest_price->price }}&lt;/td&gt;
+
+        &lt;td&gt;Edit | Delete&lt;/td&gt;
+    &lt;/tr&gt;
+@endforeach
+        </code></pre>
+
+        <div class="note-box">
+            <strong>Opdracht 19:</strong> Maak de Task index. Toon Task ID, Taak naam, datums, Gebruiker (of N/A), Projectnaam en Activity naam. Gebruik eager loading en paginatie.
+        </div>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

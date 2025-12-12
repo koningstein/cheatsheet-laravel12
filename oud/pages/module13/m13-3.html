@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Introductie Pest - Quality Assurance - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module12/m12-7.html">« Services & Features</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Quality Assurance</h1>
+            <p>Codekwaliteit, testen met PHPUnit, Pest & Dusk, en debugging.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m13-1.html">Introductie & PHPUnit</a></li>
+                <li><a href="m13-2.html">Unit vs Feature Tests</a></li>
+                <li><a href="m13-3.html" class="active">Introductie Pest</a></li>
+                <li><a href="m13-4.html">Unit & Feature Tests (Pest)</a></li>
+                <li><a href="m13-5.html">Database Testing & Seeding</a></li>
+                <li><a href="m13-6.html">Mocking & Spies</a></li>
+                <li><a href="m13-7.html">Browser Testing (Dusk)</a></li>
+                <li><a href="m13-8.html">Static Analysis & Debugging</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>De overstap naar Pest</h2>
+        <p>In de vorige hoofdstukken heb je PHPUnit gezien. Misschien viel het je op dat er veel "boilerplate" code nodig is: <code>class ... extends TestCase</code>, namespaces, <code>public function test_...</code>. Dit maakt de code soms lastig leesbaar en onnodig lang.</p>
+        <p><strong>Pest</strong> is een modern testing framework voor PHP, ontwikkeld door Nuno Maduro (een Laravel core team member). Pest is gebouwd <em>bovenop</em> PHPUnit. Dat betekent dat alles wat in PHPUnit kan, ook in Pest kan. Het verschil zit puur in de syntax: Pest is minimalistisch, functioneel en leest als een zin. In Laravel 12 is Pest de standaard.</p>
+
+        <h3>Vergelijking: PHPUnit vs Pest</h3>
+        <p>Laten we dezelfde simpele test eens naast elkaar leggen. Eerst de "oude" manier met PHPUnit.</p>
+
+        <div class="note-box">PHPUnit</div>
+        <pre><code class="language-php">
+namespace Tests\Feature;
+use Tests\TestCase;
+
+class ExampleTest extends TestCase {
+    public function test_true_is_true() {
+        $this->assertTrue(true);
+    }
+}
+        </code></pre>
+
+        <p>En nu dezelfde test in Pest. Zie je hoe we geen class, namespace of methodenaam nodig hebben? We gebruiken gewoon de <code>test</code> functie met een beschrijving en een closure.</p>
+
+        <div class="note-box">Pest</div>
+        <pre><code class="language-php">
+test('true is true', function () {
+    expect(true)->toBeTrue();
+});
+        </code></pre>
+
+        <h3>De `it` syntax</h3>
+        <p>Pest biedt naast <code>test()</code> ook de functie <code>it()</code>. Technisch doen ze precies hetzelfde, maar <code>it()</code> helpt je om je testbeschrijving als een lopende zin te formuleren. Dit maakt de output in je terminal veel leesbaarder.</p>
+
+        <pre><code class="language-php">
+// Leest als: "it has a homepage"
+it('has a homepage', function () {
+    $this->get('/')->assertStatus(200);
+});
+
+// Leest als: "it allows users to login"
+it('allows users to login', function () {
+    // ...
+});
+        </code></pre>
+
+        <p>Als je de tests draait, zie je in de terminal:</p>
+        <pre><code class="language-bash">
+✓ it has a homepage
+✓ it allows users to login
+        </code></pre>
+
+        <h3>De Expect API</h3>
+        <p>Pest introduceert ook een krachtige manier om assertions (controles) te doen: de <code>expect()</code> functie. Dit is een "fluent interface" die veel natuurlijker leest dan de traditionele <code>$this->assert...</code> methodes.</p>
+
+        <p>Vergelijk de PHPUnit assertions:</p>
+        <pre><code class="language-php">
+$this->assertEquals('Rotterdam', $city);
+$this->assertCount(5, $items);
+$this->assertGreaterThan(10, $price);
+        </code></pre>
+
+        <p>Met de Pest Expect API:</p>
+        <pre><code class="language-php">
+expect($city)->toBe('Rotterdam');
+expect($items)->toHaveCount(5);
+expect($price)->toBeGreaterThan(10);
+
+// Je kunt ze zelfs ketenen:
+expect($price)->toBeGreaterThan(10)->toBeLessThan(100);
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

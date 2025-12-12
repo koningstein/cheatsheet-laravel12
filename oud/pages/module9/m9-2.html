@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Components & Slots - Blade & Frontend - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module8/m8-7.html">« Routing & Controllers</a><a href="../module10/m10-1.html">Validatie & Forms »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Blade & Frontend</h1>
+            <p>De presentatielaag: Layouts, Components en slimme directives.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m9-1.html">Layout Inheritance</a></li>
+                <li><a href="m9-2.html" class="active">Components & Slots</a></li>
+                <li><a href="m9-3.html">Stacks & Push</a></li>
+                <li><a href="m9-4.html">Control Structures</a></li>
+                <li><a href="m9-5.html">Auth Directives</a></li>
+                <li><a href="m9-6.html">Service Injection</a></li>
+                <li><a href="m9-7.html">Tailwind Utility Patterns</a></li>
+                <li><a href="m9-8.html">Pagination</a></li>
+                <li><a href="m9-9.html">Flash Messages</a></li>
+                <li><a href="m9-10.html">Livewire</a></li>
+                <li><a href="m9-11.html">Flux UI</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Components & Slots</h2>
+        <p>Components zijn de moderne manier om herbruikbare UI-elementen te maken in Laravel (zoals knoppen, alerts, of complete layouts). Ze lijken op HTML-tags.</p>
+
+        <h3>1. Component Aanmaken</h3>
+        <p>Je kunt een component maken via de terminal. Dit maakt een view en (optioneel) een class.</p>
+        <pre><code class="language-bash">php artisan make:component Alert --view</code></pre>
+        <p>De <code>--view</code> vlag zorgt ervoor dat er alleen een Blade-bestand wordt gemaakt (Anonymous Component), wat vaak genoeg is.</p>
+
+        <h3>2. De Component Structuur ($slot)</h3>
+        <p>De variabele <code>$slot</code> bevat alles wat je <em>tussen</em> de openings- en sluitingstags van je component zet.</p>
+
+        <div class="note-box">Bestand: <code>resources/views/components/alert.blade.php</code></div>
+        <pre><code class="language-html">
+&lt;div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"&gt;
+    &lt;strong&gt;Let op!&lt;/strong&gt;
+    &lt;span class="block sm:inline"&gt;{{ $slot }}&lt;/span&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h3>3. Gebruik in een View</h3>
+        <p>Je roept een component aan met <code>x-</code> gevolgd door de naam.</p>
+
+        <div class="note-box">Bestand: <code>resources/views/home.blade.php</code></div>
+        <pre><code class="language-html">
+&lt;x-alert&gt;
+    Er is iets fout gegaan bij het opslaan!
+&lt;/x-alert&gt;
+        </code></pre>
+
+        <h3>4. Props (Variabelen doorgeven)</h3>
+        <p>Soms wil je data meegeven, zoals het type alert (info, warning, danger). Gebruik <code>@props</code> om standaardwaarden in te stellen.</p>
+
+        <div class="note-box">Bestand: <code>resources/views/components/alert.blade.php</code></div>
+        <pre><code class="language-html">
+@props(['type' => 'info']) {{-- Standaard is 'info' --}}
+
+@php
+    // Bepaal de kleur op basis van het type
+    $colors = match($type) {
+        'danger' => 'bg-red-100 text-red-700 border-red-400',
+        'success' => 'bg-green-100 text-green-700 border-green-400',
+        default => 'bg-blue-100 text-blue-700 border-blue-400',
+    };
+@endphp
+
+&lt;div {{ $attributes->merge(['class' => "border px-4 py-3 rounded $colors"]) }}&gt;
+    {{ $slot }}
+&lt;/div&gt;
+        </code></pre>
+
+        <p>Gebruik:</p>
+        <pre><code class="language-html">
+&lt;x-alert type="success" class="mb-4"&gt;
+    Het is gelukt!
+&lt;/x-alert&gt;
+        </code></pre>
+        <p><em>Let op: <code>$attributes->merge</code> zorgt ervoor dat extra classes (zoals <code>mb-4</code>) netjes worden samengevoegd met de standaard classes.</em></p>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

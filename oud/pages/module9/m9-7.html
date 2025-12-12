@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Tailwind Utility Patterns - Blade & Frontend - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module8/m8-7.html">« Routing & Controllers</a><a href="../module10/m10-1.html">Validatie & Forms »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Blade & Frontend</h1>
+            <p>De presentatielaag: Layouts, Components en slimme directives.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m9-1.html">Layout Inheritance</a></li>
+                <li><a href="m9-2.html">Components & Slots</a></li>
+                <li><a href="m9-3.html">Stacks & Push</a></li>
+                <li><a href="m9-4.html">Control Structures</a></li>
+                <li><a href="m9-5.html">Auth Directives</a></li>
+                <li><a href="m9-6.html">Service Injection</a></li>
+                <li><a href="m9-7.html" class="active">Tailwind Utility Patterns</a></li>
+                <li><a href="m9-8.html">Pagination</a></li>
+                <li><a href="m9-9.html">Flash Messages</a></li>
+                <li><a href="m9-10.html">Livewire</a></li>
+                <li><a href="m9-11.html">Flux UI</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Tailwind Utility Patterns</h2>
+        <p>Tailwind CSS is geweldig, maar je HTML kan snel veranderen in een "soep" van classes. In Laravel zijn er twee manieren om dit op te lossen: Blade Components en CSS extractie.</p>
+
+        <h3>1. Blade Components (Aanbevolen)</h3>
+        <p>In plaats van overal dezelfde lange lijst classes te kopiëren voor een knop, maak je een component. Dit is de "Laravel-manier".</p>
+
+        <div class="note-box">Bestand: <code>resources/views/components/button.blade.php</code></div>
+        <pre><code class="language-html">
+&lt;button {{ $attributes->merge(['class' => 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition']) }}&gt;
+    {{ $slot }}
+&lt;/button&gt;
+        </code></pre>
+
+        <p>Gebruik:</p>
+        <pre><code class="language-html">
+&lt;x-button class="mt-4"&gt;Klik Mij&lt;/x-button&gt;
+&lt;!-- Resultaat: Heeft alle standaard styles + mt-4 --&gt;
+        </code></pre>
+
+        <h3>2. CSS Extractie (@apply)</h3>
+        <p>Soms wil je gewoon een ouderwetse CSS class gebruiken, bijvoorbeeld voor een complexe kaart die je in pure HTML gebruikt.</p>
+
+        <div class="note-box">Bestand: <code>resources/css/app.css</code></div>
+        <pre><code class="language-css">
+@layer components {
+    .btn-primary {
+        @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition;
+    }
+
+    .card {
+        @apply bg-white p-6 rounded-lg shadow-md;
+    }
+}
+        </code></pre>
+
+        <p>Gebruik:</p>
+        <pre><code class="language-html">
+&lt;button class="btn-primary"&gt;Klik Mij&lt;/button&gt;
+        </code></pre>
+
+        <h3>Advies: Wat te kiezen?</h3>
+        <ul>
+            <li>Gebruik <strong>Blade Components</strong> voor UI elementen (knoppen, inputs, alerts). Dit is flexibeler omdat je ook logica (PHP) kunt toevoegen.</li>
+            <li>Gebruik <strong>@apply</strong> alleen als het echt nodig is, bijvoorbeeld voor styling van Markdown content waar je geen invloed hebt op de HTML-tags.</li>
+        </ul>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

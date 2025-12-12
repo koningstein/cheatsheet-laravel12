@@ -1,528 +1,469 @@
-/* =========================================
-   1. THEMA DEFINITIES & VARIABELEN
-   ========================================= */
-
-/* Standaard Thema: Blauw */
+/* v2/style.css */
 :root {
-    --c-bg: #0a3d62; /* Donkerblauw achtergrond */
-    --c-card: #ffffff; /* Wit voor content kaarten */
-    --c-card-bg: #ffffff;
-    --c-header-nav: #0a3d62; /* Header blok achtergrond */
-    --c-header-nav-text: #ffffff;
-    --c-accent: #0c5b96; /* Accentkleur (koppen, balken) */
-    --c-accent-text: #ffffff;
-    --c-text: #333; /* Algemene tekst */
-    --c-text-header: #0a3d62; /* H2 koppen in content */
-    --c-text-header-nav: #ffffff; /* Tekst in header blok */
-    --c-nav-link: #0a3d62; /* Linkjes */
-    --c-code-bg: #282c34; /* Codeblok achtergrond */
-    --c-shadow: rgba(0, 0, 0, 0.3);
-    --c-border: #dfe2e5;
-    --c-hover-link: #e7f0f7;
-    --c-table-header: #f6f8fa;
+    /* --- Basis Variabelen --- */
+    --header-height: 60px;
+    --sidebar-width: 300px;
+    --toc-width: 240px;
+
+    /* --- Standaard Kleuren (Fallback: Laravel Rood) --- */
+    --primary-color: #FF2D20; /* Officiële Laravel Rood */
+    --primary-light: rgba(255, 45, 32, 0.1);
+    --primary-text: #fff;     /* Tekstkleur op buttons/badges */
+
+    /* --- Standaard Achtergrond (Light) --- */
+    --bg-body: #f8fafc;
+    --bg-content: #ffffff;
+    --bg-sidebar: #f8fafc;
+    --bg-header: #ffffff;
+
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+
+    --code-bg: #1e293b;
+    --code-border: #e2e8f0;
+    --scrollbar-track: #f1f1f1;
+    --scrollbar-thumb: #c1c1c1;
 }
 
-/* Thema: Paars */
-[data-theme="purple"] {
-    --c-bg: #301934;
-    --c-header-nav: #301934;
-    --c-accent: #5d3a63;
-    --c-text-header: #301934;
-    --c-nav-link: #301934;
-    --c-hover-link: #f3eef4;
+/* =========================================
+   1. KLEUR ACCENTEN (data-color)
+   Deze kleuren komen uit V1
+   ========================================= */
+
+/* Rood (Standaard Laravel) */
+[data-color="red"] {
+    --primary-color: #FF2D20;
+    --primary-light: rgba(255, 45, 32, 0.1);
 }
 
-/* Thema: Rood */
-[data-theme="red"] {
-    --c-bg: #5a0d0d;
-    --c-header-nav: #5a0d0d;
-    --c-accent: #9b1a1a;
-    --c-text-header: #5a0d0d;
-    --c-nav-link: #5a0d0d;
-    --c-hover-link: #f9e8e8;
+/* Blauw (V1: #0c5b96) */
+[data-color="blue"] {
+    --primary-color: #0c5b96;
+    --primary-light: rgba(12, 91, 150, 0.1);
 }
 
-/* Thema: Oranje */
-[data-theme="orange"] {
-    --c-bg: #612d05;
-    --c-header-nav: #612d05;
-    --c-accent: #a34e0c;
-    --c-text-header: #612d05;
-    --c-nav-link: #612d05;
-    --c-hover-link: #fcf0e7;
+/* Paars (V1: #5d3a63 - iets feller gemaakt voor leesbaarheid in v2) */
+[data-color="purple"] {
+    --primary-color: #8b5cf6;
+    --primary-light: rgba(139, 92, 246, 0.1);
 }
 
-/* Thema: Teal */
-[data-theme="teal"] {
-    --c-bg: #004d40;
-    --c-header-nav: #004d40;
-    --c-accent: #00796b;
-    --c-text-header: #004d40;
-    --c-nav-link: #004d40;
-    --c-hover-link: #e0f2f1;
+/* Oranje (V1: #a34e0c) */
+[data-color="orange"] {
+    --primary-color: #f97316;
+    --primary-light: rgba(249, 115, 22, 0.1);
 }
 
-/* Thema: Donkerblauw */
-[data-theme="darkblue"] {
-    --c-bg: #0b2233;
-    --c-header-nav: #0b2233;
-    --c-accent: #144669;
-    --c-text-header: #0b2233;
-    --c-nav-link: #0b2233;
-    --c-hover-link: #e6f0f5;
+/* Teal / Turquoise (V1: #00796b) */
+[data-color="teal"] {
+    --primary-color: #00796b;
+    --primary-light: rgba(0, 121, 107, 0.1);
 }
 
-/* Thema: Groen */
-[data-theme="green"] {
-    --c-bg: #0d3d0d;
-    --c-header-nav: #0d3d0d;
-    --c-accent: #3d7a3d;
-    --c-text-header: #0d3d0d;
-    --c-nav-link: #0d3d0d;
-    --c-hover-link: #e8f5e8;
+/* Donkerblauw (V1: #144669) */
+[data-color="darkblue"] {
+    --primary-color: #144669;
+    --primary-light: rgba(20, 70, 105, 0.1);
 }
 
-/* --- Dark Mode (Material) --- */
-[data-theme="material-dark"] {
-    --c-bg: #212121;
-    --c-card: #262626;
-    --c-card-bg: #262626;
-    --c-header-nav: #262626;
-    --c-header-nav-text: #EEFFFF;
-    --c-accent: #80CBC4;
-    --c-accent-text: #212121;
-    --c-text: #EEFFFF;
-    --c-text-header: #80CBC4;
-    --c-text-header-nav: #EEFFFF;
-    --c-nav-link: #80CBC4;
-    --c-code-bg: #2E2E2E;
-    --c-shadow: rgba(0, 0, 0, 0.5);
-    --c-border: #333333;
-    --c-hover-link: #373737;
-    --c-table-header: #373737;
-}
-
-/* --- Dark Mode (Monokai Pro) --- */
-[data-theme="monokai-pro"] {
-    --c-bg: #2D2A2E;
-    --c-card: #38353D;
-    --c-card-bg: #38353D;
-    --c-header-nav: #38353D;
-    --c-header-nav-text: #FCFCFA;
-    --c-accent: #FFD866;
-    --c-accent-text: #2D2A2E;
-    --c-text: #FCFCFA;
-    --c-text-header: #FFD866;
-    --c-text-header-nav: #FCFCFA;
-    --c-nav-link: #FFD866;
-    --c-code-bg: #2D2A2E;
-    --c-shadow: rgba(0, 0, 0, 0.5);
-    --c-border: #4F4C55;
-    --c-hover-link: #4F4C55;
-    --c-table-header: #4F4C55;
-}
-
-/* --- Dark Mode (Night Owl) --- */
-[data-theme="night-owl"] {
-    --c-bg: #011627;
-    --c-card: #0b2942;
-    --c-card-bg: #0b2942;
-    --c-header-nav: #0b2942;
-    --c-header-nav-text: #d6deeb;
-    --c-accent: #FFD866;
-    --c-accent-text: #011627;
-    --c-text: #d6deeb;
-    --c-text-header: #FFD866;
-    --c-text-header-nav: #d6deeb;
-    --c-nav-link: #FFD866;
-    --c-code-bg: #011627;
-    --c-shadow: rgba(0, 0, 0, 0.5);
-    --c-border: #1d3b53;
-    --c-hover-link: #1d3b53;
-    --c-table-header: #1d3b53;
+/* Groen (V1: #3d7a3d) */
+[data-color="green"] {
+    --primary-color: #10b981;
+    --primary-light: rgba(16, 185, 129, 0.1);
 }
 
 
 /* =========================================
-   2. BASIS STYLING
+   2. THEMA ACHTERGRONDEN (data-theme)
    ========================================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+/* --- Thema: Dark (Official Laravel Docs Style) --- */
+[data-theme="dark"] {
+    --bg-body: #0f172a;      /* Slate 900 */
+    --bg-content: #1e293b;   /* Slate 800 */
+    --bg-sidebar: #0f172a;
+    --bg-header: #1e293b;
+
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+
+    --code-bg: #020617;      /* Slate 950 */
+    --code-border: #1e293b;
+    --scrollbar-track: #0f172a;
+    --scrollbar-thumb: #334155;
 }
+
+/* --- Thema: Material Dark (V1) --- */
+[data-theme="material"] {
+    --bg-body: #212121;
+    --bg-content: #262626;
+    --bg-sidebar: #212121;
+    --bg-header: #262626;
+
+    --text-main: #EEFFFF;
+    --text-muted: #B0BEC5;
+    --border-color: #333333;
+
+    --code-bg: #1a1a1a;
+    --code-border: #333;
+    --scrollbar-track: #212121;
+    --scrollbar-thumb: #424242;
+}
+
+/* --- Thema: Monokai Pro (V1) --- */
+[data-theme="monokai"] {
+    --bg-body: #2D2A2E;
+    --bg-content: #38353D;
+    --bg-sidebar: #2D2A2E;
+    --bg-header: #38353D;
+
+    --text-main: #FCFCFA;
+    --text-muted: #939293;
+    --border-color: #4F4C55;
+
+    --code-bg: #221F22;
+    --code-border: #4F4C55;
+    --scrollbar-track: #2D2A2E;
+    --scrollbar-thumb: #4F4C55;
+}
+
+/* --- Thema: Night Owl (V1) --- */
+[data-theme="night-owl"] {
+    --bg-body: #011627;
+    --bg-content: #0b2942;
+    --bg-sidebar: #011627;
+    --bg-header: #0b2942;
+
+    --text-main: #d6deeb;
+    --text-muted: #7e57c2; /* Iets aangepaste muted kleur voor contrast */
+    --border-color: #1d3b53;
+
+    --code-bg: #01111d;
+    --code-border: #1d3b53;
+    --scrollbar-track: #011627;
+    --scrollbar-thumb: #1d3b53;
+}
+
+
+/* =========================================
+   3. ALGEMENE STYLING
+   ========================================= */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
     line-height: 1.6;
-    color: var(--c-text);
-    background: var(--c-bg);
-    padding: 0;
-    padding-top: 50px; /* Ruimte voor fixed top bar */
-    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+/* Scrollbars */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
 
-/* =========================================
-   3. TOP BAR (FIXED)
-   ========================================= */
-.top-bar {
-    position: fixed;
+/* --- Header --- */
+header {
+    height: var(--header-height);
+    background-color: var(--bg-header);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
     top: 0;
-    left: 0;
-    width: 100%;
-    background: var(--c-card-bg);
-    padding: 0 20px;
-    box-shadow: 0 2px 10px var(--c-shadow);
-    z-index: 1000;
-    height: 50px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
-.top-bar-content {
-    max-width: 1200px;
+.logo {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.header-controls { display: flex; gap: 0.5rem; align-items: center; }
+
+.btn-control {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-control:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.mobile-menu-btn { display: none; background: none; border: none; color: var(--text-main); font-size: 1.5rem; cursor: pointer; }
+
+/* --- Layout Grid --- */
+.layout-wrapper {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--toc-width);
+    max-width: 1600px;
     margin: 0 auto;
+    min-height: calc(100vh - var(--header-height));
+}
+
+/* --- Left Sidebar (Navigatie) --- */
+.sidebar-left {
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    position: sticky;
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    overflow-y: auto;
+    padding: 1.5rem 1rem;
+}
+
+.nav-group h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 800;
+    margin: 1.5rem 0 0.75rem 0.5rem;
+    letter-spacing: 0.05em;
+}
+.nav-group:first-child h3 { margin-top: 0; }
+
+/* Accordion Styles */
+.nav-item-container { margin-bottom: 0.25rem; }
+
+.nav-toggle {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 100%;
+    padding: 0.6rem 0.75rem;
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    transition: background 0.2s, color 0.2s;
+    text-align: left;
 }
 
-.top-bar .nav-group {
+.nav-toggle:hover { background-color: rgba(125, 125, 125, 0.05); }
+
+.chevron {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+    fill: var(--text-muted);
+}
+
+/* Active States Sidebar */
+.nav-item-container.active .chevron { transform: rotate(180deg); fill: var(--primary-color); }
+.nav-item-container.active .nav-toggle { color: var(--primary-color); font-weight: 600; }
+
+.submenu {
+    display: none;
+    list-style: none;
+    padding-left: 0.75rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.submenu::before {
+    content: '';
+    position: absolute;
+    left: 1.2rem;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--border-color);
+}
+
+.nav-item-container.active .submenu { display: block; animation: slideDown 0.2s ease-out; }
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.submenu a {
+    display: block;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.75rem 0.4rem 1.25rem;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+    margin-left: 0.45rem; /* Ruimte voor de lijn */
+}
+
+.submenu a:hover {
+    color: var(--primary-color);
+    background-color: rgba(125, 125, 125, 0.03);
+}
+
+.submenu a.current {
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    background-color: var(--primary-light);
+    font-weight: 600;
+    border-radius: 0 0.375rem 0.375rem 0;
+}
+
+/* --- Main Content --- */
+.main-content {
+    background-color: var(--bg-content);
+    padding: 3rem 4rem;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.main-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.main-content h2 {
+    font-size: 1.75rem;
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.main-content h3 {
+    font-size: 1.4rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-main);
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 0.5rem;
+}
+.main-content h3::before {
+    content: '#';
+    color: var(--primary-color);
+    opacity: 0.5;
+    font-weight: 300;
 }
 
-.top-bar a {
-    color: var(--c-accent);
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    transition: background 0.2s;
-    font-weight: 600;
-    font-size: 0.9em;
+.main-content p { margin-bottom: 1.25rem; color: var(--text-muted); font-size: 1.05rem; }
+.main-content ul, .main-content ol { margin-left: 1.5rem; margin-bottom: 1.5rem; color: var(--text-muted); }
+.main-content li { margin-bottom: 0.5rem; }
+.main-content strong { color: var(--text-main); font-weight: 600; }
+
+/* Links in content */
+.main-content a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
 }
+.main-content a:hover { text-decoration-thickness: 2px; }
 
-.top-bar a:hover {
-    background: var(--c-hover-link);
-}
-
-.top-bar .theme-switcher select {
-    border: 1px solid var(--c-border);
-    background: var(--c-card-bg);
-    color: var(--c-nav-link);
-    padding: 5px;
-    border-radius: 4px;
-    font-weight: 600;
-    font-family: inherit;
-    font-size: 0.9em;
-}
-
-/* =========================================
-   4. INDEX PAGINA: MODULES GRID
-   ========================================= */
-.intro {
-    background: var(--c-card-bg);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px var(--c-shadow);
-    margin: 30px 0 40px 0;
-    line-height: 1.8;
-    color: var(--c-text);
-}
-
-.intro h2 {
-    color: var(--c-text-header);
-    font-size: 2em;
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.modules-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    margin-bottom: 40px;
-    align-items: start; /* Belangrijk voor uitlijning */
-}
-
-.module-card {
-    background: var(--c-card-bg);
-    padding: 0;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px var(--c-shadow);
-    transition: all 0.3s ease;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    height: 100%; /* Zorgt dat de kaart de volledige hoogte van de rij pakt */
-}
-
-.module-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px var(--c-shadow);
-}
-
-/* --- FIXED HOOGTES (Jouw Specifieke Eis) --- */
-
-.module-card h2 {
-    background: var(--c-accent);
-    color: var(--c-accent-text);
-    font-size: 1.5em;
-    margin: 0;
-    padding: 20px 30px;
-    font-weight: 600;
-    border: none;
-
-    /* HIER DE FIX: */
-    height: 90px;
-    display: flex;
-    align-items: center; /* Verticaal centreren */
-    line-height: 1.2;
-}
-
-.module-card p {
-    background: var(--c-accent);
-    color: var(--c-accent-text);
-    opacity: 0.9;
-    margin: 0;
-    padding: 0 30px 20px 30px;
-    line-height: 1.6;
-    font-size: 1.05em;
-
-    /* HIER DE FIX: */
-    height: 110px;
-    overflow: hidden; /* Afkappen als het te lang is */
-}
-
-/* --- LIJST IN CARD --- */
-.module-card ul {
-    padding: 20px 30px 30px 30px;
-    background: var(--c-card-bg);
-    margin: 0;
-    list-style: none;
-    padding-left: 30px;
-    flex-grow: 1; /* Vult de rest van de kaart */
-}
-
-.module-card li {
-    margin: 8px 0;
-    color: var(--c-text);
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    padding-bottom: 4px;
-}
-
-.module-card li a {
-    text-decoration: none;
-    color: var(--c-nav-link);
-    font-weight: 500;
-    padding: 2px 5px;
-    border-radius: 3px;
-    display: inline-block;
-}
-
-.module-card li a:hover {
-    background: var(--c-hover-link);
-    color: var(--c-accent);
-}
-
-/* =========================================
-   5. DETAIL PAGINA: HEADER BLOCK & CONTENT
-   ========================================= */
-
-/* Het blok bovenaan met titel en interne navigatie */
-.header-nav-block {
-    background: var(--c-header-nav);
-    border-radius: 10px;
-    overflow: hidden;
-    color: var(--c-header-nav-text);
-    box-shadow: 0 10px 30px var(--c-shadow), 0 0 0 1px var(--c-card);
-    margin-top: 30px;
-}
-
-header {
-    padding: 40px;
-    text-align: center;
-}
-
-header h1 {
-    font-size: 2.5em;
-    margin-bottom: 5px;
-    color: var(--c-text-header-nav);
-    border: none;
-}
-
-header p {
-    font-size: 1.2em;
-    opacity: 0.9;
-    margin: 0;
-}
-
-nav {
-    background: var(--c-card-bg);
-    padding: 15px 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 0 20px;
-}
-
-nav a {
-    color: var(--c-nav-link);
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background 0.3s, color 0.3s;
-    font-weight: 600;
-    font-size: 0.9em;
-}
-
-nav a.active {
-    background: var(--c-accent);
-    color: var(--c-accent-text);
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-/* De echte content (main) */
-main {
-    background: var(--c-card-bg);
-    border-radius: 10px;
-    padding: 40px;
-    margin-top: 30px;
-    margin-bottom: 40px;
-    box-shadow: 0 10px 30px var(--c-shadow);
-}
-
-main h2 {
-    color: var(--c-text-header);
-    font-size: 2em;
-    margin-top: 0;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 3px solid var(--c-text-header);
-}
-
-main h3 {
-    color: var(--c-accent);
-    font-size: 1.5em;
-    margin-top: 25px;
-    margin-bottom: 15px;
-}
-
-/* --- TABELLEN & CODE --- */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 0.95em;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    border-radius: 8px;
-    border: 1px solid var(--c-border);
-}
-
-table th,
-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border: 1px solid var(--c-border);
-}
-
-table thead th {
-    background-color: var(--c-table-header);
-    color: var(--c-text-header);
-    font-weight: 600;
-    border-bottom: 2px solid var(--c-accent);
-}
-
-table tbody tr:nth-child(even) {
-    background-color: var(--c-card-bg);
-}
-table tbody tr:nth-child(odd) {
-    background-color: var(--c-card); /* Iets donkerder in sommige thema's indien ingesteld, anders wit */
-}
-
-table tbody tr:hover {
-    background-color: var(--c-hover-link);
-}
-
+/* Code Blocks */
 pre {
-    background: var(--c-code-bg);
-    color: #f1f1f1;
-    padding: 20px;
-    border-radius: 5px;
+    background-color: var(--code-bg);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
     overflow-x: auto;
-    margin: 15px 0;
-    border-left: 4px solid var(--c-accent);
+    margin: 1.5rem 0 2rem 0;
+    border: 1px solid var(--code-border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+code { font-family: 'Fira Code', monospace; font-size: 0.9em; }
+
+/* Inline Code */
+p > code, li > code, td > code {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    padding: 0.2em 0.4em;
+    border-radius: 0.3em;
+    font-size: 0.85em;
+    font-weight: 500;
 }
 
-pre code.hljs {
-    padding: 0;
-    background: none;
+/* --- Right Sidebar (TOC) --- */
+.sidebar-right {
+    position: sticky;
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    padding: 2rem 1.5rem;
+    background-color: var(--bg-content);
+    overflow-y: auto;
+    border-left: 1px solid var(--border-color);
 }
-
-p > code, li > code {
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    background: var(--c-hover-link);
-    color: var(--c-text);
-    padding: 3px 6px;
-    border-radius: 4px;
-    border: 1px solid var(--c-border);
-    font-size: 0.9em;
+.toc-container h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
 }
-
-/* --- FOOTER --- */
-footer {
-    background: var(--c-card-bg);
-    color: var(--c-nav-link);
-    text-align: center;
-    padding: 20px 0;
-    width: 100%;
-    box-shadow: 0 -2px 10px var(--c-shadow);
-    position: relative;
-    bottom: 0;
-    margin-top: 40px;
+.toc-list { list-style: none; }
+.toc-list li a {
+    display: block;
+    padding: 0.4rem 0 0.4rem 1rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    border-left: 2px solid var(--border-color);
+    margin-left: 0;
 }
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    font-size: 0.9em;
+.toc-list li a:hover { color: var(--primary-color); border-left-color: var(--primary-light); }
+.toc-list li a.active {
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
     font-weight: 600;
 }
 
-footer p {
-    margin: 0;
+/* --- Responsive --- */
+@media (max-width: 1280px) {
+    .layout-wrapper { grid-template-columns: var(--sidebar-width) 1fr; }
+    .sidebar-right { display: none; }
+    .main-content { padding: 2rem; }
 }
-
-/* Extra helper classes */
-.note-box {
-    background-color: #fff3cd;
-    border-left: 5px solid #ffc107;
-    padding: 15px;
-    margin: 20px 0;
-    color: #856404;
-    border-radius: 4px;
-}
-/* Zorg dat de note-box er in dark mode ook goed uitziet */
-[data-theme="material-dark"] .note-box,
-[data-theme="monokai-pro"] .note-box,
-[data-theme="night-owl"] .note-box {
-    background-color: #3e2723;
-    color: #ffecb3;
-    border-left-color: #ffab00;
+@media (max-width: 768px) {
+    .layout-wrapper { grid-template-columns: 1fr; }
+    .sidebar-left {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: var(--header-height);
+        width: 100%;
+        background: var(--bg-content);
+        z-index: 40;
+        border-right: none;
+    }
+    .sidebar-left.open { display: block; }
+    .mobile-menu-btn { display: block; }
+    .header-controls { gap: 0.25rem; }
+    .btn-control span { display: none; } /* Verberg tekst op mobiel, toon alleen icoon als je die had */
 }

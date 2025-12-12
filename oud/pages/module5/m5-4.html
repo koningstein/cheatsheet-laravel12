@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>M5.4: Orders Tonen - Laravel 12</title>
+    <link rel="stylesheet" href="../../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="../../../script.js" defer></script>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-content"><div class="nav-group"><a href="../module4/m4-8.html">« Module 4</a><a href="../module6/m6-1.html">Module 6 »</a></div><div class="nav-group theme-switcher"><select id="theme-switcher"><option value="blue">Blauw</option></select></div></div></div>
+
+<div class="container">
+    <div class="header-nav-block">
+        <header>
+            <h1>Module 5: Orders & Validatie</h1>
+            <p>Het verwerken van bestellingen, PDF generatie en validatie vertalingen.</p>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="m5-1.html">M5.1: Orders Structuur</a></li>
+                <li><a href="m5-2.html">M5.2: Order Seeds</a></li>
+                <li><a href="m5-3.html">M5.3: Orders Opslaan</a></li>
+                <li><a href="m5-4.html" class="active">M5.4: Orders Tonen</a></li>
+                <li><a href="m5-5.html">M5.5: Order naar PDF</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>M5.4: Orders Tonen</h2>
+
+        <h3>Leeruitkomsten</h3>
+        <ul>
+            <li>Ik kan een overzicht maken van orders van de ingelogde gebruiker.</li>
+            <li>Ik kan eager loading gebruiken (<code>with('state')</code>).</li>
+            <li>Ik kan een detailpagina maken met de bestelde regels.</li>
+        </ul>
+
+        <h3>Stap 1: Index Methode</h3>
+        <p>We halen alleen de orders op van de huidige gebruiker (<code>Auth::id()</code>). We laden ook de status (<code>state</code>) in.</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Controllers/Open/OrderController.php</code></div>
+        <pre><code class="language-php">
+public function index(): View
+{
+    $orders = Order::where('user_id', Auth::id())
+                   ->with('state') // Eager load status
+                   ->orderByDesc('orderdate')
+                   ->get();
+
+    return view('open.orders.index', ['orders' => $orders]);
+}
+        </code></pre>
+
+        <h3>Stap 2: Index View</h3>
+        <p>Maak <code>resources/views/open/orders/index.blade.php</code>.</p>
+
+        <pre><code class="language-html">
+@extends('layouts.layoutpublic')
+
+@section('content')
+    &lt;h1&gt;Mijn Bestellingen&lt;/h1&gt;
+    &lt;table class="w-full bg-white shadow rounded"&gt;
+        &lt;tr&gt;&lt;th&gt;Datum&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;th&gt;Acties&lt;/th&gt;&lt;/tr&gt;
+        @foreach($orders as $order)
+            &lt;tr&gt;
+                &lt;td&gt;{{ $order->orderdate }}&lt;/td&gt;
+                &lt;td&gt;{{ $order->state->name }}&lt;/td&gt;
+                &lt;td&gt;
+                    &lt;a href="{{ route('open.orders.show', $order) }}"&gt;Details&lt;/a&gt;
+                &lt;/td&gt;
+            &lt;/tr&gt;
+        @endforeach
+    &lt;/table&gt;
+@endsection
+        </code></pre>
+
+        <h3>Stap 3: Show Methode</h3>
+        <p>Voor de details halen we de order op, inclusief de regels en de producten die daarbij horen.</p>
+
+        <div class="note-box">Bestand: <code>app/Http/Controllers/Open/OrderController.php</code></div>
+        <pre><code class="language-php">
+public function show(Order $order): View
+{
+    // Beveiliging: mag deze user deze order wel zien?
+    if ($order->user_id !== Auth::id()) {
+        abort(403);
+    }
+
+    // Laad de regels en de producten
+    $order->load('orderrows.product', 'state');
+
+    return view('open.orders.show', ['order' => $order]);
+}
+        </code></pre>
+
+        <h3>Stap 4: Show View</h3>
+        <p>Toon de orderregels in een tabel.</p>
+        <pre><code class="language-html">
+&lt;!-- resources/views/open/orders/show.blade.php --&gt;
+&lt;h1&gt;Bestelling #{{ $order->id }}&lt;/h1&gt;
+&lt;p&gt;Status: {{ $order->state->name }}&lt;/p&gt;
+
+&lt;table&gt;
+    @foreach($order->orderrows as $row)
+        &lt;tr&gt;
+            &lt;td&gt;{{ $row->product->name }}&lt;/td&gt;
+            &lt;td&gt;{{ $row->qty }} x&lt;/td&gt;
+            &lt;td&gt;&euro; {{ $row->price }}&lt;/td&gt;
+        &lt;/tr&gt;
+    @endforeach
+&lt;/table&gt;
+        </code></pre>
+
+        <h3>Stap 5: Routes</h3>
+        <div class="note-box">Bestand: <code>routes/web.php</code></div>
+        <pre><code class="language-php">
+Route::middleware(['auth'])->group(function () {
+    // ... store route stond hier al ...
+    Route::get('/orders', [OrderController::class, 'index'])->name('open.orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('open.orders.show');
+});
+        </code></pre>
+    </main>
+</div>
+<footer><div class="footer-content"><p>&copy; 2025 Techniek College Rotterdam</p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
