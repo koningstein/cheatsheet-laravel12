@@ -262,12 +262,16 @@
     </nav>
 
     <main class="main-content">
-        <h1>Middleware bij Routes</h1>
+        <h1>Middleware bij routes</h1>
+        <p>Niet iedereen mag zomaar overal bij. We gebruiken middleware om routes te beveiligen, zodat alleen ingelogde gebruikers of gebruikers met specifieke rechten toegang krijgen tot bepaalde pagina's.</p>
 
         <h2>Leeruitkomsten</h2>
         <ul style="margin-bottom: 2rem;">
-            <li>Ik kan middleware aliases registreren.</li>
-            <li>Ik kan routes beveiligen met <code>auth</code> en <code>role</code> middleware.</li>
+            <li>Ik kan middleware aliases registreren in bootstrap/app.php.</li>
+            <li>Ik kan een custom 403 error page maken.</li>
+            <li>Ik kan redirect after login aanpassen.</li>
+            <li>Ik kan auth middleware op routes toepassen.</li>
+            <li>Ik kan conditionele content tonen (@auth/@guest).</li>
         </ul>
 
         <h3 id="aliases">Stap 1: Middleware Aliases Registreren</h3>

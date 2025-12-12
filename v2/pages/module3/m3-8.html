@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete & Destroy - Laravel 12</title>
+    <title>Show & Relaties - Laravel 12</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
@@ -42,15 +42,15 @@
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="m1-1.html">Model & Migration</a></li>
-                    <li><a href="m1-2.html">Factory & Seeding</a></li>
-                    <li><a href="m1-3.html">Layouts & Tailwind</a></li>
-                    <li><a href="m1-4.html">Controller Index</a></li>
-                    <li><a href="m1-5.html">Create & Store</a></li>
-                    <li><a href="m1-6.html">Validatie & Flash</a></li>
-                    <li><a href="m1-7.html">Detailpagina (Show)</a></li>
-                    <li><a href="m1-8.html">Edit & Update</a></li>
-                    <li><a href="m1-9.html" class="current">Delete & Destroy</a></li>
+                    <li><a href="../module1/m1-1.html">Model & Migration</a></li>
+                    <li><a href="../module1/m1-2.html">Factory & Seeding</a></li>
+                    <li><a href="../module1/m1-3.html">Layouts & Tailwind</a></li>
+                    <li><a href="../module1/m1-4.html">Controller Index</a></li>
+                    <li><a href="../module1/m1-5.html">Create & Store</a></li>
+                    <li><a href="../module1/m1-6.html">Validatie & Flash</a></li>
+                    <li><a href="../module1/m1-7.html">Detailpagina (Show)</a></li>
+                    <li><a href="../module1/m1-8.html">Edit & Update</a></li>
+                    <li><a href="../module1/m1-9.html">Delete & Destroy</a></li>
                 </ul>
             </div>
 
@@ -69,24 +69,24 @@
                 </ul>
             </div>
 
-            <div class="nav-item-container">
+            <div class="nav-item-container active">
                 <button class="nav-toggle">
                     Module 3: Advanced Admin
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="../module3/m3-1.html">Models & Migrations</a></li>
-                    <li><a href="../module3/m3-2.html">Factories met Relaties</a></li>
-                    <li><a href="../module3/m3-3.html">Seeders met Relaties</a></li>
-                    <li><a href="../module3/m3-4.html">Index & Eager Loading</a></li>
-                    <li><a href="../module3/m3-5.html">Permissions</a></li>
-                    <li><a href="../module3/m3-6.html">Create & Dropdowns</a></li>
-                    <li><a href="../module3/m3-7.html">Store & Validatie</a></li>
-                    <li><a href="../module3/m3-8.html">Show & Relaties</a></li>
-                    <li><a href="../module3/m3-9.html">Edit & Pre-select</a></li>
-                    <li><a href="../module3/m3-10.html">Update & Logica</a></li>
-                    <li><a href="../module3/m3-11.html">Delete View</a></li>
-                    <li><a href="../module3/m3-12.html">Destroy & Constraints</a></li>
+                    <li><a href="m3-1.html">Models & Migrations</a></li>
+                    <li><a href="m3-2.html">Factories met Relaties</a></li>
+                    <li><a href="m3-3.html">Seeders met Relaties</a></li>
+                    <li><a href="m3-4.html">Index & Eager Loading</a></li>
+                    <li><a href="m3-5.html">Permissions</a></li>
+                    <li><a href="m3-6.html">Create & Dropdowns</a></li>
+                    <li><a href="m3-7.html">Store & Validatie</a></li>
+                    <li><a href="m3-8.html" class="current">Show & Relaties</a></li>
+                    <li><a href="m3-9.html">Edit & Pre-select</a></li>
+                    <li><a href="m3-10.html">Update & Logica</a></li>
+                    <li><a href="m3-11.html">Delete View</a></li>
+                    <li><a href="m3-12.html">Destroy & Constraints</a></li>
                 </ul>
             </div>
 
@@ -262,72 +262,64 @@
     </nav>
 
     <main class="main-content">
-        <<h1>Resource Controller - Delete & Destroy</h1>
-        <p>Het verwijderen van data moet veilig gebeuren. We maken een bevestigingspagina (Delete) voordat de data daadwerkelijk uit de database wordt verwijderd (Destroy).</p>
+        <h1>Show met Relaties</h1>
+        <p>Op een detailpagina wil je vaak meer zien dan alleen de velden uit één tabel. Je wilt ook de gerelateerde informatie tonen, zoals de categorie waartoe een product behoort of de geschiedenis van prijzen.</p>
 
         <h2>Leeruitkomsten</h2>
         <ul style="margin-bottom: 2rem;">
-            <li>Ik kan een delete bevestigingspagina maken.</li>
-            <li>Ik kan disabled input fields gebruiken.</li>
-            <li>Ik kan DELETE method gebruiken.</li>
-            <li>Ik kan records verwijderen uit database.</li>
+            <li>Ik kan een detail view maken met gerelateerde data (historie).</li>
+            <li>Ik kan conditionele weergave gebruiken (N/A bij null).</li>
+            <li>Ik kan via relaties doorlijsten (bijv. alle prijzen van een product).</li>
         </ul>
 
-        <h3 id="extra-route">Stap 1: Extra Route</h3>
-        <p>Omdat we een bevestigingsscherm willen ("Weet u het zeker?"), hebben we een extra route nodig. Plaats deze <strong>boven</strong> de resource route in <code>web.php</code>.</p>
-        <pre><code class="language-php">
-// Route voor het bevestigingsscherm
-Route::get('/admin/categories/{category}/delete',
-    [CategoryController::class, 'delete'])
-    ->name('categories.delete');
+        <h3 id="controller">Stap 1: Controller</h3>
+        <p>De <code>show</code> methode is simpel dankzij Route Model Binding. We sturen het product naar de view. Omdat de relaties in het model zijn gedefinieerd, zijn ze automatisch beschikbaar.</p>
 
-Route::resource('/admin/categories', CategoryController::class);
-        </code></pre>
-
-        <h3 id="delete">Stap 2: Delete Methode</h3>
-        <p>Deze methode toont alleen het scherm, hij verwijdert nog niets.</p>
         <pre><code class="language-php">
-public function delete(Category $category)
+public function show(Product $product)
 {
-    return view('admin.categories.delete', [
-        'category' => $category
-    ]);
+    // Omdat we 'prices' relatie hebben in Model, hoeven we niets extra's te doen hier
+    return view('admin.products.show', ['product' => $product]);
 }
         </code></pre>
 
-        <h3 id="view">Stap 3: Delete View</h3>
-        <p>Maak <code>delete.blade.php</code>. Hier gebruik je een formulier met <code>@method('DELETE')</code>.</p>
+        <h3 id="view-details">Stap 2: De View (Details)</h3>
+        <p>In de view tonen we de product details én de categorie naam. We kunnen direct de relatie aanspreken.</p>
+
         <pre><code class="language-html">
-@extends('layouts.layoutadmin')
-
-@section('content')
-    &lt;h1 class="text-red-600"&gt;Verwijderen?&lt;/h1&gt;
-    &lt;p&gt;Weet je zeker dat je {{ $category->name }} wilt verwijderen?&lt;/p&gt;
-
-    &lt;form action="{{ route('categories.destroy', $category) }}" method="POST"&gt;
-        @csrf
-        @method('DELETE')
-
-        &lt;button type="submit" class="bg-red-500 text-white p-2"&gt;
-            Ja, weg ermee
-        &lt;/button&gt;
-
-        &lt;a href="{{ route('categories.index') }}"&gt;Annuleren&lt;/a&gt;
-    &lt;/form&gt;
-@endsection
+&lt;h1 class="text-2xl font-bold mb-4"&gt;{{ $product->name }}&lt;/h1&gt;
+&lt;p class="mb-4"&gt;&lt;strong&gt;Categorie:&lt;/strong&gt; {{ $product->category->name }}&lt;/p&gt;
         </code></pre>
 
-        <h3 id="destroy">Stap 4: Destroy Methode</h3>
-        <p>Dit is de methode die daadwerkelijk verwijdert.</p>
-        <pre><code class="language-php">
-public function destroy(Category $category)
-{
-    $category->delete();
+        <h3 id="view-relations">Stap 3: Relaties Tonen (Lijst)</h3>
+        <p>Omdat een product meerdere prijzen heeft (historie), kunnen we die ook tonen. We loopen door de relatie <code>prices</code>. We kunnen in de view sorteren, al is het vaak beter om dit in de controller of model te doen.</p>
 
-    return to_route('categories.index')
-            ->with('status', 'Categorie verwijderd!');
-}
+        <pre><code class="language-html">
+&lt;h3 class="text-xl font-semibold mb-2"&gt;Prijs Historie&lt;/h3&gt;
+&lt;table class="min-w-full bg-white border border-gray-300"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th class="py-2 px-4 border-b"&gt;Datum&lt;/th&gt;
+            &lt;th class="py-2 px-4 border-b"&gt;Prijs&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        {{-- Sorteer in de view op datum (nieuwste eerst) --}}
+        @foreach($product->prices->sortByDesc('effdate') as $price)
+            &lt;tr&gt;
+                &lt;td class="py-2 px-4 border-b"&gt;{{ $price->effdate }}&lt;/td&gt;
+                &lt;td class="py-2 px-4 border-b"&gt;&euro; {{ $price->price }}&lt;/td&gt;
+            &lt;/tr&gt;
+        @endforeach
+    &lt;/tbody&gt;
+&lt;/table&gt;
         </code></pre>
+
+        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mt-6" role="alert">
+            <p class="font-bold">Opdracht 23</p>
+            <p>Maak de Show pagina voor <strong>Tasks</strong>. Toon de taak naam, project naam en activity naam. Let op: User is optioneel. Als er geen user is (<code>$task->user == null</code>), toon dan "N/A".</p>
+        </div>
+
     </main>
 
     <aside class="sidebar-right">

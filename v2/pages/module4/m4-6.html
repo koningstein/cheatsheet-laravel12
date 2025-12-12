@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete & Destroy - Laravel 12</title>
+    <title>Winkelwagen Setup - Laravel 12</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
@@ -42,15 +42,15 @@
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="m1-1.html">Model & Migration</a></li>
-                    <li><a href="m1-2.html">Factory & Seeding</a></li>
-                    <li><a href="m1-3.html">Layouts & Tailwind</a></li>
-                    <li><a href="m1-4.html">Controller Index</a></li>
-                    <li><a href="m1-5.html">Create & Store</a></li>
-                    <li><a href="m1-6.html">Validatie & Flash</a></li>
-                    <li><a href="m1-7.html">Detailpagina (Show)</a></li>
-                    <li><a href="m1-8.html">Edit & Update</a></li>
-                    <li><a href="m1-9.html" class="current">Delete & Destroy</a></li>
+                    <li><a href="../module1/m1-1.html">Model & Migration</a></li>
+                    <li><a href="../module1/m1-2.html">Factory & Seeding</a></li>
+                    <li><a href="../module1/m1-3.html">Layouts & Tailwind</a></li>
+                    <li><a href="../module1/m1-4.html">Controller Index</a></li>
+                    <li><a href="../module1/m1-5.html">Create & Store</a></li>
+                    <li><a href="../module1/m1-6.html">Validatie & Flash</a></li>
+                    <li><a href="../module1/m1-7.html">Detailpagina (Show)</a></li>
+                    <li><a href="../module1/m1-8.html">Edit & Update</a></li>
+                    <li><a href="../module1/m1-9.html">Delete & Destroy</a></li>
                 </ul>
             </div>
 
@@ -90,20 +90,20 @@
                 </ul>
             </div>
 
-            <div class="nav-item-container">
+            <div class="nav-item-container active">
                 <button class="nav-toggle">
                     Module 4: Webshop Features
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="../module4/m4-1.html">Publieke Productpagina</a></li>
-                    <li><a href="../module4/m4-2.html">De Product Show</a></li>
-                    <li><a href="../module4/m4-3.html">Reviews Setup (DB)</a></li>
-                    <li><a href="../module4/m4-4.html">Reviews Tonen</a></li>
-                    <li><a href="../module4/m4-5.html">Reviews Plaatsen</a></li>
-                    <li><a href="../module4/m4-6.html">Winkelwagen Setup</a></li>
-                    <li><a href="../module4/m4-7.html">Winkelwagen Tonen</a></li>
-                    <li><a href="../module4/m4-8.html">Winkelwagen Wijzigen</a></li>
+                    <li><a href="m4-1.html">Publieke Productpagina</a></li>
+                    <li><a href="m4-2.html">De Product Show</a></li>
+                    <li><a href="m4-3.html">Reviews Setup (DB)</a></li>
+                    <li><a href="m4-4.html">Reviews Tonen</a></li>
+                    <li><a href="m4-5.html">Reviews Plaatsen</a></li>
+                    <li><a href="m4-6.html" class="current">Winkelwagen Setup</a></li>
+                    <li><a href="m4-7.html">Winkelwagen Tonen</a></li>
+                    <li><a href="m4-8.html">Winkelwagen Wijzigen</a></li>
                 </ul>
             </div>
 
@@ -262,71 +262,58 @@
     </nav>
 
     <main class="main-content">
-        <<h1>Resource Controller - Delete & Destroy</h1>
-        <p>Het verwijderen van data moet veilig gebeuren. We maken een bevestigingspagina (Delete) voordat de data daadwerkelijk uit de database wordt verwijderd (Destroy).</p>
+        <h1>Winkelwagen Setup</h1>
+        <p>Een webshop is niet compleet zonder winkelwagen. We gebruiken een bestaande package om dit makkelijk te implementeren.</p>
 
         <h2>Leeruitkomsten</h2>
         <ul style="margin-bottom: 2rem;">
-            <li>Ik kan een delete bevestigingspagina maken.</li>
-            <li>Ik kan disabled input fields gebruiken.</li>
-            <li>Ik kan DELETE method gebruiken.</li>
-            <li>Ik kan records verwijderen uit database.</li>
+            <li>Ik kan de Shoppingcart package installeren en configureren.</li>
+            <li>Ik kan items toevoegen aan de winkelwagen via een controller.</li>
         </ul>
 
-        <h3 id="extra-route">Stap 1: Extra Route</h3>
-        <p>Omdat we een bevestigingsscherm willen ("Weet u het zeker?"), hebben we een extra route nodig. Plaats deze <strong>boven</strong> de resource route in <code>web.php</code>.</p>
-        <pre><code class="language-php">
-// Route voor het bevestigingsscherm
-Route::get('/admin/categories/{category}/delete',
-    [CategoryController::class, 'delete'])
-    ->name('categories.delete');
+        <h3 id="install">Stap 1: Package Installatie</h3>
+        <p>We gebruiken de populaire <code>bumbummen99/shoppingcart</code> package. Installeer deze via Composer:</p>
+        <pre><code class="language-bash">composer require bumbummen99/shoppingcart</code></pre>
 
-Route::resource('/admin/categories', CategoryController::class);
-        </code></pre>
+        <h3 id="config">Stap 2: Config Publiceren (Optioneel)</h3>
+        <p>Als je instellingen wilt wijzigen (zoals belastingtarief), kun je de config publiceren:</p>
+        <pre><code class="language-bash">php artisan vendor:publish
+            --provider="Gloudemans\Shoppingcart\ShoppingcartServiceProvider" --tag="config"</code></pre>
 
-        <h3 id="delete">Stap 2: Delete Methode</h3>
-        <p>Deze methode toont alleen het scherm, hij verwijdert nog niets.</p>
+        <h3 id="controller">Stap 3: CartController</h3>
+        <p>Maak een <code>CartController</code> aan in de map <code>Open</code> met een <code>store</code> methode.</p>
+
         <pre><code class="language-php">
-public function delete(Category $category)
+use Gloudemans\Shoppingcart\Facades\Cart;
+
+public function store(Request $request, Product $product)
 {
-    return view('admin.categories.delete', [
-        'category' => $category
-    ]);
+    // Cart::add(id, naam, aantal, prijs)
+    Cart::add(
+        $product->id,
+        $product->name,
+        1, // Aantal (standaard 1)
+        $product->latest_price->price
+    )->associate('App\Models\Product'); // Koppel aan model
+
+    return redirect()->route('cart.index')
+        ->with('status', 'Product toegevoegd!');
 }
         </code></pre>
 
-        <h3 id="view">Stap 3: Delete View</h3>
-        <p>Maak <code>delete.blade.php</code>. Hier gebruik je een formulier met <code>@method('DELETE')</code>.</p>
+        <h3 id="route">Stap 4: Route & Formulier</h3>
+        <p>Maak de route aan in <code>web.php</code>:</p>
+        <pre><code class="language-php">Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');</code></pre>
+
+        <p>Pas de "Bestel Nu" knop op <code>show.blade.php</code> aan zodat het een formulier wordt:</p>
         <pre><code class="language-html">
-@extends('layouts.layoutadmin')
-
-@section('content')
-    &lt;h1 class="text-red-600"&gt;Verwijderen?&lt;/h1&gt;
-    &lt;p&gt;Weet je zeker dat je {{ $category->name }} wilt verwijderen?&lt;/p&gt;
-
-    &lt;form action="{{ route('categories.destroy', $category) }}" method="POST"&gt;
-        @csrf
-        @method('DELETE')
-
-        &lt;button type="submit" class="bg-red-500 text-white p-2"&gt;
-            Ja, weg ermee
-        &lt;/button&gt;
-
-        &lt;a href="{{ route('categories.index') }}"&gt;Annuleren&lt;/a&gt;
-    &lt;/form&gt;
-@endsection
-        </code></pre>
-
-        <h3 id="destroy">Stap 4: Destroy Methode</h3>
-        <p>Dit is de methode die daadwerkelijk verwijdert.</p>
-        <pre><code class="language-php">
-public function destroy(Category $category)
-{
-    $category->delete();
-
-    return to_route('categories.index')
-            ->with('status', 'Categorie verwijderd!');
-}
+&lt;form action="{{ route('cart.store', $product) }}" method="POST"&gt;
+    @csrf
+    &lt;button type="submit" class="bg-green-600 text-white px-8 py-3 rounded-lg font-bold
+            hover:bg-green-700 transition"&gt;
+        Bestel Nu
+    &lt;/button&gt;
+&lt;/form&gt;
         </code></pre>
     </main>
 
