@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migrations & Datatypes - Laravel 12</title>
+    <title>Flux UI - Laravel 12</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
@@ -125,13 +125,13 @@
         <div class="nav-group">
             <h3>Thema's</h3>
 
-            <div class="nav-item-container active">
+            <div class="nav-item-container">
                 <button class="nav-toggle">
                     Database & Models
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="../module6/m6-1.html" class="current">Migrations & Datatypes</a></li>
+                    <li><a href="../module6/m6-1.html">Migrations & Datatypes</a></li>
                     <li><a href="../module6/m6-2.html">Foreign Key Constraints</a></li>
                     <li><a href="../module6/m6-3.html">Model Conventions</a></li>
                     <li><a href="../module6/m6-4.html">Mass Assignment</a></li>
@@ -174,7 +174,7 @@
                 </ul>
             </div>
 
-            <div class="nav-item-container">
+            <div class="nav-item-container active">
                 <button class="nav-toggle">
                     Blade & Frontend
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
@@ -190,7 +190,7 @@
                     <li><a href="../module9/m9-8.html">Pagination</a></li>
                     <li><a href="../module9/m9-9.html">Flash messages</a></li>
                     <li><a href="../module9/m9-10.html">Livewire</a></li>
-                    <li><a href="../module9/m9-11.html">Flux UI</a></li>
+                    <li><a href="../module9/m9-11.html" class="current">Flux UI</a></li>
                 </ul>
             </div>
 
@@ -262,73 +262,114 @@
     </nav>
 
     <main class="main-content">
-        <h1>Migrations & Datatypes</h1>
-        <p>Migrations zijn versiebeheer voor je database. Ze zorgen ervoor dat je tabellen kunt aanmaken en wijzigen op een gestructureerde manier.</p>
+        <h1>Flux UI</h1>
+        <p>
+            Flux is de officiële UI-componenten library voor Livewire. Waar je vroeger zelf knoppen, modals en dropdowns moest bouwen met Tailwind classes (of Breeze/Jetstream components gebruikte), biedt Flux een set kant-en-klare, prachtige en toegankelijke componenten.
+        </p>
+        <p>
+            <strong>Waarom gebruiken?</strong>
+            Het scheelt enorm veel tijd. Een dropdown menu die volledig toegankelijk is (toetsenbord navigatie, screenreaders) is lastig zelf te bouwen. Flux regelt dit en ziet er standaard modern uit ("Laravel look"), maar is volledig aanpasbaar.
+        </p>
 
         <h2>Leeruitkomsten</h2>
         <ul style="margin-bottom: 2rem;">
-            <li>Ik kan migrations aanmaken met en zonder model.</li>
-            <li>Ik kan de juiste kolomtypes kiezen voor verschillende soorten data.</li>
-            <li>Ik kan modifiers zoals nullable(), unique() en default() toepassen.</li>
-            <li>Ik kan migrations uitvoeren en terugdraaien.</li>
-            <li>Ik kan bestaande kolommen wijzigen of verwijderen met een nieuwe migration.</li>
+            <li>Ik begrijp wat Flux UI is en waarom ik het zou gebruiken.</li>
+            <li>Ik kan basis Flux componenten zoals buttons en inputs toepassen.</li>
+            <li>Ik kan geavanceerde Flux componenten zoals modals gebruiken.</li>
         </ul>
 
-        <h3>1. Migration Aanmaken</h3>
-        <p>Je maakt een migratie meestal samen met een model, maar het kan ook los.</p>
-        <pre><code class="language-bash">
-# Samen met model (aanbevolen)
-php artisan make:model Product -m
+        <h3 id="basis-componenten">Basis Componenten</h3>
+        <p>
+            Flux componenten gebruik je in Blade met de <code>&lt;flux:...&gt;</code> syntax. Ze zijn ontworpen om direct te werken met Livewire properties.
+        </p>
 
-# Losse migratie
-php artisan make:migration create_products_table
+        <h4 id="buttons-en-icons">Buttons & Icons</h4>
+        <div class="note-box">Voorbeeld View</div>
+        <pre><code class="language-html">
+&lt;!-- Een simpele primaire knop --&gt;
+&lt;flux:button variant="primary"&gt;Opslaan&lt;/flux:button&gt;
+
+&lt;!-- Een knop met een icoon (Flux heeft ingebouwde iconen) --&gt;
+&lt;flux:button icon="pencil"&gt;Bewerken&lt;/flux:button&gt;
+
+&lt;!-- Een gevaarlijke actie (vaak rood) --&gt;
+&lt;flux:button variant="danger" wire:click="delete"&gt;Verwijderen&lt;/flux:button&gt;
         </code></pre>
 
-        <h3>2. Veelgebruikte Kolomtypes</h3>
-        <p>In de <code>up()</code> methode definieer je de kolommen.</p>
+        <h3 id="formulieren-met-flux">Formulieren met Flux</h3>
+        <p>
+            Dit is waar Flux echt krachtig is. In plaats van een <code>label</code>, <code>input</code> en <code>x-input-error</code> los te schrijven, combineert Flux dit in slimme componenten.
+        </p>
+        <p>
+            Onderstaand voorbeeld laat zien hoe compact een formulier wordt. Het regelt automatisch:
+        <ul>
+            <li>Het label boven het veld.</li>
+            <li>De styling van het invoerveld.</li>
+            <li>Het tonen van validatiefouten (via de <code>wire:model</code> koppeling).</li>
+            <li>Eventuele beschrijvingsteksten.</li>
+        </ul>
+        </p>
 
-        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_products_table.php</code></div>
-        <pre><code class="language-php">
-public function up(): void
-{
-    Schema::create('products', function (Blueprint $table) {
-        // Primary Key (Auto Increment BigInt)
-        $table->id();
+        <div class="note-box">resources/views/livewire/create-project.blade.php</div>
+        <pre><code class="language-html">
+&lt;form wire:submit="save" class="space-y-6"&gt;
 
-        // Tekst
-        $table->string('name', 100);       // VARCHAR(100)
-        $table->text('description');       // TEXT (veel data)
+    &lt;!-- Tekstveld --&gt;
+    &lt;flux:input
+        label="Project Naam"
+        wire:model="name"
+        placeholder="Bijv. Nieuwe Website"
+    /&gt;
 
-        // Nummers
-        $table->integer('stock');          // INT
-        $table->decimal('price', 8, 2);    // DECIMAL(8,2) -> bijv. 123456.78
-        $table->boolean('is_active');      // TINYINT(1) (0 of 1)
+    &lt;!-- Textarea met extra beschrijving --&gt;
+    &lt;flux:textarea
+        label="Omschrijving"
+        wire:model="description"
+        description="Leg kort uit wat het doel is."
+    /&gt;
 
-        // Datums
-        $table->date('release_date');      // DATE (2023-01-01)
-        $table->dateTime('published_at');  // DATETIME (2023-01-01 12:00:00)
+    &lt;!-- Selectbox --&gt;
+    &lt;flux:select label="Status" wire:model="status"&gt;
+        &lt;flux:option value="draft"&gt;Concept&lt;/flux:option&gt;
+        &lt;flux:option value="published"&gt;Gepubliceerd&lt;/flux:option&gt;
+    &lt;/flux:select&gt;
 
-        // Created_at & Updated_at
-        $table->timestamps();
-    });
-}
+    &lt;div class="flex justify-end"&gt;
+        &lt;flux:button type="submit" variant="primary"&gt;Project Aanmaken&lt;/flux:button&gt;
+    &lt;/div&gt;
+
+&lt;/form&gt;
         </code></pre>
 
-        <h3>3. Modifiers (Aanpassingen)</h3>
-        <p>Je kunt eigenschappen aan kolommen toevoegen (chainen).</p>
+        <h3 id="geavanceerde-ui">Geavanceerde UI (Modals & Toasts)</h3>
+        <p>
+            Complexe UI-patronen zoals Modals (pop-ups) en Toasts (notificaties) zijn in Flux triviaal. Je hoeft geen JavaScript te schrijven om ze te openen of sluiten.
+        </p>
 
-        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_users_table.php</code></div>
-        <pre><code class="language-php">
-$table->string('email')->unique();            // Moet uniek zijn
-$table->string('phone')->nullable();          // Mag leeg (NULL) zijn
-$table->boolean('is_admin')->default(false);  // Standaardwaarde
-$table->integer('score')->unsigned();         // Alleen positieve getallen
-        </code></pre>
+        <div class="note-box">Modal Voorbeeld</div>
+        <pre><code class="language-html">
+&lt;!-- De trigger knop --&gt;
+&lt;flux:modal.trigger name="delete-modal"&gt;
+    &lt;flux:button variant="danger"&gt;Verwijder Account&lt;/flux:button&gt;
+&lt;/flux:modal.trigger&gt;
 
-        <h3>4. Uitvoeren</h3>
-        <pre><code class="language-bash">
-php artisan migrate        # Voer uit
-php artisan migrate:fresh  # Gooi alles weg en begin opnieuw
+&lt;!-- De Modal zelf --&gt;
+&lt;flux:modal name="delete-modal" class="min-w-[20rem]"&gt;
+    &lt;div class="space-y-6"&gt;
+        &lt;div&gt;
+            &lt;flux:heading size="lg"&gt;Weet je het zeker?&lt;/flux:heading&gt;
+            &lt;flux:subheading&gt;Dit kan niet ongedaan worden gemaakt.&lt;/flux:subheading&gt;
+        &lt;/div&gt;
+
+        &lt;div class="flex gap-2"&gt;
+            &lt;flux:spacer /&gt;
+            &lt;flux:modal.close&gt;
+                &lt;flux:button variant="ghost"&gt;Annuleren&lt;/flux:button&gt;
+            &lt;/flux:modal.close&gt;
+            &lt;flux:button variant="danger" wire:click="destroy"&gt;Ja, verwijder&lt;/flux:button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/flux:modal&gt;
         </code></pre>
     </main>
 

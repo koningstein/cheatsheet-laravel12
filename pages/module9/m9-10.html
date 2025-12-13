@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migrations & Datatypes - Laravel 12</title>
+    <title>Livewire - Laravel 12</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
@@ -125,13 +125,13 @@
         <div class="nav-group">
             <h3>Thema's</h3>
 
-            <div class="nav-item-container active">
+            <div class="nav-item-container">
                 <button class="nav-toggle">
                     Database & Models
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="../module6/m6-1.html" class="current">Migrations & Datatypes</a></li>
+                    <li><a href="../module6/m6-1.html">Migrations & Datatypes</a></li>
                     <li><a href="../module6/m6-2.html">Foreign Key Constraints</a></li>
                     <li><a href="../module6/m6-3.html">Model Conventions</a></li>
                     <li><a href="../module6/m6-4.html">Mass Assignment</a></li>
@@ -174,7 +174,7 @@
                 </ul>
             </div>
 
-            <div class="nav-item-container">
+            <div class="nav-item-container active">
                 <button class="nav-toggle">
                     Blade & Frontend
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
@@ -189,7 +189,7 @@
                     <li><a href="../module9/m9-7.html">Tailwind Patterns</a></li>
                     <li><a href="../module9/m9-8.html">Pagination</a></li>
                     <li><a href="../module9/m9-9.html">Flash messages</a></li>
-                    <li><a href="../module9/m9-10.html">Livewire</a></li>
+                    <li><a href="../module9/m9-10.html" class="current">Livewire</a></li>
                     <li><a href="../module9/m9-11.html">Flux UI</a></li>
                 </ul>
             </div>
@@ -262,73 +262,133 @@
     </nav>
 
     <main class="main-content">
-        <h1>Migrations & Datatypes</h1>
-        <p>Migrations zijn versiebeheer voor je database. Ze zorgen ervoor dat je tabellen kunt aanmaken en wijzigen op een gestructureerde manier.</p>
+        <h1>Livewire</h1>
+        <p>
+            Livewire is een full-stack framework voor Laravel dat het bouwen van dynamische interfaces eenvoudig maakt. Normaal gesproken heb je voor interactiviteit (zoals een formulier dat update zonder de pagina te herladen) een JavaScript framework zoals Vue of React nodig.
+        </p>
+        <p>
+            <strong>Waarom gebruiken?</strong> Met Livewire schrijf je de logica in PHP (je backend taal) en de template in Blade. Livewire handelt de AJAX-requests, state updates en DOM-manipulatie automatisch af. In Laravel 12 is dit vaak de standaard keuze voor authenticatie-scaffolding.
+        </p>
 
         <h2>Leeruitkomsten</h2>
         <ul style="margin-bottom: 2rem;">
-            <li>Ik kan migrations aanmaken met en zonder model.</li>
-            <li>Ik kan de juiste kolomtypes kiezen voor verschillende soorten data.</li>
-            <li>Ik kan modifiers zoals nullable(), unique() en default() toepassen.</li>
-            <li>Ik kan migrations uitvoeren en terugdraaien.</li>
-            <li>Ik kan bestaande kolommen wijzigen of verwijderen met een nieuwe migration.</li>
+            <li>Ik begrijp wat Livewire is en waarom ik het gebruik.</li>
+            <li>Ik kan een Livewire component aanmaken en renderen.</li>
+            <li>Ik begrijp het concept van State en Actions.</li>
+            <li>Ik kan data-binding toepassen met <code>wire:model</code>.</li>
         </ul>
 
-        <h3>1. Migration Aanmaken</h3>
-        <p>Je maakt een migratie meestal samen met een model, maar het kan ook los.</p>
-        <pre><code class="language-bash">
-# Samen met model (aanbevolen)
-php artisan make:model Product -m
+        <h3 id="component-maken">Een Component Maken</h3>
+        <p>
+            Een Livewire component bestaat uit twee delen: een PHP class (de logica) en een Blade view (de presentatie).
+        </p>
+        <div class="note-box">Terminal</div>
+        <pre><code class="language-bash">php artisan make:livewire Counter</code></pre>
 
-# Losse migratie
-php artisan make:migration create_products_table
-        </code></pre>
+        <p>
+            Dit maakt:
+        <ul>
+            <li><code>app/Livewire/Counter.php</code> (De Class)</li>
+            <li><code>resources/views/livewire/counter.blade.php</code> (De View)</li>
+        </ul>
+        </p>
 
-        <h3>2. Veelgebruikte Kolomtypes</h3>
-        <p>In de <code>up()</code> methode definieer je de kolommen.</p>
+        <h3 id="state-actions">State & Actions (Properties en Methods)</h3>
+        <p>
+            De kracht van Livewire zit in <strong>public properties</strong>. Deze zijn direct beschikbaar in je view. Als je ze in de view aanpast, veranderen ze ook in de PHP class (Data Binding). Functies in je class noemen we <strong>Actions</strong>.
+        </p>
 
-        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_products_table.php</code></div>
+        <div class="note-box">app/Livewire/Counter.php</div>
         <pre><code class="language-php">
-public function up(): void
+&lt;?php
+
+namespace App\Livewire;
+
+use Livewire\Component;
+
+class Counter extends Component
 {
-    Schema::create('products', function (Blueprint $table) {
-        // Primary Key (Auto Increment BigInt)
-        $table->id();
+    // Public properties zijn direct zichtbaar in de Blade view
+    public $count = 0;
 
-        // Tekst
-        $table->string('name', 100);       // VARCHAR(100)
-        $table->text('description');       // TEXT (veel data)
+    // Een 'Action' methode
+    public function increment()
+    {
+        $this->count++;
+    }
 
-        // Nummers
-        $table->integer('stock');          // INT
-        $table->decimal('price', 8, 2);    // DECIMAL(8,2) -> bijv. 123456.78
-        $table->boolean('is_active');      // TINYINT(1) (0 of 1)
-
-        // Datums
-        $table->date('release_date');      // DATE (2023-01-01)
-        $table->dateTime('published_at');  // DATETIME (2023-01-01 12:00:00)
-
-        // Created_at & Updated_at
-        $table->timestamps();
-    });
+    public function render()
+    {
+        return view('livewire.counter');
+    }
 }
         </code></pre>
 
-        <h3>3. Modifiers (Aanpassingen)</h3>
-        <p>Je kunt eigenschappen aan kolommen toevoegen (chainen).</p>
+        <div class="note-box">resources/views/livewire/counter.blade.php</div>
+        <pre><code class="language-html">
+&lt;div class="p-4 text-center"&gt;
+    &lt;h2&gt;Huidige telling: {{ $count }}&lt;/h2&gt;
 
-        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_users_table.php</code></div>
-        <pre><code class="language-php">
-$table->string('email')->unique();            // Moet uniek zijn
-$table->string('phone')->nullable();          // Mag leeg (NULL) zijn
-$table->boolean('is_admin')->default(false);  // Standaardwaarde
-$table->integer('score')->unsigned();         // Alleen positieve getallen
+    &lt;!-- wire:click zorgt voor de verbinding met de PHP methode --&gt;
+    &lt;button wire:click="increment" class="bg-blue-500 text-white px-4 py-2 rounded"&gt;
+        +1 Optellen
+    &lt;/button&gt;
+&lt;/div&gt;
         </code></pre>
 
-        <h3>4. Uitvoeren</h3>
-        <pre><code class="language-bash">
-php artisan migrate        # Voer uit
-php artisan migrate:fresh  # Gooi alles weg en begin opnieuw
+        <h3 id="data-binding">Real-time Data Binding (wire:model)</h3>
+        <p>
+            Voor formulieren gebruik je <code>wire:model</code>. Dit verbindt een input veld direct met een public property in je component. Typ je iets in het inputveld? Dan wordt de PHP-variabele direct bijgewerkt (zonder save knop).
+        </p>
+
+        <div class="note-box">app/Livewire/SearchUser.php</div>
+        <pre><code class="language-php">
+public $search = '';
+
+public function render()
+{
+    return view('livewire.search-user', [
+        // Zoekt live terwijl je typt
+        'users' => User::where('name', 'like', '%'.$this->search.'%')->get(),
+    ]);
+}
+        </code></pre>
+
+        <div class="note-box">resources/views/livewire/search-user.blade.php</div>
+        <pre><code class="language-html">
+&lt;div&gt;
+    &lt;!-- .live zorgt voor updates tijdens het typen, anders pas na 'blur' --&gt;
+    &lt;input type="text" wire:model.live="search" placeholder="Zoek gebruiker..."
+            class="border p-2"&gt;
+
+    &lt;ul&gt;
+        @foreach($users as $user)
+            &lt;li&gt;{{ $user->name }}&lt;/li&gt;
+        @endforeach
+    &lt;/ul&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h3 id="volt">Volt (Functionele API)</h3>
+        <p>
+            In moderne Laravel 12 projecten zie je soms ook <strong>Volt</strong>. Dit laat je de PHP logica <em>binnen</em> het Blade bestand schrijven, vergelijkbaar met de <code>&lt;script setup&gt;</code> van Vue. Dit is optioneel, maar goed om te herkennen.
+        </p>
+        <div class="note-box">resources/views/livewire/counter-volt.blade.php</div>
+        <pre><code class="language-php">
+&lt;?php
+    use function Livewire\Volt\{state};
+
+    // Definieer state
+    state(['count' => 0]);
+
+    // Definieer actie
+    $increment = fn () => $this->count++;
+?&gt;
+
+&lt;div&gt;
+    &lt;h1&gt;{{ $count }}&lt;/h1&gt;
+    &lt;button wire:click="increment"&gt;+&lt;/button&gt;
+&lt;/div&gt;
         </code></pre>
     </main>
 

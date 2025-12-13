@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Migrations & Datatypes - Laravel 12</title>
+    <title>Tailwind Utility Patterns - Laravel 12</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
@@ -125,13 +125,13 @@
         <div class="nav-group">
             <h3>Thema's</h3>
 
-            <div class="nav-item-container active">
+            <div class="nav-item-container">
                 <button class="nav-toggle">
                     Database & Models
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="../module6/m6-1.html" class="current">Migrations & Datatypes</a></li>
+                    <li><a href="../module6/m6-1.html">Migrations & Datatypes</a></li>
                     <li><a href="../module6/m6-2.html">Foreign Key Constraints</a></li>
                     <li><a href="../module6/m6-3.html">Model Conventions</a></li>
                     <li><a href="../module6/m6-4.html">Mass Assignment</a></li>
@@ -174,7 +174,7 @@
                 </ul>
             </div>
 
-            <div class="nav-item-container">
+            <div class="nav-item-container active">
                 <button class="nav-toggle">
                     Blade & Frontend
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
@@ -186,7 +186,7 @@
                     <li><a href="../module9/m9-4.html">Control Structures</a></li>
                     <li><a href="../module9/m9-5.html">Auth Directives</a></li>
                     <li><a href="../module9/m9-6.html">Service Injection</a></li>
-                    <li><a href="../module9/m9-7.html">Tailwind Patterns</a></li>
+                    <li><a href="../module9/m9-7.html" class="current">Tailwind Patterns</a></li>
                     <li><a href="../module9/m9-8.html">Pagination</a></li>
                     <li><a href="../module9/m9-9.html">Flash messages</a></li>
                     <li><a href="../module9/m9-10.html">Livewire</a></li>
@@ -262,74 +262,59 @@
     </nav>
 
     <main class="main-content">
-        <h1>Migrations & Datatypes</h1>
-        <p>Migrations zijn versiebeheer voor je database. Ze zorgen ervoor dat je tabellen kunt aanmaken en wijzigen op een gestructureerde manier.</p>
+        <h1>Tailwind Utility Patterns</h1>
+        <p>Tailwind CSS is geweldig, maar je HTML kan snel veranderen in een "soep" van classes. In Laravel zijn er twee manieren om dit op te lossen: Blade Components en CSS extractie.</p>
 
         <h2>Leeruitkomsten</h2>
         <ul style="margin-bottom: 2rem;">
-            <li>Ik kan migrations aanmaken met en zonder model.</li>
-            <li>Ik kan de juiste kolomtypes kiezen voor verschillende soorten data.</li>
-            <li>Ik kan modifiers zoals nullable(), unique() en default() toepassen.</li>
-            <li>Ik kan migrations uitvoeren en terugdraaien.</li>
-            <li>Ik kan bestaande kolommen wijzigen of verwijderen met een nieuwe migration.</li>
+            <li>Ik begrijp het verschil tussen Blade Components en CSS extractie.</li>
+            <li>Ik kan herbruikbare components maken voor veelgebruikte UI-elementen.</li>
+            <li>Ik weet wanneer ik <code>@apply</code> wel en niet moet gebruiken.</li>
         </ul>
 
-        <h3>1. Migration Aanmaken</h3>
-        <p>Je maakt een migratie meestal samen met een model, maar het kan ook los.</p>
-        <pre><code class="language-bash">
-# Samen met model (aanbevolen)
-php artisan make:model Product -m
+        <h3 id="blade-components">1. Blade Components (Aanbevolen)</h3>
+        <p>In plaats van overal dezelfde lange lijst classes te kopiëren voor een knop, maak je een component. Dit is de "Laravel-manier".</p>
 
-# Losse migratie
-php artisan make:migration create_products_table
+        <div class="note-box">Bestand: <code>resources/views/components/button.blade.php</code></div>
+        <pre><code class="language-html">
+&lt;button {{ $attributes->merge(['class' => 'px-4 py-2 bg-blue-500 text-white rounded
+            hover:bg-blue-600 transition']) }}&gt;
+    {{ $slot }}
+&lt;/button&gt;
         </code></pre>
 
-        <h3>2. Veelgebruikte Kolomtypes</h3>
-        <p>In de <code>up()</code> methode definieer je de kolommen.</p>
+        <p>Gebruik:</p>
+        <pre><code class="language-html">
+&lt;x-button class="mt-4"&gt;Klik Mij&lt;/x-button&gt;
+&lt;!-- Resultaat: Heeft alle standaard styles + mt-4 --&gt;
+        </code></pre>
 
-        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_products_table.php</code></div>
-        <pre><code class="language-php">
-public function up(): void
-{
-    Schema::create('products', function (Blueprint $table) {
-        // Primary Key (Auto Increment BigInt)
-        $table->id();
+        <h3 id="css-extractie">2. CSS Extractie (@apply)</h3>
+        <p>Soms wil je gewoon een ouderwetse CSS class gebruiken, bijvoorbeeld voor een complexe kaart die je in pure HTML gebruikt.</p>
 
-        // Tekst
-        $table->string('name', 100);       // VARCHAR(100)
-        $table->text('description');       // TEXT (veel data)
+        <div class="note-box">Bestand: <code>resources/css/app.css</code></div>
+        <pre><code class="language-css">
+@layer components {
+    .btn-primary {
+        @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition;
+    }
 
-        // Nummers
-        $table->integer('stock');          // INT
-        $table->decimal('price', 8, 2);    // DECIMAL(8,2) -> bijv. 123456.78
-        $table->boolean('is_active');      // TINYINT(1) (0 of 1)
-
-        // Datums
-        $table->date('release_date');      // DATE (2023-01-01)
-        $table->dateTime('published_at');  // DATETIME (2023-01-01 12:00:00)
-
-        // Created_at & Updated_at
-        $table->timestamps();
-    });
+    .card {
+        @apply bg-white p-6 rounded-lg shadow-md;
+    }
 }
         </code></pre>
 
-        <h3>3. Modifiers (Aanpassingen)</h3>
-        <p>Je kunt eigenschappen aan kolommen toevoegen (chainen).</p>
-
-        <div class="note-box">Bestand: <code>database/migrations/xxxx_create_users_table.php</code></div>
-        <pre><code class="language-php">
-$table->string('email')->unique();            // Moet uniek zijn
-$table->string('phone')->nullable();          // Mag leeg (NULL) zijn
-$table->boolean('is_admin')->default(false);  // Standaardwaarde
-$table->integer('score')->unsigned();         // Alleen positieve getallen
+        <p>Gebruik:</p>
+        <pre><code class="language-html">
+&lt;button class="btn-primary"&gt;Klik Mij&lt;/button&gt;
         </code></pre>
 
-        <h3>4. Uitvoeren</h3>
-        <pre><code class="language-bash">
-php artisan migrate        # Voer uit
-php artisan migrate:fresh  # Gooi alles weg en begin opnieuw
-        </code></pre>
+        <h3 id="advies">Advies: Wat te kiezen?</h3>
+        <ul>
+            <li>Gebruik <strong>Blade Components</strong> voor UI elementen (knoppen, inputs, alerts). Dit is flexibeler omdat je ook logica (PHP) kunt toevoegen.</li>
+            <li>Gebruik <strong>@apply</strong> alleen als het echt nodig is, bijvoorbeeld voor styling van Markdown content waar je geen invloed hebt op de HTML-tags.</li>
+        </ul>
     </main>
 
     <aside class="sidebar-right">
