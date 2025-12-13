@@ -13,7 +13,7 @@
 <header>
     <a href="index.html" class="logo">
         <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12 Cheatsheet v2
+        Laravel 12
     </a>
     <div class="header-controls">
         <button class="btn-control" id="color-toggle">🎨 Kleur</button>
@@ -232,7 +232,7 @@
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="pages/module12/m12-1.html">PDF Generatie</a></li>
+                    <li><a href="/module12/m12-1.html">PDF Generatie</a></li>
                     <li><a href="pages/module12/m12-2.html">Excel Import/Export</a></li>
                     <li><a href="pages/module12/m12-3.html">Mail & Notifications</a></li>
                     <li><a href="pages/module12/m12-4.html">File Storage</a></li>
@@ -244,18 +244,32 @@
 
             <div class="nav-item-container">
                 <button class="nav-toggle">
-                    Quality Assurance
+                    Automated Testing
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="pages/module13/m13-1.html">Pest Testing Basics</a></li>
+                    <li><a href="pages/module13/m13-1.html">Introductie & PHPUnit</a></li>
                     <li><a href="pages/module13/m13-2.html">Unit vs Feature Tests</a></li>
-                    <li><a href="pages/module13/m13-3.html">Database Testing</a></li>
-                    <li><a href="pages/module13/m13-4.html">HTTP Testing</a></li>
-                    <li><a href="pages/module13/m13-5.html">Faking</a></li>
-                    <li><a href="pages/module13/m13-6.html">Debugging</a></li>
-                    <li><a href="pages/module13/m13-7.html">Laravel Debugbar</a></li>
-                    <li><a href="pages/module13/m13-8.html">Git Workflow</a></li>
+                    <li><a href="pages/module13/m13-3.html">Introductie Pest</a></li>
+                    <li><a href="pages/module13/m13-4.html">Unit & Feature Tests (Pest)</a></li>
+                    <li><a href="pages/module13/m13-5.html">Database Testing & Seeding</a></li>
+                    <li><a href="pages/module13/m13-6.html">HTTP Testing</a></li>
+                    <li><a href="pages/module13/m13-7.html">Mocking & Spies</a></li>
+                    <li><a href="pages/module13/m13-8.html">Faking</a></li>
+                    <li><a href="pages/module13/m13-9.html">Browser Testing (Dusk)</a></li>
+                </ul>
+            </div>
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    QA Tools & Workflow
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="pages/module14/m14-1.html">Static Analysis (Larastan)</a></li>
+                    <li><a href="pages/module14/m14-2.html">Code Style (Pint)</a></li>
+                    <li><a href="pages/module14/m14-3.html">Debugging & Debugbar</a></li>
+                    <li><a href="pages/module14/m14-4.html">Git Workflow</a></li>
+                    <li><a href="pages/module14/m14-5.html">CI/CD Basics</a></li>
                 </ul>
             </div>
 
@@ -263,17 +277,211 @@
     </nav>
 
     <main class="main-content">
-        <h1>Laravel 12 Curriculum</h1>
-        <p>Welkom bij de interactieve cheatsheet. Gebruik het menu om te navigeren door de installatie, het opdrachtentraject en de verdiepende thema's.</p>
+        <style>
+            .hero-section {
+                background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-content) 100%);
+                padding: 2rem;
+                border-radius: 1rem;
+                border: 1px solid var(--primary-light);
+                margin-bottom: 3rem;
+                text-align: center;
+            }
 
-        <h2>Curriculum Overzicht</h2>
-        <ul>
-            <li><strong>Deel A: Opdrachten:</strong> Stap-voor-stap modules (1 t/m 5) om de applicatie te bouwen.</li>
-            <li><strong>Deel B: Thema's:</strong> Thematische naslagwerken (Database, Routing, Security, etc.) voor verdieping.</li>
-        </ul>
+            .hero-section h1 {
+                margin-top: 0;
+                color: var(--primary-color);
+            }
 
-        <div style="background: var(--primary-light, #fef2f2); padding: 1.5rem; border-radius: 0.5rem; border-left: 4px solid var(--primary-color); color: var(--text-main);">
-            <strong>Tip:</strong> Gebruik de zoekfunctie van je browser (Ctrl+F) of klap de modules in het menu open om specifieke onderwerpen te vinden.
+            .hero-section p {
+                font-size: 1.1rem;
+                color: var(--text-main);
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .section-title {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 1.5rem;
+                margin-top: 3rem;
+                padding-bottom: 0.5rem;
+                border-bottom: 2px solid var(--border-color);
+                color: var(--text-main);
+            }
+
+            .section-icon { font-size: 1.5rem; }
+
+            .curriculum-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 1.5rem;
+            }
+
+            /* --- CARD STYLING & LINK RESET --- */
+            /* We gebruiken .main-content a.card om de globale link-styling te overschrijven */
+            .main-content a.card {
+                background: var(--bg-content);
+                border: 1px solid var(--border-color);
+                border-radius: 0.75rem;
+                padding: 1.5rem;
+                transition: all 0.2s ease;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+
+                /* RESET LINK STYLES: Belangrijk! */
+                text-decoration: none !important; /* Forceer geen onderstreping */
+                color: var(--text-main) !important; /* Forceer normale tekstkleur */
+                border-bottom: none !important; /* Verwijder eventuele link-borders */
+            }
+
+            /* Hover effect: blokje omhoog en schaduw/kleur rand */
+            .main-content a.card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                border-color: var(--primary-color);
+                text-decoration: none !important; /* Zeker weten dat hover geen lijn trekt */
+            }
+
+            .card-badge {
+                display: inline-block;
+                background-color: var(--primary-light);
+                color: var(--primary-color);
+                font-size: 0.75rem;
+                font-weight: 700;
+                padding: 0.25rem 0.75rem;
+                border-radius: 9999px;
+                margin-bottom: 1rem;
+                width: fit-content;
+            }
+
+            .theme-badge {
+                background-color: var(--bg-body);
+                color: var(--text-muted);
+                border: 1px solid var(--border-color);
+            }
+
+            .card h3 {
+                margin: 0 0 0.75rem 0;
+                font-size: 1.25rem;
+                color: var(--text-main);
+                text-decoration: none !important; /* Dubbele zekerheid voor de titel */
+            }
+
+            .card p {
+                margin: 0;
+                color: var(--text-muted);
+                font-size: 0.95rem;
+                line-height: 1.6;
+                flex-grow: 1;
+                text-decoration: none !important; /* Dubbele zekerheid voor de tekst */
+            }
+        </style>
+
+        <div class="hero-section">
+            <h1>Laravel 12 Curriculum</h1>
+            <p>Welkom bij de interactieve cheatsheet. Gebruik het menu aan de linkerkant om te navigeren door de installatie, het opdrachtentraject en de verdiepende thema's.</p>
+        </div>
+
+        <h2 class="section-title">
+            <span class="section-icon">🚀</span>
+            Opdrachten
+        </h2>
+        <p style="margin-bottom: 2rem; color: var(--text-muted);">Stap-voor-stap modules waarin we samen een webshop en admin-paneel bouwen.</p>
+
+        <div class="curriculum-grid">
+            <a href="pages/module1/m1-1.html" class="card">
+                <span class="card-badge">Module 1</span>
+                <h3>Basis CRUD</h3>
+                <p>De basis van Laravel. Models, Migrations en Controllers opzetten voor een simpele administratie.</p>
+            </a>
+
+            <a href="pages/module2/m2-1.html" class="card">
+                <span class="card-badge">Module 2</span>
+                <h3>Users & Security</h3>
+                <p>Authenticatie (inloggen/registreren), gebruikersbeheer en middleware voor beveiliging.</p>
+            </a>
+
+            <a href="pages/module3/m3-1.html" class="card">
+                <span class="card-badge">Module 3</span>
+                <h3>Advanced Admin</h3>
+                <p>Een professioneel admin-dashboard bouwen met complexe formulieren, relaties en rechtenstructuren.</p>
+            </a>
+
+            <a href="pages/module4/m4-1.html" class="card">
+                <span class="card-badge">Module 4</span>
+                <h3>Webshop Features</h3>
+                <p>De voorkant van de winkel. Producten tonen, winkelwagen functionaliteit en reviews systeem.</p>
+            </a>
+
+            <a href="pages/module5/m5-1.html" class="card">
+                <span class="card-badge">Module 5</span>
+                <h3>Orders & Validatie</h3>
+                <p>Het afrekenproces, database transacties, complexe validatieregels en PDF facturen genereren.</p>
+            </a>
+        </div>
+
+        <h2 class="section-title">
+            <span class="section-icon">📚</span>
+            Thema's
+        </h2>
+        <p style="margin-bottom: 2rem; color: var(--text-muted);">Verdiepende naslagwerken over specifieke onderdelen van het framework.</p>
+
+        <div class="curriculum-grid">
+            <a href="pages/module6/m6-1.html" class="card">
+                <span class="card-badge theme-badge">Database</span>
+                <h3>Database & Models</h3>
+                <p>Alles over database structuur, conventies, factories en geavanceerde Eloquent features.</p>
+            </a>
+
+            <a href="pages/module7/m7-1.html" class="card">
+                <span class="card-badge theme-badge">Relaties</span>
+                <h3>Eloquent Relaties</h3>
+                <p>Diepgang in hoe tabellen met elkaar communiceren (1-op-1, 1-op-veel, veel-op-veel).</p>
+            </a>
+
+            <a href="pages/module8/m8-1.html" class="card">
+                <span class="card-badge theme-badge">Routing</span>
+                <h3>Routing & Controllers</h3>
+                <p>Hoe URL's werken, dependency injection en slimme routing trucs.</p>
+            </a>
+
+            <a href="pages/module9/m9-1.html" class="card">
+                <span class="card-badge theme-badge">Frontend</span>
+                <h3>Blade & Frontend</h3>
+                <p>De view-laag. Components, layouts en integratie met frontend frameworks.</p>
+            </a>
+
+            <a href="pages/module10/m10-1.html" class="card">
+                <span class="card-badge theme-badge">Validatie</span>
+                <h3>Validatie & Forms</h3>
+                <p>Veilige input verwerking, custom error messages en form requests.</p>
+            </a>
+
+            <a href="pages/module11/m11-1.html" class="card">
+                <span class="card-badge theme-badge">Security</span>
+                <h3>Security & Auth</h3>
+                <p>Beveiliging, rechten (Gates/Policies), wachtwoorden hashen en e-mail verificatie.</p>
+            </a>
+
+            <a href="pages/module12/m12-1.html" class="card">
+                <span class="card-badge theme-badge">Features</span>
+                <h3>Features</h3>
+                <p>Extra functionaliteiten zoals bestandsopslag, externe API calls, events en mail.</p>
+            </a>
+
+            <a href="pages/module13/m13-1.html" class="card">
+                <span class="card-badge theme-badge">Automated Testing</span>
+                <h3>Automated Testing</h3>
+                <p>Code kwaliteit garanderen met tests (Pest, PHPUnit, Dusk).</p>
+            </a>
+
+            <a href="pages/module14/m14-1.html" class="card">
+                <span class="card-badge theme-badge">QA Tools & Workflow</span>
+                <h3>QA Tools & Workflow</h3>
+                <p>Professionele workflow met Static Analysis, Code Style tools en Git.</p>
+            </a>
         </div>
     </main>
 
