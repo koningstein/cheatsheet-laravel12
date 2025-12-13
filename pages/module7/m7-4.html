@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders Tonen - Laravel 12</title>
+    <title>Eager Loading - Laravel 12</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
@@ -107,17 +107,17 @@
                 </ul>
             </div>
 
-            <div class="nav-item-container active">
+            <div class="nav-item-container">
                 <button class="nav-toggle">
                     Module 5: Orders & Validatie
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="m5-1.html">Orders Structuur</a></li>
-                    <li><a href="m5-2.html">Order Seeds</a></li>
-                    <li><a href="m5-3.html">Orders Opslaan</a></li>
-                    <li><a href="m5-4.html" class="current">Orders Tonen</a></li>
-                    <li><a href="m5-5.html">Order naar PDF</a></li>
+                    <li><a href="../module5/m5-1.html">Orders Structuur</a></li>
+                    <li><a href="../module5/m5-2.html">Order Seeds</a></li>
+                    <li><a href="../module5/m5-3.html">Orders Opslaan</a></li>
+                    <li><a href="../module5/m5-4.html">Orders Tonen</a></li>
+                    <li><a href="../module5/m5-5.html">Order naar PDF</a></li>
                 </ul>
             </div>
         </div>
@@ -142,19 +142,19 @@
                 </ul>
             </div>
 
-            <div class="nav-item-container">
+            <div class="nav-item-container active">
                 <button class="nav-toggle">
                     Eloquent Relaties
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="../module7/m7-1.html">One to One (HasOne)</a></li>
-                    <li><a href="../module7/m7-2.html">One to Many (HasMany)</a></li>
-                    <li><a href="../module7/m7-3.html">Many to Many</a></li>
-                    <li><a href="../module7/m7-4.html">Eager Loading</a></li>
-                    <li><a href="../module7/m7-5.html">Query Scopes</a></li>
-                    <li><a href="../module7/m7-6.html">Collections Methods</a></li>
-                    <li><a href="../module7/m7-7.html">Pivot Tabellen</a></li>
+                    <li><a href="m7-1.html">One to One (HasOne)</a></li>
+                    <li><a href="m7-2.html">One to Many (HasMany)</a></li>
+                    <li><a href="m7-3.html">Many to Many</a></li>
+                    <li><a href="m7-4.html" class="current">Eager Loading</a></li>
+                    <li><a href="m7-5.html">Query Scopes</a></li>
+                    <li><a href="m7-6.html">Collections Methods</a></li>
+                    <li><a href="m7-7.html">Pivot Tabellen</a></li>
                 </ul>
             </div>
 
@@ -262,86 +262,59 @@
     </nav>
 
     <main class="main-content">
-        <h1>Orders Tonen</h1>
-        <p>De klant moet zijn bestellingen kunnen inzien. We maken een index pagina voor de lijst en een show pagina voor de details.</p>
+        <h1>Eager Loading</h1>
+        <p>In deze module leer je hoe je de performance van je applicatie verbetert door relaties slim op te halen.</p>
 
         <h2>Leeruitkomsten</h2>
         <ul style="margin-bottom: 2rem;">
-            <li>Ik kan orders ophalen voor de ingelogde gebruiker (<code>Auth::id()</code>).</li>
-            <li>Ik kan orderregels en productinformatie ophalen via relaties (Eager Loading).</li>
+            <li>Ik begrijp wat het N+1 probleem is.</li>
+            <li>Ik kan Eager Loading toepassen met <code>with()</code>.</li>
+            <li>Ik kan Lazy Eager Loading toepassen met <code>load()</code>.</li>
         </ul>
 
-        <h3 id="controller-index">Stap 1: Controller Index</h3>
-        <p>In de <code>index</code> methode tonen we alleen de bestellingen van de <strong>huidige gebruiker</strong>.</p>
+        <h3 id="n-plus-1">Eager Loading (N+1 Probleem)</h3>
+        <p>Het N+1 probleem maakt je applicatie traag. Het ontstaat wanneer je in een loop steeds opnieuw een database query uitvoert om een relatie op te halen.</p>
+
+        <h3 id="problem">1. Het Probleem (Lazy Loading)</h3>
+        <p>Stel je toont 100 producten en wilt hun categorie naam zien.</p>
 
         <pre><code class="language-php">
-public function index()
-{
-    $orders = Order::where('user_id', Auth::id())
-        ->latest()
-        ->get();
+// Query 1: Haal alle producten
+$products = Product::all();
 
-    return view('open.orders.index', ['orders' => $orders]);
+foreach ($products as $product) {
+    // FOUT: Hier voer je voor ELK product een nieuwe query uit!
+    // Query 2 t/m 101: SELECT * FROM categories WHERE id = X
+    echo $product->category->name;
+}
+        </code></pre>
+        <p>Resultaat: <strong>101 queries</strong>.</p>
+
+        <h3 id="solution">2. De Oplossing (Eager Loading)</h3>
+        <p>Met <code>with()</code> haal je de relaties vooraf op. Laravel doet dan 2 geoptimaliseerde queries.</p>
+
+        <pre><code class="language-php">
+// Query 1: Producten
+// Query 2: Categorieën (WHERE id IN (...))
+$products = Product::with('category')->get();
+
+foreach ($products as $product) {
+    // Geen extra query meer, data is al binnen!
+    echo $product->category->name;
 }
         </code></pre>
 
-        <h3 id="view-index">Stap 2: Index View</h3>
-        <p>Maak een tabel in <code>resources/views/open/orders/index.blade.php</code>.</p>
-        <pre><code class="language-html">
-&lt;table&gt;
-    @foreach($orders as $order)
-        &lt;tr&gt;
-            &lt;td&gt;#{{ $order->id }}&lt;/td&gt;
-            &lt;td&gt;{{ $order->created_at->format('d-m-Y') }}&lt;/td&gt;
-            &lt;td&gt;{{ $order->state->name }}&lt;/td&gt;
-            &lt;td&gt;&lt;a href="{{ route('open.orders.show', $order) }}"&gt;Bekijk&lt;/a&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-    @endforeach
-&lt;/table&gt;
-        </code></pre>
-
-        <h3 id="controller-show">Stap 3: Controller Show</h3>
-        <p>We moeten controleren of de order wel van de gebruiker is (Policy of check). En we moeten de regels + producten inladen.</p>
+        <h3 id="lazy">3. Lazy Eager Loading</h3>
+        <p>Als je het model al hebt (bijv. via Route Model Binding) en je wilt <em>alsnog</em> efficiënt laden:</p>
 
         <pre><code class="language-php">
-public function show(Order $order)
+public function show(Product $product)
 {
-    if ($order->user_id !== Auth::id()) {
-        abort(403);
-    }
+    // Laad de relatie achteraf in
+    $product->load('category');
 
-    // Laad regels en producten
-    $order->load('orderrows.product', 'state');
-
-    return view('open.orders.show', ['order' => $order]);
+    return view('products.show', ['product' => $product]);
 }
-        </code></pre>
-
-        <h3 id="view-show">Stap 4: Show View</h3>
-        <p>Toon de orderregels in een tabel.</p>
-        <pre><code class="language-html">
-&lt;h1&gt;Bestelling #{{ $order->id }}&lt;/h1&gt;
-&lt;p&gt;Status: {{ $order->state->name }}&lt;/p&gt;
-
-&lt;table&gt;
-    @foreach($order->orderrows as $row)
-        &lt;tr&gt;
-            &lt;td&gt;{{ $row->product->name }}&lt;/td&gt;
-            &lt;td&gt;{{ $row->qty }} x&lt;/td&gt;
-            &lt;td&gt;&euro; {{ $row->price }}&lt;/td&gt;
-        &lt;/tr&gt;
-    @endforeach
-&lt;/table&gt;
-        </code></pre>
-
-        <h3 id="routes">Stap 5: Routes</h3>
-        <pre><code class="language-php">
-Route::middleware(['auth'])->group(function () {
-    // ... store route stond er al ...
-    Route::get('/orders', [OrderController::class, 'index'])->name('open.orders.index');
-    Route::get('/orders/{order}', [OrderController::class, 'show'])
-            ->name('open.orders.show');
-});
         </code></pre>
     </main>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders Tonen - Laravel 12</title>
+    <title>Service Injection - Laravel 12</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
@@ -35,7 +35,6 @@
 
         <div class="nav-group">
             <h3>Opdrachten</h3>
-
             <div class="nav-item-container">
                 <button class="nav-toggle">
                     Module 1: Basis CRUD
@@ -107,17 +106,17 @@
                 </ul>
             </div>
 
-            <div class="nav-item-container active">
+            <div class="nav-item-container">
                 <button class="nav-toggle">
                     Module 5: Orders & Validatie
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="m5-1.html">Orders Structuur</a></li>
-                    <li><a href="m5-2.html">Order Seeds</a></li>
-                    <li><a href="m5-3.html">Orders Opslaan</a></li>
-                    <li><a href="m5-4.html" class="current">Orders Tonen</a></li>
-                    <li><a href="m5-5.html">Order naar PDF</a></li>
+                    <li><a href="../module5/m5-1.html">Orders Structuur</a></li>
+                    <li><a href="../module5/m5-2.html">Order Seeds</a></li>
+                    <li><a href="../module5/m5-3.html">Orders Opslaan</a></li>
+                    <li><a href="../module5/m5-4.html">Orders Tonen</a></li>
+                    <li><a href="../module5/m5-5.html">Order naar PDF</a></li>
                 </ul>
             </div>
         </div>
@@ -174,23 +173,23 @@
                 </ul>
             </div>
 
-            <div class="nav-item-container">
+            <div class="nav-item-container active">
                 <button class="nav-toggle">
                     Blade & Frontend
                     <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                 </button>
                 <ul class="submenu">
-                    <li><a href="../module9/m9-1.html">Layout Inheritance</a></li>
-                    <li><a href="../module9/m9-2.html">Components & Slots</a></li>
-                    <li><a href="../module9/m9-3.html">Stacks & Push</a></li>
-                    <li><a href="../module9/m9-4.html">Control Structures</a></li>
-                    <li><a href="../module9/m9-5.html">Auth Directives</a></li>
-                    <li><a href="../module9/m9-6.html">Service Injection</a></li>
-                    <li><a href="../module9/m9-7.html">Tailwind Patterns</a></li>
-                    <li><a href="../module9/m9-8.html">Pagination</a></li>
-                    <li><a href="../module9/m9-9.html">Flash messages</a></li>
-                    <li><a href="../module9/m9-10.html">Livewire</a></li>
-                    <li><a href="../module9/m9-11.html">Flux UI</a></li>
+                    <li><a href="m9-1.html">Layout Inheritance</a></li>
+                    <li><a href="m9-2.html">Components & Slots</a></li>
+                    <li><a href="m9-3.html">Stacks & Push</a></li>
+                    <li><a href="m9-4.html">Control Structures</a></li>
+                    <li><a href="m9-5.html">Auth Directives</a></li>
+                    <li><a href="m9-6.html" class="current">Service Injection</a></li>
+                    <li><a href="m9-7.html">Tailwind Patterns</a></li>
+                    <li><a href="m9-8.html">Pagination</a></li>
+                    <li><a href="m9-9.html">Flash messages</a></li>
+                    <li><a href="m9-10.html">Livewire</a></li>
+                    <li><a href="m9-11.html">Flux UI</a></li>
                 </ul>
             </div>
 
@@ -262,87 +261,51 @@
     </nav>
 
     <main class="main-content">
-        <h1>Orders Tonen</h1>
-        <p>De klant moet zijn bestellingen kunnen inzien. We maken een index pagina voor de lijst en een show pagina voor de details.</p>
+        <h1>Service Injection (@inject)</h1>
+        <p>Normaal gesproken geef je data vanuit de Controller door aan de View. Maar soms heb je data nodig die op <em>elke</em> pagina aanwezig moet zijn (zoals een winkelwagen-teller in de header) of data die niet direct gerelateerd is aan de hoofdtaak van de controller.</p>
+        <p>In plaats van elke controller aan te passen, kun je een Service direct in de View injecteren.</p>
 
         <h2>Leeruitkomsten</h2>
         <ul style="margin-bottom: 2rem;">
-            <li>Ik kan orders ophalen voor de ingelogde gebruiker (<code>Auth::id()</code>).</li>
-            <li>Ik kan orderregels en productinformatie ophalen via relaties (Eager Loading).</li>
+            <li>Ik kan een service class maken.</li>
+            <li>Ik kan een service injecteren in een Blade view met <code>@inject</code>.</li>
+            <li>Ik begrijp wanneer ik service injection moet gebruiken.</li>
         </ul>
 
-        <h3 id="controller-index">Stap 1: Controller Index</h3>
-        <p>In de <code>index</code> methode tonen we alleen de bestellingen van de <strong>huidige gebruiker</strong>.</p>
+        <h3 id="create">1. De Service Maken</h3>
+        <p>Stel we hebben een class die statistieken berekent.</p>
 
         <pre><code class="language-php">
-public function index()
+namespace App\Services;
+
+use App\Models\User;
+
+class StatsService
 {
-    $orders = Order::where('user_id', Auth::id())
-        ->latest()
-        ->get();
-
-    return view('open.orders.index', ['orders' => $orders]);
-}
-        </code></pre>
-
-        <h3 id="view-index">Stap 2: Index View</h3>
-        <p>Maak een tabel in <code>resources/views/open/orders/index.blade.php</code>.</p>
-        <pre><code class="language-html">
-&lt;table&gt;
-    @foreach($orders as $order)
-        &lt;tr&gt;
-            &lt;td&gt;#{{ $order->id }}&lt;/td&gt;
-            &lt;td&gt;{{ $order->created_at->format('d-m-Y') }}&lt;/td&gt;
-            &lt;td&gt;{{ $order->state->name }}&lt;/td&gt;
-            &lt;td&gt;&lt;a href="{{ route('open.orders.show', $order) }}"&gt;Bekijk&lt;/a&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-    @endforeach
-&lt;/table&gt;
-        </code></pre>
-
-        <h3 id="controller-show">Stap 3: Controller Show</h3>
-        <p>We moeten controleren of de order wel van de gebruiker is (Policy of check). En we moeten de regels + producten inladen.</p>
-
-        <pre><code class="language-php">
-public function show(Order $order)
-{
-    if ($order->user_id !== Auth::id()) {
-        abort(403);
+    public function userCount(): int
+    {
+        return User::count();
     }
-
-    // Laad regels en producten
-    $order->load('orderrows.product', 'state');
-
-    return view('open.orders.show', ['order' => $order]);
 }
         </code></pre>
 
-        <h3 id="view-show">Stap 4: Show View</h3>
-        <p>Toon de orderregels in een tabel.</p>
+        <h3 id="inject">2. Injecteren in Blade</h3>
+        <p>Gebruik <code>@inject</code>. Het eerste argument is de variabelenaam die je in de view wilt gebruiken, het tweede is de class die je wilt laden.</p>
+
         <pre><code class="language-html">
-&lt;h1&gt;Bestelling #{{ $order->id }}&lt;/h1&gt;
-&lt;p&gt;Status: {{ $order->state->name }}&lt;/p&gt;
+{{-- Injecteer de service en noem hem $stats --}}
+@inject('stats', 'App\Services\StatsService')
 
-&lt;table&gt;
-    @foreach($order->orderrows as $row)
-        &lt;tr&gt;
-            &lt;td&gt;{{ $row->product->name }}&lt;/td&gt;
-            &lt;td&gt;{{ $row->qty }} x&lt;/td&gt;
-            &lt;td&gt;&euro; {{ $row->price }}&lt;/td&gt;
-        &lt;/tr&gt;
-    @endforeach
-&lt;/table&gt;
+&lt;div class="footer"&gt;
+    &lt;p&gt;Totaal aantal gebruikers: {{ $stats->userCount() }}&lt;/p&gt;
+&lt;/div&gt;
         </code></pre>
 
-        <h3 id="routes">Stap 5: Routes</h3>
-        <pre><code class="language-php">
-Route::middleware(['auth'])->group(function () {
-    // ... store route stond er al ...
-    Route::get('/orders', [OrderController::class, 'index'])->name('open.orders.index');
-    Route::get('/orders/{order}', [OrderController::class, 'show'])
-            ->name('open.orders.show');
-});
-        </code></pre>
+        <h3 id="usage">Wanneer gebruiken?</h3>
+        <ul>
+            <li><strong>Wel doen:</strong> Voor globale data (navigatie, footers, widgets) die losstaat van de specifieke pagina-inhoud.</li>
+            <li><strong>Niet doen:</strong> Voor de hoofd-data van de pagina (bijv. het product op een product-detail pagina). Dat hoort gewoon via de Controller te gaan.</li>
+        </ul>
     </main>
 
     <aside class="sidebar-right">
