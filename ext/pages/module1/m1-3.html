@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="light" data-color="red">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layouts & Tailwind - Laravel 12 Module 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../../index.html" class="logo">
+        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
+        Laravel 12
+    </a>
+    <div class="header-controls">
+        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
+        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
+        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
+    </div>
+</header>
+
+<div class="layout-wrapper">
+    <nav class="sidebar-left">
+
+        <div class="nav-group">
+            <h3>Cursus Modules</h3>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 1: Basis CRUD
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu" style="display:block;">
+                    <li><a href="m1-1.html">Model & Migration</a></li>
+                    <li><a href="m1-2.html">Factory & Seeding</a></li>
+                    <li><a href="m1-3.html" class="current">Layouts & Tailwind</a></li>
+                    <li><a href="m1-4.html">Controller Index</a></li>
+                    <li><a href="m1-5.html">Create & Store</a></li>
+                    <li><a href="m1-6.html">Validatie & Flash</a></li>
+                    <li><a href="m1-7.html">Detailpagina (Show)</a></li>
+                    <li><a href="m1-8.html">Edit & Update</a></li>
+                    <li><a href="m1-9.html">Delete & Destroy</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 2: Users & Security
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module2/m2-1.html">Publieke Layout</a></li>
+                    <li><a href="../module2/m2-2.html">Simpele Publieke Pagina</a></li>
+                    <li><a href="../module2/m2-3.html">Roles & Permissions</a></li>
+                    <li><a href="../module2/m2-4.html">Aanmaken van Users</a></li>
+                    <li><a href="../module2/m2-5.html">Middleware bij Routes</a></li>
+                    <li><a href="../module2/m2-6.html">Rolgebaseerde Toegang</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 3: Advanced Admin
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module3/m3-1.html">Models & Migrations</a></li>
+                    <li><a href="../module3/m3-2.html">Factories met Relaties</a></li>
+                    <li><a href="../module3/m3-3.html">Seeders met Relaties</a></li>
+                    <li><a href="../module3/m3-4.html">Index & Eager Loading</a></li>
+                    <li><a href="../module3/m3-5.html">Permissions</a></li>
+                    <li><a href="../module3/m3-6.html">Create & Dropdowns</a></li>
+                    <li><a href="../module3/m3-7.html">Store & Validatie</a></li>
+                    <li><a href="../module3/m3-8.html">Show & Relaties</a></li>
+                    <li><a href="../module3/m3-9.html">Edit & Pre-select</a></li>
+                    <li><a href="../module3/m3-10.html">Update & Logica</a></li>
+                    <li><a href="../module3/m3-11.html">Delete View</a></li>
+                    <li><a href="../module3/m3-12.html">Destroy & Constraints</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 4: Webshop Features
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module4/m4-1.html">Publieke Productpagina</a></li>
+                    <li><a href="../module4/m4-2.html">De Product Show</a></li>
+                    <li><a href="../module4/m4-3.html">Reviews Setup (DB)</a></li>
+                    <li><a href="../module4/m4-4.html">Reviews Tonen</a></li>
+                    <li><a href="../module4/m4-5.html">Reviews Plaatsen</a></li>
+                    <li><a href="../module4/m4-6.html">Winkelwagen Setup</a></li>
+                    <li><a href="../module4/m4-7.html">Winkelwagen Tonen</a></li>
+                    <li><a href="../module4/m4-8.html">Winkelwagen Wijzigen</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 5: Orders & Validatie
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module5/m5-1.html">Orders Structuur</a></li>
+                    <li><a href="../module5/m5-2.html">Order Seeds</a></li>
+                    <li><a href="../module5/m5-3.html">Orders Opslaan</a></li>
+                    <li><a href="../module5/m5-4.html">Orders Tonen</a></li>
+                    <li><a href="../module5/m5-5.html">Order naar PDF</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1>Laravel Lay-out & Tailwind</h1>
+        <p>Voordat we beginnen met programmeren, zetten we een goede basis lay-out op. In Laravel gebruiken we Blade templates en een <strong>Masterpage</strong> concept om herhaling te voorkomen (DRY principe). We maken gebruik van de Livewire starterkit voor de basis authenticatie en styling.</p>
+
+        <h3 id="livewire">Livewire Starterkit</h3>
+        <p>We gebruiken de Livewire starterkit (vervanger voor Breeze in Laravel 12). Dit pakket geeft ons direct:</p>
+        <ul>
+            <li>Authenticatie functionaliteit (Login, Register)</li>
+            <li>Tailwind CSS configuratie</li>
+            <li>Vite bundler (voor assets)</li>
+        </ul>
+        <p>De bestanden vind je in <code>app/Http/Controllers/Auth</code> en de views in <code>resources/views/livewire/auth</code>.</p>
+
+        <h2 id="template-splitting">Template Splitting</h2>
+        <p>We splitsen onze layout op in kleine, herbruikbare bestanden. Dit implementeert het <strong>Composite Pattern</strong>. Zo blijft je code overzichtelijk en onderhoudbaar.</p>
+
+        <p>Maak de volgende structuur in <code>resources/views/layouts/</code>:</p>
+        <ul>
+            <li><code>layoutadmin.blade.php</code> (De masterpage)</li>
+            <li><code>base/start.blade.php</code> (HTML head & styles)</li>
+            <li><code>base/navbar.blade.php</code> (Bovenbalk)</li>
+            <li><code>base/sidebar.blade.php</code> (Zijmenu)</li>
+            <li><code>base/end.blade.php</code> (Scripts & footer)</li>
+        </ul>
+
+        <h3 id="masterpage">De Masterpage</h3>
+        <p>De masterpage (<code>layoutadmin.blade.php</code>) knoopt alles aan elkaar. We gebruiken <code>@include</code> voor de vaste onderdelen en <code>@yield</code> voor de dynamische content van subpagina's.</p>
+
+        <pre><code class="language-html">
+@include('layouts.base.start')
+@include('layouts.base.navbar')
+
+&lt;div class="h-screen flex flex-row flex-wrap"&gt;
+
+    @include('layouts.base.sidebar')
+
+    &lt;div class="bg-gray-100 flex-1 p-6 md:mt-16"&gt;
+        @yield('topmenu')
+
+        @yield('content')
+    &lt;/div&gt;
+    &lt;/div&gt;
+@include('layouts.base.end')
+        </code></pre>
+
+        <h3 id="base-files">De Base Bestanden</h3>
+        <p>In <code>start.blade.php</code> laden we de assets via Vite. De <code>asset()</code> functie zorgt dat links blijven werken, ook in submappen.</p>
+
+        <pre><code class="language-html">
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;title&gt;Laravel Opdrachten&lt;/title&gt;
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+&lt;/head&gt;
+&lt;body class="bg-gray-100"&gt;
+        </code></pre>
+
+        <p>In <code>navbar.blade.php</code> maken we de logout functionaliteit. Dit moet via een POST request (formulier) voor veiligheid, maar we stylen het als een linkje.</p>
+
+        <pre><code class="language-html">
+&lt;a href="{{ route('logout') }}"
+   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+   class="..."&gt;
+   Log out
+&lt;/a&gt;
+
+&lt;form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;"&gt;
+    @csrf
+&lt;/form&gt;
+        </code></pre>
+
+        <p>In <code>sidebar.blade.php</code> gebruiken we <code>@guest</code> en <code>@else</code> directives om links te tonen op basis van inlogstatus.</p>
+
+        <pre><code class="language-html">
+@guest
+    &lt;!-- Links voor gasten --&gt;
+    &lt;p&gt;Guest&lt;/p&gt;
+    &lt;a href="{{ route('login') }}"&gt;Login&lt;/a&gt;
+@else
+    &lt;!-- Links voor ingelogde users (admins) --&gt;
+    &lt;p&gt;Admin&lt;/p&gt;
+    &lt;a href=""&gt;Category admin&lt;/a&gt;
+    &lt;a href=""&gt;Product admin&lt;/a&gt;
+@endguest
+        </code></pre>
+
+        <h2 id="testen">Testen & Routes</h2>
+        <p>Om de nieuwe layout te testen, maken we een tijdelijke route aan in <code>routes/web.php</code>. We laden direct de view om te zien of de structuur werkt.</p>
+
+        <pre><code class="language-php">
+// routes/web.php
+
+Route::get('/admin', function () {
+    // We laden direct de layout file om te testen
+    return view('layouts.layoutadmin');
+})->name('admin');
+        </code></pre>
+
+        <p>Start je server en ga naar <code>/admin</code> om het resultaat te bekijken. Je zou nu de sidebar en navbar moeten zien, maar nog zonder content in het midden.</p>
+
+    </main>
+
+    <aside class="sidebar-right">
+        <div class="toc-container">
+            <h4>Inhoud</h4>
+            <ul id="toc-list" class="toc-list">
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="../../script.js"></script>
+</body>
+</html>
