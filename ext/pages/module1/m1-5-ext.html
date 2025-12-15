@@ -4,23 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create & Store - Laravel 12 Module 1</title>
+    <script src="../../theme-init.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
-<header>
-    <a href="../../index.html" class="logo">
-        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12
-    </a>
-    <div class="header-controls">
-        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
-        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
-        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
-    </div>
-</header>
+<div data-include="../../header.html"></div>
 
 <div class="layout-wrapper">
     <div data-include="../../sidebar.html"></div>
@@ -40,7 +31,7 @@
             </ul>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Create Methode</h2>
+        <h2>Create Methode</h2>
         <p>De <code>create</code> methode in de <code>CategoryController</code> heeft als enig doel om het formulier te tonen aan de gebruiker. We hoeven hier nog geen data op te halen of te verwerken, dat komt later bij de <code>store</code> methode.</p>
 
         <p>In de controller hoeven we dus alleen de juiste view terug te geven:</p>
@@ -57,7 +48,7 @@ public function create(): View
 
         <p>Vergeet niet om bovenin je bestand de <code>View</code> class te importeren voor de type-hinting in de functie declaratie.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Create View (Het Formulier)</h2>
+        <h2>De Create View (Het Formulier)</h2>
         <p>We maken een nieuw bestand aan: <code>resources/views/admin/categories/create.blade.php</code>. Omdat we dezelfde lay-out willen gebruiken als bij de index, nemen we de masterpage (<code>layoutadmin</code>) over.</p>
 
         <h3>Navigatie (Topmenu)</h3>
@@ -116,7 +107,7 @@ public function create(): View
             Laravel genereert een unieke, geheime token (de CSRF-token) die in de sessie van de gebruiker wordt opgeslagen. Met de directive <code>@csrf</code> zet je dit token als verborgen veld in je formulier. Bij het ontvangen van het formulier controleert Laravel of de token uit het formulier overeenkomt met de token in de sessie. Zo weet Laravel zeker dat het formulier echt vanaf jouw website komt.
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Store Methode</h2>
+        <h2>Store Methode</h2>
         <p>Wanneer de gebruiker op "Toevoegen" klikt, wordt de data via een POST request naar de <code>store</code> methode gestuurd. Hier vangen we de data op via de <code>Request $request</code> variabele.</p>
 
         <h3>Mass Assignment Beveiliging</h3>
@@ -189,7 +180,7 @@ public function store(Request $request): RedirectResponse
         </div>
     </aside>
 </div>
-
+<div data-include="../../footer.html"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="../../script.js"></script>
 </body>

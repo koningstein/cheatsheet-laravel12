@@ -3,24 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roles & Permissions - Laravel 12 Module 2</title>
+    <title>Model & Migration - Laravel 12 Module 1</title>
+    <script src="../../theme-init.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
-<header>
-    <a href="../../index.html" class="logo">
-        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12
-    </a>
-    <div class="header-controls">
-        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
-        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
-        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
-    </div>
-</header>
+<div data-include="../../header.html"></div>
 
 <div class="layout-wrapper">
     <div data-include="../../sidebar.html"></div>
@@ -41,7 +32,7 @@
             </ul>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Authenticatie vs. Autorisatie</h2>
+        <h2>Authenticatie vs. Autorisatie</h2>
         <p>Deze twee termen worden vaak door elkaar gehaald, maar betekenen iets heel anders:</p>
         <ul>
             <li><strong>Authenticatie (Who are you?):</strong> Controleren <em>wie</em> de gebruiker is. Dit gebeurt bij het inloggen (gebruikersnaam + wachtwoord). Laravel regelt dit grotendeels voor ons met de starterkit.</li>
@@ -49,7 +40,7 @@
         </ul>
         <p>In deze module focussen we op <strong>Autorisatie</strong>.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Database Aanpassing</h2>
+        <h2>Database Aanpassing</h2>
         <p>Om te weten of iemand admin is, moeten we dit opslaan in de database. De simpelste manier voor nu is om een kolom <code>is_admin</code> toe te voegen aan de <code>users</code> tabel. Dit is een 'boolean' (waar/niet waar).</p>
 
         <h3>Migration Maken</h3>
@@ -81,7 +72,7 @@ public function down(): void
         <p>Voer daarna de migratie uit:</p>
         <pre><code class="language-bash">php artisan migrate</code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Model Aanpassing (Casting)</h2>
+        <h2>Model Aanpassing (Casting)</h2>
         <p>In de database wordt een boolean vaak opgeslagen als een <code>0</code> of een <code>1</code> (TINYINT). In PHP willen we liever werken met <code>true</code> of <code>false</code>.</p>
         <p>Laravel heeft hiervoor <strong>Attribute Casting</strong>. Hiermee vertel je het Model hoe hij de data uit de database moet vertalen naar PHP.</p>
         <p>Open <code>app/Models/User.php</code> en voeg <code>is_admin</code> toe aan de <code>$casts</code> array:</p>
@@ -104,7 +95,7 @@ protected function casts(): array
             <code>protected $fillable = ['name', 'email', 'password', 'is_admin'];</code>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Admins maken (Seeding)</h2>
+        <h2>Admins maken (Seeding)</h2>
         <p>We hebben nu de structuur, maar nog geen admins. We gaan de <code>DatabaseSeeder</code> aanpassen zodat we altijd één vaste admin-account hebben om mee te testen.</p>
         <p>Open <code>database/seeders/DatabaseSeeder.php</code>:</p>
 
@@ -134,7 +125,7 @@ public function run(): void
         <pre><code class="language-bash">php artisan migrate:fresh --seed</code></pre>
         <p>Je kunt nu inloggen met <code>admin@test.com</code> en wachtwoord <code>password</code>.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Blade Checks</h2>
+        <h2>Blade Checks</h2>
         <p>Nu kunnen we in onze HTML (Blade) controleren wie er is ingelogd. We passen de <code>navbarpublic.blade.php</code> aan zodat de "Admin" knop alleen zichtbaar is voor beheerders.</p>
 
         <pre><code class="language-html">
@@ -172,7 +163,7 @@ public function run(): void
         </div>
     </aside>
 </div>
-
+<div data-include="../../footer.html"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="../../script.js"></script>
 </body>

@@ -4,23 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Validatie & Flash - Laravel 12 Module 1</title>
+    <script src="../../theme-init.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
-<header>
-    <a href="../../index.html" class="logo">
-        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12
-    </a>
-    <div class="header-controls">
-        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
-        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
-        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
-    </div>
-</header>
+<div data-include="../../header.html"></div>
 
 <div class="layout-wrapper">
     <div data-include="../../sidebar.html"></div>
@@ -42,7 +33,7 @@
             </ul>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Form Requests</h2>
+        <h2>Form Requests</h2>
         <p>Je kunt validatie direct in de controller schrijven, maar dat is in Laravel niet "best practice". We willen onze controller schoon en overzichtelijk houden. Daarom gebruiken we een apart bestand voor de validatie: de <strong>Form Request</strong>.</p>
 
         <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
@@ -61,7 +52,7 @@
 
         <p>Het bestand wordt aangemaakt in <code>app/Http/Requests/CategoryStoreRequest.php</code>.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Regels Instellen</h2>
+        <h2>Regels Instellen</h2>
         <p>Open het bestand. Je ziet hier twee methodes: <code>authorize()</code> en <code>rules()</code>.</p>
 
         <h3>Authorize</h3>
@@ -94,7 +85,7 @@ public function rules(): array
 }
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Controller Koppelen</h2>
+        <h2>Controller Koppelen</h2>
         <p>Nu moeten we de controller vertellen dat hij onze nieuwe <code>CategoryStoreRequest</code> moet gebruiken in plaats van de standaard <code>Request</code>.</p>
 
         <p>Dit werkt via <strong>Dependency Injection</strong>. Laravel ziet dat je een specifieke class vraagt in de parameters van je functie, en zorgt ervoor dat deze automatisch wordt uitgevoerd <em>voordat</em> de code in je functie begint. Als de validatie faalt, wordt de code in de functie niet eens uitgevoerd!</p>
@@ -117,7 +108,7 @@ public function store(CategoryStoreRequest $request)
 }
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Foutmeldingen in View</h2>
+        <h2>Foutmeldingen in View</h2>
         <p>Als de validatie faalt, stuurt Laravel de gebruiker automatisch terug naar het formulier. De foutmeldingen worden meegestuurd in de variabele <code>$errors</code>.</p>
         <p>We tonen deze meldingen in <code>resources/views/admin/categories/create.blade.php</code>.</p>
 
@@ -145,7 +136,7 @@ public function store(CategoryStoreRequest $request)
 @enderror
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Old Input (Gebruiksgemak)</h2>
+        <h2>Old Input (Gebruiksgemak)</h2>
         <p>Niets is irritanter dan een formulier opnieuw moeten invullen omdat je één foutje hebt gemaakt. Laravel heeft hiervoor de <code>old()</code> functie.</p>
         <p>Gebruik dit in het <code>value</code> attribuut van je inputvelden:</p>
 
@@ -154,7 +145,7 @@ public function store(CategoryStoreRequest $request)
         </code></pre>
         <p>Als er nu een validatiefout is, wordt de waarde die de gebruiker had ingevuld teruggezet.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Flash Messages</h2>
+        <h2>Flash Messages</h2>
         <p>Als het opslaan wél lukt, willen we een bevestiging tonen. Dit noemen we een <strong>Flash Message</strong>. Deze data wordt in de sessie opgeslagen, maar is slechts beschikbaar voor <strong>één</strong> volgend verzoek (page load). Daarna wordt het automatisch verwijderd.</p>
 
         <h3>Stap 1: Message meesturen</h3>
@@ -191,7 +182,7 @@ public function store(CategoryStoreRequest $request)
         </div>
     </aside>
 </div>
-
+<div data-include="../../footer.html"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="../../script.js"></script>
 </body>

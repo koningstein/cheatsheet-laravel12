@@ -3,24 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aanmaken van Users - Laravel 12 Module 2</title>
+    <title>Model & Migration - Laravel 12 Module 1</title>
+    <script src="../../theme-init.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
-<header>
-    <a href="../../index.html" class="logo">
-        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12
-    </a>
-    <div class="header-controls">
-        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
-        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
-        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
-    </div>
-</header>
+<div data-include="../../header.html"></div>
 
 <div class="layout-wrapper">
     <div data-include="../../sidebar.html"></div>
@@ -39,7 +30,7 @@
             </ul>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De User Controller</h2>
+        <h2>De User Controller</h2>
         <p>We beginnen met het aanmaken van een controller speciaal voor het beheren van gebruikers. Omdat dit een admin-taak is, plaatsen we deze weer in de <code>Admin</code> namespace.</p>
 
         <pre><code class="language-bash">php artisan make:controller Admin/UserController --resource</code></pre>
@@ -52,7 +43,7 @@ use App\Http\Controllers\Admin\UserController;
 Route::resource('admin/users', UserController::class);
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Wachtwoorden & Hashing</h2>
+        <h2>Wachtwoorden & Hashing</h2>
         <p>Voordat we gebruikers gaan opslaan, moeten we het hebben over veiligheid. Een van de belangrijkste regels in software development is:</p>
 
         <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
@@ -71,7 +62,7 @@ use Illuminate\Support\Facades\Hash;
 $hashedPassword = Hash::make('geheim123');
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Create View</h2>
+        <h2>De Create View</h2>
         <p>Maak het bestand <code>resources/views/admin/users/create.blade.php</code> aan. Dit formulier lijkt op dat van Categorieën, maar met extra velden voor e-mail, wachtwoord en de admin-checkbox.</p>
 
         <pre><code class="language-html">
@@ -117,7 +108,7 @@ $hashedPassword = Hash::make('geheim123');
 @endsection
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Opslaan (Store Logic)</h2>
+        <h2>Opslaan (Store Logic)</h2>
         <p>In de <code>UserController</code> gaan we de data verwerken. Let goed op hoe we het wachtwoord en de checkbox behandelen.</p>
 
         <h3>1. Validatie</h3>
@@ -188,7 +179,7 @@ class UserController extends Controller
         </div>
     </aside>
 </div>
-
+<div data-include="../../footer.html"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="../../script.js"></script>
 </body>

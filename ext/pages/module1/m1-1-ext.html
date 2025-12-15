@@ -4,23 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Model & Migration - Laravel 12 Module 1</title>
+    <script src="../../theme-init.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
-<header>
-    <a href="../../index.html" class="logo">
-        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12
-    </a>
-    <div class="header-controls">
-        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
-        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
-        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
-    </div>
-</header>
+<div data-include="../../header.html"></div>
 
 <div class="layout-wrapper">
     <div data-include="../../sidebar.html"></div>
@@ -40,7 +31,7 @@
             </ul>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Casus Beschrijving</h2>
+        <h2>Casus Beschrijving</h2>
         <p>Gedurende deze lessen bouwen we een webshop waar gebruikers spellen kunnen bekijken en kopen. De applicatie moet de volgende functies bevatten:</p>
         <ul>
             <li>Spellen bekijken in een overzicht.</li>
@@ -58,7 +49,7 @@
             <li>User Admin</li>
         </ul>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Het Model & MVC</h2>
+        <h2>Het Model & MVC</h2>
         <p>Laravel is gebouwd op het <strong>MVC-principe</strong> (Model-View-Controller). Dit is een veelgebruikt <em>Design Pattern</em> in softwareontwikkeling dat helpt om je code overzichtelijk en onderhoudbaar te houden door verantwoordelijkheden te scheiden.</p>
         <ul>
             <li><strong>Model:</strong> Dit onderdeel is verantwoordelijk voor alle data. In de meeste gevallen communiceert het Model direct met de database, maar het kan ook data uit een API of bestand zijn.</li>
@@ -85,7 +76,7 @@
 
         <p>Je vindt het nieuwe bestand in de map <code>app/Models/Category.php</code>. Voor nu is dit bestand nog vrij leeg, en dat is prima. Laravel weet door de naam <code>Category</code> automatisch dat dit model gekoppeld is aan de tabel <code>categories</code>.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Migrations</h2>
+        <h2>Migrations</h2>
         <p>Een migration is eigenlijk "versiebeheer voor je database". Waarom gebruiken we dit? Stel je werkt in een team. Jij past de database aan op jouw laptop (bijvoorbeeld: je voegt een kolom toe). Hoe krijgen jouw teamgenoten die aanpassing?</p>
         <p>Vroeger stuurden we SQL-bestandjes naar elkaar, wat vaak leidde tot errors. Met migrations beschrijf je de structuur van je database in PHP-code. Iedereen in het team kan deze code uitvoeren (migreren) en krijgt precies dezelfde database structuur. Ook kun je wijzigingen makkelijk ongedaan maken (rollback) als er iets misgaat.</p>
 
@@ -129,7 +120,7 @@ public function up(): void
             <em>(Vergeet niet <code>use Illuminate\Support\Facades\Schema;</code> bovenaan het bestand toe te voegen!)</em>. Voer daarna <code>php artisan migrate:fresh</code> uit om opnieuw te beginnen.
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Tabel Wijzigen</h2>
+        <h2>Tabel Wijzigen</h2>
         <p>Stel je hebt een foutje gemaakt: de naam mag toch maar 75 tekens lang zijn in plaats van 100. Of je bent een kolom vergeten.</p>
 
         <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
@@ -173,6 +164,7 @@ public function down(): void
     </aside>
 </div>
 
+<div data-include="../../footer.html"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="../../script.js"></script>
 </body>

@@ -3,24 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publieke Layout - Laravel 12 Module 2</title>
+    <title>Model & Migration - Laravel 12 Module 1</title>
+    <script src="../../theme-init.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
-<header>
-    <a href="../../index.html" class="logo">
-        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12
-    </a>
-    <div class="header-controls">
-        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
-        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
-        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
-    </div>
-</header>
+<div data-include="../../header.html"></div>
 
 <div class="layout-wrapper">
     <div data-include="../../sidebar.html"></div>
@@ -41,12 +32,12 @@
             </ul>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Concept: Gescheiden Layouts</h2>
+        <h2>Concept: Gescheiden Layouts</h2>
         <p>We hanteren hier het <strong>Separation of Concerns</strong> principe op UI-niveau. De behoeften van een beheerder (data invoeren, tabellen, dashboards) zijn compleet anders dan die van een klant (producten bekijken, sfeer, kopen).</p>
 
         <p>Hoewel de lay-outs verschillen, willen we geen code dupliceren. De HTML-head (met CSS links) en de scripts aan het einde zijn voor beide lay-outs vaak hetzelfde. Daarom hergebruiken we de partials die we in Module 1 hebben gemaakt (<code>start.blade.php</code> en <code>end.blade.php</code>). Dit voldoet aan het <strong>DRY (Don't Repeat Yourself)</strong> principe.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Publieke Masterpage</h2>
+        <h2>De Publieke Masterpage</h2>
         <p>We maken een nieuw bestand aan: <code>resources/views/layouts/layoutpublic.blade.php</code>.</p>
         <p>De structuur is eenvoudiger dan de admin-layout: we hebben geen sidebar nodig, alleen een menubalk bovenaan en een footer onderaan.</p>
 
@@ -73,7 +64,7 @@
 
         <p>Je ziet dat we verwijzen naar twee nieuwe bestanden: <code>navbarpublic</code> en <code>footer</code>. Deze moeten we nog maken.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Publieke Navigatie</h2>
+        <h2>De Publieke Navigatie</h2>
         <p>Maak het bestand <code>resources/views/layouts/base/navbarpublic.blade.php</code> aan.</p>
         <p>In dit menu willen we logica inbouwen:</p>
         <ul>
@@ -131,7 +122,7 @@
             In het voorbeeld hierboven zie je <code>Auth::user()->is_admin</code>. Dit werkt alleen als je User model een kolom of attribuut <code>is_admin</code> heeft. In Module 2-3 gaan we dieper in op rollen en rechten. Voor nu kun je dit weglaten of vervangen door een simpele link naar het dashboard.
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Footer</h2>
+        <h2>De Footer</h2>
         <p>Maak ook nog even <code>resources/views/layouts/base/footer.blade.php</code> aan om de pagina netjes af te sluiten.</p>
 
         <pre><code class="language-html">
@@ -142,7 +133,7 @@
 &lt;/footer&gt;
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Testen van de Layout</h2>
+        <h2>Testen van de Layout</h2>
         <p>Om te zien of alles werkt, hebben we een tijdelijke route en view nodig.</p>
 
         <h3>1. De Route</h3>
@@ -178,7 +169,7 @@ Route::get('/', function () {
         </div>
     </aside>
 </div>
-
+<div data-include="../../footer.html"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="../../script.js"></script>
 </body>

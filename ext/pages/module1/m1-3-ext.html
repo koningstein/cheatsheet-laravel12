@@ -4,23 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layouts & Tailwind - Laravel 12 Module 1</title>
+    <script src="../../theme-init.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
-<header>
-    <a href="../../index.html" class="logo">
-        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12
-    </a>
-    <div class="header-controls">
-        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
-        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
-        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
-    </div>
-</header>
+<div data-include="../../header.html"></div>
 
 <div class="layout-wrapper">
     <div data-include="../../sidebar.html"></div>
@@ -41,11 +32,11 @@
             </ul>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Livewire Starterkit</h2>
+        <h2>Livewire Starterkit</h2>
         <p>Voor dit project gebruiken we de <strong>Livewire starterkit</strong>. Dit pakket geeft ons direct een goede basis voor authenticatie (registreren, inloggen) en lay-out met Tailwind CSS. De installatie zorgt ervoor dat CSS en JavaScript bestanden correct worden geladen via Vite.</p>
         <p>Vite wordt gebruikt voor het bundelen van assets. De config staat in <code>vite.config.js</code> en de bestanden staan in <code>resources/css/app.css</code> en <code>resources/js/app.js</code>.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Masterpage Opbouwen</h2>
+        <h2>De Masterpage Opbouwen</h2>
         <p>We gaan onze lay-out opsplitsen in kleine, herbruikbare bestanden. Dit implementeert het <strong>Composite Pattern</strong>: grote templates opsplitsen in kleine stukken. Het voordeel is dat elk bestand één doel heeft en je bugs makkelijker kunt vinden.</p>
 
         <p>We maken de volgende structuur in <code>resources/views/layouts</code>:</p>
@@ -89,7 +80,7 @@
             <li><code>@yield('naam')</code>: Definieert een sectie waar subpagina's hun inhoud in kunnen "injecteren".</li>
         </ul>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Componenten</h2>
+        <h2>De Componenten</h2>
         <p>Laten we kijken wat er in de losse bestanden moet komen.</p>
 
         <h3>Start (resources/views/layouts/base/start.blade.php)</h3>
@@ -133,7 +124,7 @@
 @endguest
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Testen</h2>
+        <h2>Testen</h2>
         <p>Om te kijken of je lay-out werkt, maken we een tijdelijke route aan. Ga naar <code>routes/web.php</code> en voeg dit toe:</p>
 
         <pre><code class="language-php">
@@ -155,7 +146,7 @@ Route::get('/admin', function () {
         </div>
     </aside>
 </div>
-
+<div data-include="../../footer.html"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="../../script.js"></script>
 </body>

@@ -3,24 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rolgebaseerde Toegang - Laravel 12 Module 2</title>
+    <title>Model & Migration - Laravel 12 Module 1</title>
+    <script src="../../theme-init.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
-<header>
-    <a href="../../index.html" class="logo">
-        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12
-    </a>
-    <div class="header-controls">
-        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
-        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
-        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
-    </div>
-</header>
+<div data-include="../../header.html"></div>
 
 <div class="layout-wrapper">
     <div data-include="../../sidebar.html"></div>
@@ -41,14 +32,14 @@
             </ul>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Custom Middleware Maken</h2>
+        <h2>Custom Middleware Maken</h2>
         <p>Laravel biedt standaard geen "IsAdmin" middleware, omdat elke applicatie andere rollen heeft. We moeten deze dus zelf maken. We noemen hem <code>EnsureUserIsAdmin</code>.</p>
 
         <pre><code class="language-bash">php artisan make:middleware EnsureUserIsAdmin</code></pre>
 
         <p>Dit commando maakt een bestand aan in <code>app/Http/Middleware/EnsureUserIsAdmin.php</code>.</p>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Logica (Handle Methode)</h2>
+        <h2>De Logica (Handle Methode)</h2>
         <p>Open het bestand. Je ziet een <code>handle</code> methode. Dit is de functie waar elk verzoek doorheen moet. Hier schrijven we onze check.</p>
         <p>De logica is als volgt:</p>
         <ol>
@@ -96,7 +87,7 @@ class EnsureUserIsAdmin
             Het is belangrijk om de juiste code te gebruiken voor de juiste situatie.
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Middleware Registreren (Alias)</h2>
+        <h2>Middleware Registreren (Alias)</h2>
         <p>Voordat we de middleware makkelijk kunnen gebruiken in onze routes, moeten we hem bekendmaken aan Laravel en er een korte naam (alias) aan geven, bijvoorbeeld <code>admin</code>.</p>
 
         <p>In moderne Laravel versies (11+) doe je dit in <code>bootstrap/app.php</code>.</p>
@@ -125,7 +116,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })->create();
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Routes Beveiligen</h2>
+        <h2>Routes Beveiligen</h2>
         <p>Nu kunnen we de alias <code>admin</code> gebruiken in onze route groep in <code>routes/web.php</code>. We stapelen hem bovenop de <code>auth</code> middleware.</p>
 
         <pre><code class="language-php">
@@ -145,7 +136,7 @@ Route::middleware(['auth', 'admin'])
 });
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Testen en Verifiëren</h2>
+        <h2>Testen en Verifiëren</h2>
         <p>Het testen van beveiliging is cruciaal. Je moet verifiëren dat het werkt zoals verwacht.</p>
 
         <h3>Scenario 1: De Blije Pad (Happy Path)</h3>
@@ -174,7 +165,7 @@ Route::middleware(['auth', 'admin'])
         </div>
     </aside>
 </div>
-
+<div data-include="../../footer.html"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="../../script.js"></script>
 </body>

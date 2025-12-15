@@ -159,6 +159,11 @@ body {
     color: var(--text-main);
     line-height: 1.6;
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+    /* Sticky Footer Setup */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Scrollbars */
@@ -223,7 +228,10 @@ header {
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--toc-width);
     max-width: 1600px;
     margin: 0 auto;
-    min-height: calc(100vh - var(--header-height));
+
+    /* Sticky Footer Logic */
+    width: 100%;
+    flex: 1; /* Neemt alle beschikbare ruimte in */
 }
 
 /* --- Left Sidebar (Navigatie) --- */
@@ -354,8 +362,18 @@ header {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border-color);
     color: var(--text-main);
+    /* TOEVOEGEN: Zorgt dat de tekst en het hekje netjes uitlijnen */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
-
+/* NIEUW: Dit genereert het hekje automatisch via CSS */
+.main-content h2::before {
+    content: '#';
+    color: var(--primary-color); /* Dit zorgt dat hij meekleurt met je thema! */
+    opacity: 0.5;
+    font-weight: 300;
+}
 .main-content h3 {
     font-size: 1.4rem;
     margin-top: 2.5rem;
@@ -442,6 +460,23 @@ p > code, li > code, td > code {
     color: var(--primary-color);
     border-left-color: var(--primary-color);
     font-weight: 600;
+}
+
+/* --- Footer --- */
+.site-footer {
+    background-color: var(--bg-sidebar); /* Zelfde kleur als sidebar/header voor rustig beeld */
+    border-top: 1px solid var(--border-color);
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: auto; /* Zorgt voor de sticky functionaliteit bij weinig content */
+    width: 100%;
+}
+
+.site-footer p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    opacity: 0.8;
 }
 
 /* --- Responsive --- */

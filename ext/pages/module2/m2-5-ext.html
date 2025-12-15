@@ -3,24 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Middleware bij Routes - Laravel 12 Module 2</title>
+    <title>Model & Migration - Laravel 12 Module 1</title>
+    <script src="../../theme-init.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
 
-<header>
-    <a href="../../index.html" class="logo">
-        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
-        Laravel 12
-    </a>
-    <div class="header-controls">
-        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
-        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
-        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
-    </div>
-</header>
+<div data-include="../../header.html"></div>
 
 <div class="layout-wrapper">
     <div data-include="../../sidebar.html"></div>
@@ -40,7 +31,7 @@
             </ul>
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Het Concept: The Gatekeeper</h2>
+        <h2>Het Concept: The Gatekeeper</h2>
         <p>Stel je een nachtclub voor. Je hebt de dansvloer (jouw Controller) en de rij buiten (het Request). De uitsmijter bij de deur is de <strong>Middleware</strong>. Hij checkt of je op de gastenlijst staat (Authentication) en of je oud genoeg bent (Authorization).</p>
         <p>In Laravel werkt het precies zo:</p>
         <ol>
@@ -50,7 +41,7 @@
             <li>Ja? -> Laat het verzoek door naar de Controller.</li>
         </ol>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Route Groups</h2>
+        <h2>Route Groups</h2>
         <p>Je kunt middleware per route instellen, maar dat wordt al snel onoverzichtelijk als je 20 admin-routes hebt. Daarom gebruiken we <strong>Route Groups</strong>. Hiermee bundel je routes die dezelfde eigenschappen (zoals beveiliging of URL-prefix) delen.</p>
 
         <p>Open <code>routes/web.php</code>. Waarschijnlijk heb je nu zoiets:</p>
@@ -83,7 +74,7 @@ Route::middleware(['auth'])->group(function () {
 });
         </code></pre>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Prefix & Name Prefixes</h2>
+        <h2>Prefix & Name Prefixes</h2>
         <p>Je ziet dat we bij elke route <code>admin/</code> in de URL typen. Ook dit kunnen we groeperen. Hetzelfde geldt voor de namen van de routes (die beginnen vaak met <code>admin.</code>).</p>
         <p>We maken de groep nog krachtiger:</p>
 
@@ -114,7 +105,7 @@ Route::middleware(['auth'])
             Maar... als je handmatig URL's had getypt in je HTML (wat je niet zou moeten doen!), dan moet je controleren of de prefix klopt.
         </div>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Testen</h2>
+        <h2>Testen</h2>
         <p>Het is cruciaal om te testen of je beveiliging werkt.</p>
         <ol>
             <li>Zorg dat je bent <strong>uitgelogd</strong>.</li>
@@ -124,7 +115,7 @@ Route::middleware(['auth'])
             <li>Probeer de pagina nog eens te openen. Nu zou je er wel in moeten kunnen.</li>
         </ol>
 
-        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Wat is 'auth'?</h2>
+        <h2>Wat is 'auth'?</h2>
         <p>Je vraagt je misschien af waar die string <code>'auth'</code> vandaan komt. Dit is een alias voor de class <code>Illuminate\Auth\Middleware\Authenticate</code>.</p>
         <p>In oudere Laravel versies (voor versie 11) stonden deze aliassen in <code>app/Http/Kernel.php</code>. In Laravel 11 wordt dit veelal automatisch geregeld of geconfigureerd in <code>bootstrap/app.php</code>.</p>
         <p>De <code>auth</code> middleware controleert simpelweg: "Is er een sessie met een User ID?". Zo niet, dan gooit hij een <code>AuthenticationException</code>, die door Laravel wordt opgevangen en omgezet in een redirect naar de login route.</p>
@@ -146,7 +137,7 @@ Route::middleware(['auth'])
         </div>
     </aside>
 </div>
-
+<div data-include="../../footer.html"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="../../script.js"></script>
 </body>

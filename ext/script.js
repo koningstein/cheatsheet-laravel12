@@ -12,32 +12,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const colors = ['red', 'blue', 'green', 'purple', 'orange', 'teal', 'darkblue'];
 
     // --- INCLUDE SYSTEM (HEADER/SIDEBAR) ---
-    // Dit stukje zoekt naar <div data-include="..."> en laadt de bestanden in
     const includeElements = document.querySelectorAll("[data-include]");
     let includesPending = includeElements.length;
 
     if (includesPending === 0) {
-        // Geen includes? Start direct de logica
         initPageLogic();
     } else {
         includeElements.forEach(el => {
-            const file = el.getAttribute("data-include");
-            fetch(file)
+            const filePath = el.getAttribute("data-include");
+
+            // Bepaal het "basis pad" (bijv. "../../" als filePath "../../sidebar.html" is)
+            const lastSlashIndex = filePath.lastIndexOf("/");
+            const basePath = lastSlashIndex !== -1 ? filePath.substring(0, lastSlashIndex + 1) : "";
+
+            fetch(filePath)
                 .then(res => {
                     if (!res.ok) throw new Error("Network response was not ok");
                     return res.text();
                 })
-                .then(html => {
-                    el.outerHTML = html; // Vervang de placeholder door de echte HTML
+                .then(content => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = content;
+
+                    // Pad correcties voor links/images in de ingeladen HTML
+                    const links = tempDiv.querySelectorAll('a, img, link, script');
+                    links.forEach(link => {
+                        if (link.hasAttribute('href')) {
+                            const href = link.getAttribute('href');
+                            if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
+                                link.setAttribute('href', basePath + href);
+                            }
+                        }
+                        if (link.hasAttribute('src')) {
+                            const src = link.getAttribute('src');
+                            if (src && !src.startsWith('http')) {
+                                link.setAttribute('src', basePath + src);
+                            }
+                        }
+                    });
+
+                    el.outerHTML = tempDiv.innerHTML;
                 })
                 .catch(err => {
-                    console.error(`Fout bij laden van ${file}:`, err);
-                    el.innerHTML = `<p style="color:red">Error loading ${file}</p>`;
+                    console.error(`Fout bij laden van ${filePath}:`, err);
+                    el.innerHTML = `<p style="color:red">Error loading ${filePath}</p>`;
                 })
                 .finally(() => {
                     includesPending--;
                     if (includesPending === 0) {
-                        // Wacht tot ALLES is ingeladen, start dan pas de logica
                         initPageLogic();
                     }
                 });
@@ -48,38 +70,75 @@ document.addEventListener('DOMContentLoaded', () => {
     function initPageLogic() {
         initThemeLogic();
         initColorLogic();
-        initSidebarLogic(); // Belangrijk: Active class zetten
-        initTOC();          // Inhoudsopgave genereren
+        initSidebarLogic();
+        initTOC();
+        initViewToggle(); // <--- NIEUWE FUNCTIE TOEGEVOEGD
     }
 
-    // --- SIDEBAR LOGICA (Active state & Accordion) ---
-    function initSidebarLogic() {
-        // 1. Bepaal huidige pagina
-        const currentPath = window.location.pathname.split("/").pop(); // bijv: 'm1-1-ext.html'
+    // --- NIEUW: VIEW TOGGLE (Extended vs Cheatsheet) ---
+    function initViewToggle() {
+        const toggleBtn = document.getElementById('view-toggle');
+        if (!toggleBtn) return;
 
-        // 2. Loop door alle links in de (net ingeladen) sidebar
+        const path = window.location.pathname;
+        const filename = path.split("/").pop(); // bijv: 'm1-1-ext.html' of 'm1-1.html'
+
+        // Regex om Module ID en Pagina ID te vinden: m(Getal)-(Getal)(-ext?).html
+        const regex = /m(\d+)-(\d+)(-ext)?\.html/;
+        const match = filename.match(regex);
+
+        if (match) {
+            const moduleId = parseInt(match[1]); // bijv. 1
+            const pageId = match[2];             // bijv. 1
+            const isExtended = !!match[3];       // true als '-ext' in de naam zit
+
+            if (isExtended) {
+                // SITUATIE: We zitten op EXTENDED
+                // Knop moet leiden naar CHEATSHEET
+                toggleBtn.innerHTML = '🔄 Cheatsheet';
+                toggleBtn.title = "Ga naar Cheatsheet view";
+
+                // Doel: ../../../pages/moduleX/mX-Y.html
+                // We gaan ervan uit dat Cheatsheet altijd bestaat
+                toggleBtn.href = `../../../pages/module${moduleId}/m${moduleId}-${pageId}.html`;
+
+            } else {
+                // SITUATIE: We zitten op CHEATSHEET
+                // Knop moet leiden naar EXTENDED
+                toggleBtn.innerHTML = '🔄 Extended';
+                toggleBtn.title = "Ga naar Extended view";
+
+                // Regel: Als module <= 5 is, ga naar dezelfde pagina.
+                // Anders (module 6+), ga naar start van Extended (m1-1-ext.html).
+                if (moduleId <= 5) {
+                    toggleBtn.href = `../../../ext/pages/module${moduleId}/m${moduleId}-${pageId}-ext.html`;
+                } else {
+                    toggleBtn.href = `../../../ext/pages/module1/m1-1-ext.html`;
+                }
+            }
+        } else {
+            // Geen match (bijv. index.html)? Verberg de knop.
+            toggleBtn.style.display = 'none';
+        }
+    }
+
+    // --- SIDEBAR LOGICA ---
+    function initSidebarLogic() {
+        const currentPath = window.location.pathname.split("/").pop();
         const links = document.querySelectorAll(".sidebar-left a");
 
         links.forEach(link => {
             const linkHref = link.getAttribute("href");
-            // Check of bestandsnaam overeenkomt
             const linkFile = linkHref ? linkHref.split("/").pop() : "";
 
             if (linkFile === currentPath && currentPath !== "") {
-                // A. Zet current class op de link
                 link.classList.add("current");
-
-                // B. Klap het submenu open
                 const submenu = link.closest(".submenu");
                 if (submenu) {
                     submenu.style.display = "block";
-
-                    // C. Zet het pijltje goed (active class op container)
                     const parentGroup = link.closest(".nav-item-container");
                     if (parentGroup) {
                         parentGroup.classList.add("active");
-
-                        // Scroll naar het item als het buiten beeld is
                         setTimeout(() => {
                             parentGroup.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                         }, 100);
@@ -88,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 3. Click events voor open/dicht klappen
         const navToggles = document.querySelectorAll('.nav-toggle');
         navToggles.forEach(toggle => {
             toggle.addEventListener('click', () => {
@@ -97,14 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // 4. Mobiel menu
         const menuBtn = document.getElementById('menu-toggle');
         const sidebarLeft = document.querySelector('.sidebar-left');
         if(menuBtn && sidebarLeft) {
             menuBtn.addEventListener('click', () => {
                 sidebarLeft.classList.toggle('open');
             });
-            // Sluit menu bij klik buiten menu
             document.addEventListener('click', (e) => {
                 if(window.innerWidth <= 768 && sidebarLeft.classList.contains('open') && !sidebarLeft.contains(e.target) && e.target !== menuBtn) {
                     sidebarLeft.classList.remove('open');
@@ -175,8 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sidebarRight = document.querySelector('.sidebar-right');
 
         if (content && sidebarRight) {
-            sidebarRight.innerHTML = ''; // Reset
-
+            sidebarRight.innerHTML = '';
             const tocContainer = document.createElement('div');
             tocContainer.className = 'toc-container';
 
@@ -197,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const li = document.createElement('li');
                 const a = document.createElement('a');
                 a.href = `#${header.id}`;
-                // Haal eventuele handmatige # weg voor de TOC weergave
                 a.textContent = header.textContent.replace(/^#\s?/, '');
 
                 if(header.tagName === 'H3') {
@@ -214,7 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ul.appendChild(li);
             });
 
-            // Scroll Spy
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
