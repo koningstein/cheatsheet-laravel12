@@ -23,213 +23,91 @@
 </header>
 
 <div class="layout-wrapper">
-    <nav class="sidebar-left">
-
-        <div class="nav-group">
-            <h3>Cursus Modules</h3>
-
-            <div class="nav-item-container">
-                <button class="nav-toggle">
-                    Module 1: Basis CRUD
-                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </button>
-                <ul class="submenu" style="display:block;">
-                    <li><a href="m1-1-ext.html">Model & Migration</a></li>
-                    <li><a href="m1-2-ext.html">Factory & Seeding</a></li>
-                    <li><a href="m1-3-ext.html">Layouts & Tailwind</a></li>
-                    <li><a href="m1-4-ext.html">Controller Index</a></li>
-                    <li><a href="m1-5-ext.html">Create & Store</a></li>
-                    <li><a href="m1-6-ext.html">Validatie & Flash</a></li>
-                    <li><a href="m1-7-ext.html">Detailpagina (Show)</a></li>
-                    <li><a href="m1-8-ext.html">Edit & Update</a></li>
-                    <li><a href="m1-9-ext.html" class="current">Delete & Destroy</a></li>
-                </ul>
-            </div>
-
-            <div class="nav-item-container">
-                <button class="nav-toggle">
-                    Module 2: Users & Security
-                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </button>
-                <ul class="submenu">
-                    <li><a href="../module2/m2-1.html">Publieke Layout</a></li>
-                    <li><a href="../module2/m2-2.html">Simpele Publieke Pagina</a></li>
-                    <li><a href="../module2/m2-3.html">Roles & Permissions</a></li>
-                    <li><a href="../module2/m2-4.html">Aanmaken van Users</a></li>
-                    <li><a href="../module2/m2-5.html">Middleware bij Routes</a></li>
-                    <li><a href="../module2/m2-6.html">Rolgebaseerde Toegang</a></li>
-                </ul>
-            </div>
-
-            <div class="nav-item-container">
-                <button class="nav-toggle">
-                    Module 3: Advanced Admin
-                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </button>
-                <ul class="submenu">
-                    <li><a href="../module3/m3-1.html">Models & Migrations</a></li>
-                    <li><a href="../module3/m3-2.html">Factories met Relaties</a></li>
-                    <li><a href="../module3/m3-3.html">Seeders met Relaties</a></li>
-                    <li><a href="../module3/m3-4.html">Index & Eager Loading</a></li>
-                    <li><a href="../module3/m3-5.html">Permissions</a></li>
-                    <li><a href="../module3/m3-6.html">Create & Dropdowns</a></li>
-                    <li><a href="../module3/m3-7.html">Store & Validatie</a></li>
-                    <li><a href="../module3/m3-8.html">Show & Relaties</a></li>
-                    <li><a href="../module3/m3-9.html">Edit & Pre-select</a></li>
-                    <li><a href="../module3/m3-10.html">Update & Logica</a></li>
-                    <li><a href="../module3/m3-11.html">Delete View</a></li>
-                    <li><a href="../module3/m3-12.html">Destroy & Constraints</a></li>
-                </ul>
-            </div>
-
-            <div class="nav-item-container">
-                <button class="nav-toggle">
-                    Module 4: Webshop Features
-                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </button>
-                <ul class="submenu">
-                    <li><a href="../module4/m4-1.html">Publieke Productpagina</a></li>
-                    <li><a href="../module4/m4-2.html">De Product Show</a></li>
-                    <li><a href="../module4/m4-3.html">Reviews Setup (DB)</a></li>
-                    <li><a href="../module4/m4-4.html">Reviews Tonen</a></li>
-                    <li><a href="../module4/m4-5.html">Reviews Plaatsen</a></li>
-                    <li><a href="../module4/m4-6.html">Winkelwagen Setup</a></li>
-                    <li><a href="../module4/m4-7.html">Winkelwagen Tonen</a></li>
-                    <li><a href="../module4/m4-8.html">Winkelwagen Wijzigen</a></li>
-                </ul>
-            </div>
-
-            <div class="nav-item-container">
-                <button class="nav-toggle">
-                    Module 5: Orders & Validatie
-                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </button>
-                <ul class="submenu">
-                    <li><a href="../module5/m5-1.html">Orders Structuur</a></li>
-                    <li><a href="../module5/m5-2.html">Order Seeds</a></li>
-                    <li><a href="../module5/m5-3.html">Orders Opslaan</a></li>
-                    <li><a href="../module5/m5-4.html">Orders Tonen</a></li>
-                    <li><a href="../module5/m5-5.html">Order naar PDF</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div data-include="../../sidebar.html"></div>
 
     <main class="main-content">
-        <h1>Resource Controller: Delete & Destroy</h1>
-        <p>In een standaard Resource Controller van Laravel vind je wel een <code>destroy</code> methode (voor het daadwerkelijk verwijderen), maar geen <code>delete</code> methode (voor een bevestigingsscherm). Standaard zou een item direct verwijderd worden als je op de knop drukt. Dat is niet erg gebruiksvriendelijk; als je per ongeluk klikt, ben je je data kwijt.</p>
+        <h1>Delete & Destroy</h1>
+        <p>De laatste letter van CRUD staat voor <strong>Delete</strong>. In deze module gaan we functionaliteit bouwen om categorieën te verwijderen uit de database. Dit is een destructieve actie, dus we moeten goed opletten hoe we dit veilig implementeren.</p>
 
-        <p>Daarom gaan we zelf een tussenstap bouwen: de <strong>Delete</strong> pagina. Hier ziet de gebruiker wat hij gaat verwijderen en moet hij dit bevestigen.</p>
+        <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
+            <h2>Leeruitkomsten</h2>
+            <ul style="margin-bottom: 0;">
+                <li>Ik begrijp waarom we voor verwijderen een POST/DELETE request gebruiken en geen GET.</li>
+                <li>Ik kan een HTML-formulier maken om een item te verwijderen.</li>
+                <li>Ik kan Method Spoofing toepassen voor DELETE acties.</li>
+                <li>Ik kan een JavaScript bevestiging (confirm) toevoegen voor de zekerheid.</li>
+                <li>Ik kan de destroy methode in de controller implementeren.</li>
+            </ul>
+        </div>
 
-        <h2 id="link-index">1. Linken vanaf de Index</h2>
-        <p>We beginnen in de view <code>resources/views/admin/categories/index.blade.php</code>. We voegen een linkje toe naar onze nieuwe delete-pagina. We gebruiken hiervoor de named route <code>admin.categories.delete</code>. Let op: deze route bestaat nog niet standaard in Laravel!</p>
+        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Veiligheid van Delete</h2>
+        <p>Een veelgemaakte fout bij beginners is om een simpel linkje te maken voor het verwijderen: <code>&lt;a href="/delete/1"&gt;Verwijder&lt;/a&gt;</code>. <strong>Doe dit nooit!</strong></p>
+
+        <p>Waarom niet? Een link is altijd een <strong>GET</strong> request. Browsers (en Google bots) kunnen linkjes vooraf laden om pagina's sneller te maken. Als een Google-bot langs jouw admin-pagina komt en alle linkjes "volgt", heeft hij per ongeluk je hele database leeggegooid.</p>
+
+        <p>Daarom gebruiken we voor acties die iets veranderen (zoals verwijderen) altijd een <strong>formulier</strong> met een POST-methode (en Method Spoofing naar DELETE). Bovendien vereist een formulier een <strong>CSRF-token</strong>, wat voorkomt dat andere sites namens jou iets kunnen verwijderen.</p>
+
+        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De View (De Knop)</h2>
+        <p>We voegen de verwijderknop toe aan het overzicht in <code>resources/views/admin/categories/index.blade.php</code>. Omdat het een formulier is, ziet de code er iets anders uit dan een simpele knop.</p>
 
         <pre><code class="language-html">
+&lt;!-- In de loop van je tabel --&gt;
 &lt;td class="px-6 py-4 whitespace-nowrap text-sm font-medium"&gt;
-    &lt;a href="{{ route('admin.categories.edit', $category) }}" class="text-indigo-600 hover:text-indigo-900 mr-3"&gt;Wijzig&lt;/a&gt;
+    &lt;a href="{{ route('admin.categories.edit', $category) }}" class="text-indigo-600 hover:text-indigo-900 mr-3"&gt;
+        Wijzig
+    &lt;/a&gt;
 
-    &lt;a href="{{ route('admin.categories.delete', $category) }}" class="text-red-600 hover:text-red-900"&gt;Verwijder&lt;/a&gt;
+    &lt;!-- Verwijder Formulier --&gt;
+    &lt;form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="inline-block"&gt;
+        @csrf
+        @method('DELETE')
+
+        &lt;button type="submit"
+                class="text-red-600 hover:text-red-900"
+                onclick="return confirm('Weet je zeker dat je deze categorie wilt verwijderen?')"&gt;
+            Verwijder
+        &lt;/button&gt;
+    &lt;/form&gt;
 &lt;/td&gt;
         </code></pre>
 
-        <h2 id="routing">2. Extra Route Toevoegen</h2>
-        <p>Omdat <code>delete</code> geen onderdeel is van de standaard Resource Route, moeten we deze handmatig toevoegen in <code>routes/web.php</code>.</p>
+        <h3>Javascript Bevestiging</h3>
+        <p>Je ziet in de code hierboven het attribuut <code>onclick</code>. Dit is een klein stukje JavaScript dat een pop-up toont. Als de gebruiker op "Annuleren" klikt, geeft de functie <code>false</code> terug en wordt het formulier niet verstuurd. Klikt de gebruiker op "OK", dan gaat het formulier wel door.</p>
 
-        <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
-            <strong>Let op: Volgorde van Routes</strong><br>
-            Zet deze nieuwe route <strong>boven</strong> de <code>Route::resource</code> regel. Laravel leest routes van boven naar beneden. Als je de resource route eerst zet, kan het zijn dat Laravel denkt dat <code>/categories/1/delete</code> eigenlijk de show pagina is van een categorie met ID '1/delete'.
-        </div>
+        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> De Destroy Methode</h2>
+        <p>Het formulier stuurt de gebruiker naar de <code>destroy</code> methode in de <code>CategoryController</code>. Dankzij de Resource Route die we in module 1-4 hebben gemaakt, is deze route al gekoppeld.</p>
 
-        <pre><code class="language-php">
-// routes/web.php
-
-// Extra route voor de delete bevestigingspagina
-Route::get('/admin/categories/{category}/delete', [CategoryController::class, 'delete'])
-    ->name('admin.categories.delete');
-
-// De standaard resource route
-Route::resource('admin/categories', CategoryController::class);
-        </code></pre>
-
-        <h2 id="delete-method">3. De Delete Methode</h2>
-        <p>Nu voegen we de <code>delete</code> methode toe aan onze <code>CategoryController</code>. Ik zet deze meestal tussen <code>update</code> en <code>destroy</code> in voor de logica.</p>
-        <p>Dankzij Model Binding hebben we de categorie al beschikbaar.</p>
+        <p>We gebruiken ook hier weer <strong>Implicit Model Binding</strong>. Laravel zoekt automatisch de categorie die bij het ID in de URL hoort.</p>
 
         <pre><code class="language-php">
 /**
- * Show the form for deleting the specified resource.
+ * Remove the specified resource from storage.
  */
-public function delete(Category $category): View
-{
-    return view('admin.categories.delete', [
-        'category' => $category
-    ]);
-}
-        </code></pre>
-
-        <h2 id="delete-view">4. De Delete View</h2>
-        <p>We maken het bestand <code>resources/views/admin/categories/delete.blade.php</code> aan. Je kunt hiervoor de code van <code>edit.blade.php</code> kopiëren, want de layout is bijna hetzelfde. We passen echter een paar cruciale dingen aan:</p>
-
-        <h3 id="disabled-inputs">Disabled Inputs</h3>
-        <p>Omdat dit alleen een bevestiging is, willen we niet dat de gebruiker de gegevens nog kan aanpassen. Daarom voegen we het attribuut <code>disabled</code> toe aan alle invoervelden. Ook hebben we geen <code>old()</code> functie meer nodig, we tonen simpelweg de data uit de database.</p>
-
-        <h3 id="delete-form">Het Formulier</h3>
-        <ul>
-            <li><strong>Method:</strong> We moeten de <code>destroy</code> methode aanroepen. Volgens de resource controller regels moet dit met een <strong>DELETE</strong> request. Omdat HTML formulieren dit niet kunnen, gebruiken we <code>@method('DELETE')</code>.</li>
-            <li><strong>Action:</strong> De route is <code>admin.categories.destroy</code>.</li>
-            <li><strong>Knop:</strong> De tekst op de knop veranderen we naar "Verwijderen" en we maken hem rood voor de duidelijkheid.</li>
-        </ul>
-
-        <pre><code class="language-html">
-@section('content')
-    &lt;div class="card mt-6"&gt;
-        &lt;div class="card-body"&gt;
-            &lt;h3 class="text-lg font-medium text-gray-900 mb-4"&gt;Weet je zeker dat je deze categorie wilt verwijderen?&lt;/h3&gt;
-
-            &lt;form action="{{ route('admin.categories.destroy', $category) }}" method="POST"&gt;
-                @csrf
-                @method('DELETE') &lt;!-- Dit zorgt voor de juiste request naar destroy --&gt;
-
-                &lt;div class="mb-4"&gt;
-                    &lt;label class="block text-gray-700 text-sm font-bold mb-2" for="name"&gt;
-                        Naam
-                    &lt;/label&gt;
-                    &lt;input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight bg-gray-100"
-                           id="name"
-                           type="text"
-                           value="{{ $category-&gt;name }}"
-                           disabled&gt;
-                &lt;/div&gt;
-
-                &lt;div class="flex items-center justify-between"&gt;
-                    &lt;a href="{{ route('admin.categories.index') }}" class="text-gray-600 hover:text-gray-900"&gt;Annuleren&lt;/a&gt;
-
-                    &lt;button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" type="submit"&gt;
-                        Verwijderen
-                    &lt;/button&gt;
-                &lt;/div&gt;
-            &lt;/form&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-@endsection
-        </code></pre>
-
-        <h2 id="destroy-method">5. De Destroy Methode</h2>
-        <p>Als de gebruiker op de rode knop drukt, wordt de <code>destroy</code> methode in de controller aangeroepen. Hier voeren we de daadwerkelijke verwijdering uit.</p>
-
-        <pre><code class="language-php">
 public function destroy(Category $category): RedirectResponse
 {
     // 1. Verwijder de categorie uit de database
     $category->delete();
 
-    // 2. Redirect naar de index met een melding
+    // 2. Stuur de gebruiker terug met een melding
     return to_route('admin.categories.index')
         ->with('status', 'Categorie succesvol verwijderd!');
 }
         </code></pre>
 
-        <p>Nu is je volledige CRUD (Create, Read, Update, Delete) compleet! De gebruiker kan veilig items beheren zonder per ongeluk iets weg te gooien.</p>
+        <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
+            <strong>Let op: Constraints</strong><br>
+            Als je later producten gaat koppelen aan categorieën, kun je een categorie niet zomaar verwijderen als er nog producten in zitten (Foreign Key Constraints). De database zal dan een foutmelding geven. Je moet dan eerst controleren of de categorie leeg is, of de producten ook verwijderen (Cascade Delete). Voor nu, in deze fase, is een simpele delete voldoende.
+        </div>
+
+        <h2><span style="color: #ef3b2d; font-weight: 300; opacity: 0.5; margin-right: 0.5rem;">#</span> Soft Deletes</h2>
+        <p>Soms wil je data niet écht weggooien, maar alleen verbergen ("Prullenbak" principe). Laravel heeft hier een ingebouwde functie voor: <strong>Soft Deletes</strong>.</p>
+        <p>Hierbij wordt de rij niet uit de tabel verwijderd, maar wordt er een datum ingevuld in de kolom <code>deleted_at</code>. Laravel ziet dit en zal bij standaard queries deze rijen negeren, alsof ze weg zijn.</p>
+        <p>Om dit te gebruiken moet je:</p>
+        <ol>
+            <li>De <code>SoftDeletes</code> trait toevoegen aan je Model.</li>
+            <li>De kolom <code>deleted_at</code> toevoegen aan je migration (<code>$table->softDeletes();</code>).</li>
+        </ol>
+        <p>Voor deze module gebruiken we <strong>Hard Deletes</strong> (definitief verwijderen), maar het is goed om te weten dat dit bestaat.</p>
 
     </main>
 
