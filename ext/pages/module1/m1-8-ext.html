@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="light" data-color="red">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit & Update - Laravel 12 Module 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../../index.html" class="logo">
+        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
+        Laravel 12
+    </a>
+    <div class="header-controls">
+        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
+        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
+        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
+    </div>
+</header>
+
+<div class="layout-wrapper">
+    <nav class="sidebar-left">
+
+        <div class="nav-group">
+            <h3>Cursus Modules</h3>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 1: Basis CRUD
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu" style="display:block;">
+                    <li><a href="m1-1-ext.html">Model & Migration</a></li>
+                    <li><a href="m1-2-ext.html">Factory & Seeding</a></li>
+                    <li><a href="m1-3-ext.html">Layouts & Tailwind</a></li>
+                    <li><a href="m1-4-ext.html">Controller Index</a></li>
+                    <li><a href="m1-5-ext.html">Create & Store</a></li>
+                    <li><a href="m1-6-ext.html">Validatie & Flash</a></li>
+                    <li><a href="m1-7-ext.html">Detailpagina (Show)</a></li>
+                    <li><a href="m1-8-ext.html" class="current">Edit & Update</a></li>
+                    <li><a href="m1-9-ext.html">Delete & Destroy</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 2: Users & Security
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module2/m2-1.html">Publieke Layout</a></li>
+                    <li><a href="../module2/m2-2.html">Simpele Publieke Pagina</a></li>
+                    <li><a href="../module2/m2-3.html">Roles & Permissions</a></li>
+                    <li><a href="../module2/m2-4.html">Aanmaken van Users</a></li>
+                    <li><a href="../module2/m2-5.html">Middleware bij Routes</a></li>
+                    <li><a href="../module2/m2-6.html">Rolgebaseerde Toegang</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 3: Advanced Admin
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module3/m3-1.html">Models & Migrations</a></li>
+                    <li><a href="../module3/m3-2.html">Factories met Relaties</a></li>
+                    <li><a href="../module3/m3-3.html">Seeders met Relaties</a></li>
+                    <li><a href="../module3/m3-4.html">Index & Eager Loading</a></li>
+                    <li><a href="../module3/m3-5.html">Permissions</a></li>
+                    <li><a href="../module3/m3-6.html">Create & Dropdowns</a></li>
+                    <li><a href="../module3/m3-7.html">Store & Validatie</a></li>
+                    <li><a href="../module3/m3-8.html">Show & Relaties</a></li>
+                    <li><a href="../module3/m3-9.html">Edit & Pre-select</a></li>
+                    <li><a href="../module3/m3-10.html">Update & Logica</a></li>
+                    <li><a href="../module3/m3-11.html">Delete View</a></li>
+                    <li><a href="../module3/m3-12.html">Destroy & Constraints</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 4: Webshop Features
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module4/m4-1.html">Publieke Productpagina</a></li>
+                    <li><a href="../module4/m4-2.html">De Product Show</a></li>
+                    <li><a href="../module4/m4-3.html">Reviews Setup (DB)</a></li>
+                    <li><a href="../module4/m4-4.html">Reviews Tonen</a></li>
+                    <li><a href="../module4/m4-5.html">Reviews Plaatsen</a></li>
+                    <li><a href="../module4/m4-6.html">Winkelwagen Setup</a></li>
+                    <li><a href="../module4/m4-7.html">Winkelwagen Tonen</a></li>
+                    <li><a href="../module4/m4-8.html">Winkelwagen Wijzigen</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 5: Orders & Validatie
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module5/m5-1.html">Orders Structuur</a></li>
+                    <li><a href="../module5/m5-2.html">Order Seeds</a></li>
+                    <li><a href="../module5/m5-3.html">Orders Opslaan</a></li>
+                    <li><a href="../module5/m5-4.html">Orders Tonen</a></li>
+                    <li><a href="../module5/m5-5.html">Order naar PDF</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1>Resource Controller: Edit & Update</h1>
+        <p>In deze module gaan we aan de slag met het wijzigen van bestaande gegevens. Dit bestaat uit twee onderdelen: <strong>Edit</strong> (het tonen van een ingevuld formulier) en <strong>Update</strong> (het verwerken van de wijzigingen).</p>
+
+        <h2 id="edit">1. De Edit Methode</h2>
+        <p>Het doel van de <code>edit</code> methode is simpel: toon een formulier dat al is ingevuld met de gegevens uit de database. Omdat we in een Resource Controller werken, maken we weer gebruik van <strong>Implicit Model Binding</strong>.</p>
+
+        <p>De ID van de categorie staat in de URL (bijv. <code>/admin/categories/1/edit</code>). Laravel haalt de bijbehorende categorie op en stopt deze in de <code>$category</code> variabele.</p>
+
+        <pre><code class="language-php">
+public function edit(Category $category): View
+{
+    // De $category is al opgehaald uit de database door Laravel.
+    // We sturen deze mee naar de view zodat we het formulier kunnen invullen.
+    return view('admin.categories.edit', [
+        'category' => $category
+    ]);
+}
+        </code></pre>
+
+        <h2 id="edit-view">2. De Edit View</h2>
+        <p>We maken het bestand <code>resources/views/admin/categories/edit.blade.php</code> aan. Je kunt hiervoor de code van <code>create.blade.php</code> kopiëren, want het formulier lijkt er erg op. We moeten echter een paar belangrijke aanpassingen doen.</p>
+
+        <h3 id="form-action">Form Action</h3>
+        <p>De data moet niet naar <code>store</code> gestuurd worden, maar naar <code>update</code>. De route hiervoor is <code>admin.categories.update</code>. Omdat we een specifiek item bijwerken, moeten we ook het categorie-object meegeven aan de route.</p>
+
+        <h3 id="method-spoofing">Method Spoofing (PUT)</h3>
+        <p>In de Resource Controller route-lijst zie je dat de <code>update</code> methode verwacht dat we een <strong>PUT</strong> of <strong>PATCH</strong> request doen. Echter, HTML-formulieren ondersteunen alleen <code>GET</code> en <code>POST</code>.</p>
+
+        <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
+            <strong>Hoe lossen we dit op?</strong><br>
+            Laravel gebruikt <em>Method Spoofing</em>. We laten het formulier gewoon als <code>POST</code> staan, maar we voegen een verborgen veld toe genaamd <code>_method</code> met de waarde <code>PUT</code>. In Blade doen we dit eenvoudig met de <code>@method('PUT')</code> directive. Laravel snapt dan dat dit request als een PUT behandeld moet worden.
+        </div>
+
+        <h3 id="old-values">Oude Waarden</h3>
+        <p>In het <code>value</code> attribuut van de input velden willen we de huidige waarde uit de database tonen. Maar, als de validatie faalt na een wijziging, willen we de <em>gewijzigde</em> (foute) invoer tonen, niet de oude uit de database.</p>
+        <p>Hiervoor gebruiken we: <code>old('naam_veld', $category->naam_veld)</code>. De functie kijkt eerst of er een 'old' input is (na een validatiefout). Zo niet, dan gebruikt hij de waarde uit de database.</p>
+
+        <pre><code class="language-html">
+@section('content')
+    &lt;div class="card mt-6"&gt;
+        &lt;div class="card-body"&gt;
+            &lt;form action="{{ route('admin.categories.update', $category) }}" method="POST"&gt;
+                @csrf
+                @method('PUT') &lt;!-- Dit zorgt voor de juiste request methode --&gt;
+
+                &lt;div class="mb-4"&gt;
+                    &lt;label class="block text-gray-700 text-sm font-bold mb-2" for="name"&gt;
+                        Naam
+                    &lt;/label&gt;
+                    &lt;input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                           id="name"
+                           name="name"
+                           type="text"
+                           value="{{ old('name', $category-&gt;name) }}"&gt;
+                &lt;/div&gt;
+
+                &lt;button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit"&gt;
+                    Wijzigen
+                &lt;/button&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+@endsection
+        </code></pre>
+
+        <h2 id="update-method">3. De Update Methode</h2>
+        <p>Nu gaan we de <code>update</code> methode in de controller schrijven. Deze lijkt erg op de <code>store</code> methode, maar er is een cruciaal verschil: we maken geen nieuwe rij aan, maar passen een bestaande aan.</p>
+
+        <p>De methode krijgt twee parameters binnen:</p>
+        <ol>
+            <li><code>Request $request</code>: Bevat de data uit het formulier.</li>
+            <li><code>Category $category</code>: Het object dat we willen wijzigen (via Model Binding).</li>
+        </ol>
+
+        <pre><code class="language-php">
+public function update(Request $request, Category $category): RedirectResponse
+{
+    // 1. We hebben de $category al, dus we hoeven geen 'new Category()' te doen.
+    // 2. We passen de eigenschappen aan met de data uit het request.
+    $category->name = $request->name;
+
+    // 3. We slaan de wijzigingen op.
+    $category->save();
+
+    // 4. Redirect naar index met succesbericht.
+    return to_route('admin.categories.index')
+        ->with('status', 'Categorie succesvol gewijzigd!');
+}
+        </code></pre>
+
+        <h2 id="validation">4. Validatie bij Update (Uniek)</h2>
+        <p>We moeten de data natuurlijk ook valideren. We kunnen hiervoor de <code>CategoryStoreRequest</code> gebruiken, maar daar lopen we tegen een probleem aan.</p>
+
+        <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
+            <strong>Het probleem met 'unique':</strong><br>
+            In de store request staat de regel: <code>'name' => 'required|unique:categories'</code>.
+            Stel je past de categorie "Horror" aan, maar je verandert de naam niet. Je klikt op opslaan. Laravel checkt of de naam "Horror" al bestaat. Ja, die bestaat al (namelijk bij dit record zelf!). De validatie faalt en zegt "Naam is al in gebruik".
+        </div>
+
+        <p>Om dit op te lossen maken we een nieuwe Request aan: <code>CategoryUpdateRequest</code>.</p>
+        <pre><code class="language-bash">php artisan make:request CategoryUpdateRequest</code></pre>
+
+        <p>In deze request moeten we zeggen: "De naam moet uniek zijn, <em>behalve</em> voor het record dat we nu aan het bewerken zijn".</p>
+
+        <pre><code class="language-php">
+// app/Http/Requests/CategoryUpdateRequest.php
+
+public function rules(): array
+{
+    // We halen het huidige categorie ID op uit de route
+    $categoryId = $this->route('category')->id;
+
+    return [
+        // We voegen de uitzondering toe aan de unique regel:
+        // unique:tabel,kolom,uitzondering_id
+        'name' => 'required|string|min:5|max:75|unique:categories,name,' . $categoryId,
+    ];
+}
+        </code></pre>
+
+        <p>Vergeet niet om in je Controller de nieuwe <code>CategoryUpdateRequest</code> te gebruiken in plaats van de gewone <code>Request</code>!</p>
+
+        <pre><code class="language-php">
+// Bovenin importeren
+use App\Http\Requests\CategoryUpdateRequest;
+
+// In de methode definitie
+public function update(CategoryUpdateRequest $request, Category $category)
+{
+    // ...
+}
+        </code></pre>
+
+        <h2 id="link-index">5. Linken vanaf Index</h2>
+        <p>Als laatste moeten we zorgen dat we ook daadwerkelijk bij het edit-scherm kunnen komen. Pas de <code>index.blade.php</code> aan en voeg de link toe.</p>
+
+        <pre><code class="language-html">
+&lt;a href="{{ route('admin.categories.edit', $category) }}" class="text-indigo-600 hover:text-indigo-900"&gt;Wijzig&lt;/a&gt;
+        </code></pre>
+
+        <p>Nu heb je de volledige cyclus voor het bewerken van gegevens: link in overzicht -> formulier met oude data -> validatie met uitzondering -> opslaan in database -> redirect.</p>
+
+    </main>
+
+    <aside class="sidebar-right">
+        <div class="toc-container">
+            <h4>Inhoud</h4>
+            <ul id="toc-list" class="toc-list">
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="../../script.js"></script>
+</body>
+</html>

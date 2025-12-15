@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="light" data-color="red">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailpagina (Show) - Laravel 12 Module 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../../index.html" class="logo">
+        <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor"><path d="M50 0L10 20L10 80L50 100L90 80L90 20L50 0Z"/></svg>
+        Laravel 12
+    </a>
+    <div class="header-controls">
+        <button class="btn-control" id="color-toggle">🎨 Kleur</button>
+        <button class="btn-control" id="theme-toggle">🌓 Thema</button>
+        <button class="mobile-menu-btn" id="menu-toggle">☰</button>
+    </div>
+</header>
+
+<div class="layout-wrapper">
+    <nav class="sidebar-left">
+
+        <div class="nav-group">
+            <h3>Cursus Modules</h3>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 1: Basis CRUD
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu" style="display:block;">
+                    <li><a href="m1-1-ext.html">Model & Migration</a></li>
+                    <li><a href="m1-2-ext.html">Factory & Seeding</a></li>
+                    <li><a href="m1-3-ext.html">Layouts & Tailwind</a></li>
+                    <li><a href="m1-4-ext.html">Controller Index</a></li>
+                    <li><a href="m1-5-ext.html">Create & Store</a></li>
+                    <li><a href="m1-6-ext.html">Validatie & Flash</a></li>
+                    <li><a href="m1-7-ext.html" class="current">Detailpagina (Show)</a></li>
+                    <li><a href="m1-8-ext.html">Edit & Update</a></li>
+                    <li><a href="m1-9-ext.html">Delete & Destroy</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 2: Users & Security
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module2/m2-1.html">Publieke Layout</a></li>
+                    <li><a href="../module2/m2-2.html">Simpele Publieke Pagina</a></li>
+                    <li><a href="../module2/m2-3.html">Roles & Permissions</a></li>
+                    <li><a href="../module2/m2-4.html">Aanmaken van Users</a></li>
+                    <li><a href="../module2/m2-5.html">Middleware bij Routes</a></li>
+                    <li><a href="../module2/m2-6.html">Rolgebaseerde Toegang</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 3: Advanced Admin
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module3/m3-1.html">Models & Migrations</a></li>
+                    <li><a href="../module3/m3-2.html">Factories met Relaties</a></li>
+                    <li><a href="../module3/m3-3.html">Seeders met Relaties</a></li>
+                    <li><a href="../module3/m3-4.html">Index & Eager Loading</a></li>
+                    <li><a href="../module3/m3-5.html">Permissions</a></li>
+                    <li><a href="../module3/m3-6.html">Create & Dropdowns</a></li>
+                    <li><a href="../module3/m3-7.html">Store & Validatie</a></li>
+                    <li><a href="../module3/m3-8.html">Show & Relaties</a></li>
+                    <li><a href="../module3/m3-9.html">Edit & Pre-select</a></li>
+                    <li><a href="../module3/m3-10.html">Update & Logica</a></li>
+                    <li><a href="../module3/m3-11.html">Delete View</a></li>
+                    <li><a href="../module3/m3-12.html">Destroy & Constraints</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 4: Webshop Features
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module4/m4-1.html">Publieke Productpagina</a></li>
+                    <li><a href="../module4/m4-2.html">De Product Show</a></li>
+                    <li><a href="../module4/m4-3.html">Reviews Setup (DB)</a></li>
+                    <li><a href="../module4/m4-4.html">Reviews Tonen</a></li>
+                    <li><a href="../module4/m4-5.html">Reviews Plaatsen</a></li>
+                    <li><a href="../module4/m4-6.html">Winkelwagen Setup</a></li>
+                    <li><a href="../module4/m4-7.html">Winkelwagen Tonen</a></li>
+                    <li><a href="../module4/m4-8.html">Winkelwagen Wijzigen</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-item-container">
+                <button class="nav-toggle">
+                    Module 5: Orders & Validatie
+                    <svg class="chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+                <ul class="submenu">
+                    <li><a href="../module5/m5-1.html">Orders Structuur</a></li>
+                    <li><a href="../module5/m5-2.html">Order Seeds</a></li>
+                    <li><a href="../module5/m5-3.html">Orders Opslaan</a></li>
+                    <li><a href="../module5/m5-4.html">Orders Tonen</a></li>
+                    <li><a href="../module5/m5-5.html">Order naar PDF</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1>Resource Controller: Show</h1>
+        <p>We hebben nu een overzicht (Index) en we kunnen nieuwe items aanmaken (Create & Store). De volgende stap is het bekijken van de details van één specifiek item. Hiervoor gebruiken we de <code>show</code> methode in onze Resource Controller.</p>
+
+        <p>De <code>show</code> methode lijkt qua structuur een beetje op de <code>index</code>. Het grote verschil is dat we bij de index <em>alle</em> rijen ophalen, en bij de show slechts <strong>één specifieke rij</strong> willen zien.</p>
+
+        <h2 id="model-binding">Implicit Model Binding</h2>
+        <p>Hier komen we in aanraking met een van de krachtigste features van Laravel: <strong>Implicit Model Binding</strong>. Dit is een techniek waarbij Laravel automatisch de juiste data uit de database haalt op basis van de URL.</p>
+
+        <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
+            <strong>Hoe werkt het?</strong><br>
+            Als je een URL hebt zoals <code>/admin/categories/1</code>, dan is <code>1</code> het ID van de categorie.
+            In je route staat dit gedefinieerd als <code>/admin/categories/{category}</code>.
+            <br><br>
+            Als je in je controller-functie de parameter <code>Category $category</code> noemt (dezelfde naam als in de route, maar dan als variabele), snapt Laravel dat hij automatisch naar de database moet gaan. Hij zoekt dan naar een Categorie met dat ID. Als hij het vindt, stopt hij het hele object in de variabele <code>$category</code>. Als hij het niet vindt, geeft hij automatisch een 404 error. Je hoeft dus niet meer zelf <code>Category::find($id)</code> te typen!
+        </div>
+
+        <h2 id="show-method">De Show Methode</h2>
+        <p>Laten we kijken naar de code in de <code>CategoryController</code>. Omdat we gebruik maken van Model Binding, krijgen we het categorie-object 'gratis' binnen als parameter.</p>
+
+        <pre><code class="language-php">
+/**
+ * Display the specified resource.
+ */
+public function show(Category $category): View
+{
+    // Door Model Binding zit de juiste categorie al in $category.
+    // We hoeven hem alleen nog maar door te sturen naar de view.
+
+    return view('admin.categories.show', [
+        'category' => $category
+    ]);
+}
+        </code></pre>
+
+        <p>Je ziet dat de methode heel kort en schoon is. We hoeven geen queries te schrijven omdat Laravel het werk al voor ons heeft gedaan.</p>
+
+        <h2 id="show-view">De View Maken</h2>
+        <p>We maken een nieuw bestand aan: <code>resources/views/admin/categories/show.blade.php</code>.
+            We gebruiken weer onze masterpage en tonen de gegevens van de categorie. We zorgen ook voor een 'Topmenu' zodat je makkelijk terug kunt navigeren.</p>
+
+        <pre><code class="language-html">
+@extends('layouts.layoutadmin')
+
+@section('topmenu')
+    &lt;nav class="flex mb-4" aria-label="Breadcrumb"&gt;
+        &lt;ol class="inline-flex items-center space-x-1 md:space-x-3"&gt;
+            &lt;li class="inline-flex items-center"&gt;
+                &lt;a href="{{ route('admin.categories.index') }}" class="text-gray-700 hover:text-blue-600"&gt;
+                    &lt; Terug naar overzicht
+                &lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/ol&gt;
+    &lt;/nav&gt;
+    &lt;h2 class="text-3xl font-extrabold"&gt;Details van {{ $category-&gt;name }}&lt;/h2&gt;
+@endsection
+
+@section('content')
+    &lt;div class="bg-white shadow overflow-hidden sm:rounded-lg mt-6"&gt;
+        &lt;div class="px-4 py-5 sm:px-6"&gt;
+            &lt;h3 class="text-lg leading-6 font-medium text-gray-900"&gt;
+                Categorie Informatie
+            &lt;/h3&gt;
+        &lt;/div&gt;
+        &lt;div class="border-t border-gray-200"&gt;
+            &lt;dl&gt;
+                &lt;div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"&gt;
+                    &lt;dt class="text-sm font-medium text-gray-500"&gt;ID&lt;/dt&gt;
+                    &lt;dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"&gt;{{ $category-&gt;id }}&lt;/dd&gt;
+                &lt;/div&gt;
+                &lt;div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"&gt;
+                    &lt;dt class="text-sm font-medium text-gray-500"&gt;Naam&lt;/dt&gt;
+                    &lt;dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"&gt;{{ $category-&gt;name }}&lt;/dd&gt;
+                &lt;/div&gt;
+                &lt;div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"&gt;
+                    &lt;dt class="text-sm font-medium text-gray-500"&gt;Aangemaakt op&lt;/dt&gt;
+                    &lt;dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"&gt;{{ $category-&gt;created_at }}&lt;/dd&gt;
+                &lt;/div&gt;
+                &lt;div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"&gt;
+                    &lt;dt class="text-sm font-medium text-gray-500"&gt;Laatst gewijzigd&lt;/dt&gt;
+                    &lt;dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"&gt;{{ $category-&gt;updated_at }}&lt;/dd&gt;
+                &lt;/div&gt;
+            &lt;/dl&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+@endsection
+        </code></pre>
+
+        <h2 id="linken">Linken vanaf de Index</h2>
+        <p>De pagina bestaat nu, maar je moet de URL handmatig intypen om er te komen (bijvoorbeeld <code>/admin/categories/1</code>). Het is natuurlijk netter om vanuit de index-tabel direct naar de detailpagina te linken.</p>
+
+        <p>We passen <code>resources/views/admin/categories/index.blade.php</code> aan. We gebruiken hiervoor de named route <code>admin.categories.show</code>. Let op: deze route verwacht een parameter (de categorie die je wilt zien).</p>
+
+        <div class="info-box" style="background: var(--bg-content); border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.5rem;">
+            <strong>Parameter doorgeven:</strong><br>
+            De route is gedefinieerd als <code>categories/{category}</code>. Als we de route-functie gebruiken, moeten we aangeven <em>welke</em> categorie we bedoelen. We kunnen simpelweg het hele object meegeven: <code>route('admin.categories.show', $category)</code>. Laravel is slim genoeg om automatisch het ID uit dat object te halen en in de URL te plakken.
+        </div>
+
+        <pre><code class="language-html">
+&lt;td class="px-6 py-4 whitespace-nowrap text-sm font-medium"&gt;
+    &lt;a href="{{ route('admin.categories.show', $category) }}" class="text-indigo-600 hover:text-indigo-900 mr-3"&gt;Details&lt;/a&gt;
+    &lt;a href="#" class="text-indigo-600 hover:text-indigo-900"&gt;Wijzig&lt;/a&gt;
+&lt;/td&gt;
+        </code></pre>
+
+        <p>Als je nu naar het overzicht gaat, zie je bij elke rij een link "Details". Als je daarop klikt, kom je op de detailpagina van die specifieke categorie.</p>
+
+    </main>
+
+    <aside class="sidebar-right">
+        <div class="toc-container">
+            <h4>Inhoud</h4>
+            <ul id="toc-list" class="toc-list">
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="../../script.js"></script>
+</body>
+</html>
