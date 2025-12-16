@@ -72,7 +72,30 @@ document.addEventListener('DOMContentLoaded', () => {
         initColorLogic();
         initSidebarLogic();
         initTOC();
-        initViewToggle(); // <--- NIEUWE FUNCTIE TOEGEVOEGD
+        initViewToggle();
+        initLogoLink(); // <--- DEZE HEB IK TOEGEVOEGD
+    }
+
+    // --- NIEUW: LOGO LINK FIX ---
+    function initLogoLink() {
+        const logoLink = document.getElementById('logo-link') || document.querySelector('a.logo');
+        if (!logoLink) return;
+
+        const path = window.location.pathname;
+
+        // Controleer of we in een 'pages' submap zitten.
+        // Dit werkt voor zowel de normale structuur ('/pages/module1/...')
+        // als de extended structuur ('/ext/pages/module1/...').
+        if (path.includes('/pages/')) {
+            // We zitten 2 niveaus diep (moduleX -> pages), dus we moeten 2 niveaus omhoog.
+            // - Vanuit 'ext/pages/module1/' ga je naar 'ext/index.html' (Extended Home)
+            // - Vanuit 'pages/module1/' ga je naar 'index.html' (Cheatsheet Home)
+            logoLink.href = "../../index.html";
+        } else {
+            // We zitten waarschijnlijk al op de root (index.html) of de extended root (ext/index.html).
+            // De link verwijst gewoon naar 'index.html' in de huidige map.
+            logoLink.href = "index.html";
+        }
     }
 
     // --- NIEUW: VIEW TOGGLE (Extended vs Cheatsheet) ---
@@ -81,44 +104,75 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!toggleBtn) return;
 
         const path = window.location.pathname;
-        const filename = path.split("/").pop(); // bijv: 'm1-1-ext.html' of 'm1-1.html'
+        const filename = path.split("/").pop();
+        let targetUrl = ""; // Hier slaan we het doel op
 
-        // Regex om Module ID en Pagina ID te vinden: m(Getal)-(Getal)(-ext?).html
-        const regex = /m(\d+)-(\d+)(-ext)?\.html/;
-        const match = filename.match(regex);
+        // 1. Check of we op de Homepagina zitten (index.html)
+        if (filename === 'index.html' || filename === '') {
+            toggleBtn.style.display = ''; // Zichtbaar maken
 
-        if (match) {
-            const moduleId = parseInt(match[1]); // bijv. 1
-            const pageId = match[2];             // bijv. 1
-            const isExtended = !!match[3];       // true als '-ext' in de naam zit
-
-            if (isExtended) {
-                // SITUATIE: We zitten op EXTENDED
-                // Knop moet leiden naar CHEATSHEET
+            if (path.includes('/ext/')) {
+                // EXTENDED Home -> ga naar ROOT Home
                 toggleBtn.innerHTML = '🔄 Cheatsheet';
                 toggleBtn.title = "Ga naar Cheatsheet view";
-
-                // Doel: ../../../pages/moduleX/mX-Y.html
-                // We gaan ervan uit dat Cheatsheet altijd bestaat
-                toggleBtn.href = `../../../pages/module${moduleId}/m${moduleId}-${pageId}.html`;
-
+                targetUrl = "../index.html";
             } else {
-                // SITUATIE: We zitten op CHEATSHEET
-                // Knop moet leiden naar EXTENDED
+                // ROOT Home -> ga naar EXTENDED Home
                 toggleBtn.innerHTML = '🔄 Extended';
                 toggleBtn.title = "Ga naar Extended view";
-
-                // Regel: Als module <= 5 is, ga naar dezelfde pagina.
-                // Anders (module 6+), ga naar start van Extended (m1-1-ext.html).
-                if (moduleId <= 5) {
-                    toggleBtn.href = `../../../ext/pages/module${moduleId}/m${moduleId}-${pageId}-ext.html`;
-                } else {
-                    toggleBtn.href = `../../../ext/pages/module1/m1-1-ext.html`;
-                }
+                targetUrl = "ext/index.html";
             }
-        } else {
-            // Geen match (bijv. index.html)? Verberg de knop.
-            toggleBtn.style.display = 'none';
+        }
+        // 2. Check voor Module pagina's (bijv. m1-1.html)
+        else {
+            const regex = /m(\d+)-(\d+)(-ext)?\.html/;
+            const match = filename.match(regex);
+
+            if (match) {
+                toggleBtn.style.display = ''; // Zichtbaar maken
+
+                const moduleId = parseInt(match[1]);
+                const pageId = match[2];
+                const isExtended = !!match[3];
+
+                if (isExtended) {
+                    // SITUATIE: Extended pagina (3 mappen diep in 'ext') -> Link naar Cheatsheet
+                    toggleBtn.innerHTML = '🔄 Cheatsheet';
+                    toggleBtn.title = "Ga naar Cheatsheet view";
+                    // Pad: ../../../ (terug naar root) -> pages/moduleX/...
+                    targetUrl = `../../../pages/module${moduleId}/m${moduleId}-${pageId}.html`;
+
+                } else {
+                    // SITUATIE: Cheatsheet pagina (2 mappen diep) -> Link naar Extended
+                    toggleBtn.innerHTML = '🔄 Extended';
+                    toggleBtn.title = "Ga naar Extended view";
+
+                    // Pad: ../../ (terug naar root) -> ext/pages/moduleX/...
+                    // Let op: controleer of je module > 5 inmiddels ook extended paginas heeft!
+                    if (moduleId <= 5) {
+                        targetUrl = `../../ext/pages/module${moduleId}/m${moduleId}-${pageId}-ext.html`;
+                    } else {
+                        // Fallback als de extended versie nog niet bestaat
+                        targetUrl = `../../ext/pages/module1/m1-1-ext.html`;
+                    }
+                }
+            } else {
+                toggleBtn.style.display = 'none';
+                return;
+            }
+        }
+
+        // 3. Pas de link toe (Robuust voor zowel <a> als <button>)
+        if (targetUrl) {
+            if (toggleBtn.tagName === 'A') {
+                // Als het een <a> tag is
+                toggleBtn.href = targetUrl;
+            } else {
+                // Als het een <button> is
+                toggleBtn.onclick = function() {
+                    window.location.href = targetUrl;
+                };
+            }
         }
     }
 
