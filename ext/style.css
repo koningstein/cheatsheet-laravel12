@@ -502,3 +502,61 @@ p > code, li > code, td > code {
     .header-controls { gap: 0.25rem; }
     .btn-control span { display: none; } /* Verberg tekst op mobiel, toon alleen icoon als je die had */
 }
+
+/* =========================================
+   4. EXTRA COMPONENTEN (Downloads & Info)
+   ========================================= */
+
+/* Container voor de knoppen (zodat ze netjes naast elkaar staan) */
+.download-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+/* De Download Knop zelf */
+.download-grid .download-btn {
+    background-color: var(--primary-color);
+    color: #ffffff !important;        /* Forceer witte tekst */
+    text-decoration: none !important; /* Forceer geen onderstreping */
+
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    line-height: 1.5;
+}
+
+/* Hover effect */
+.download-grid .download-btn:hover {
+    filter: brightness(110%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    color: #ffffff !important; /* Blijft wit bij hover */
+}
+
+/* Info Box styling (Vervangt de inline styles in je HTML) */
+.info-box {
+    background-color: var(--bg-sidebar); /* Gebruikt de iets afwijkende achtergrondkleur */
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Zorgt dat de titel in de box netjes staat */
+.info-box h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    border-bottom: none;
+    font-size: 1.25rem;
+}
+.info-box h2::before {
+    content: none; /* Geen hekje in de infobox */
+}
