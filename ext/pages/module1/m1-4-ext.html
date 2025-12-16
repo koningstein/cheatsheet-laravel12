@@ -59,9 +59,9 @@ Route::resource('admin/categories', CategoryController::class);
         <h3>Controller Aanmaken</h3>
         <p>We maken een controller aan. Omdat we een admin-paneel maken, zetten we deze netjes in een submap <code>Admin</code>.</p>
 
-        <pre><code class="language-bash">php artisan make:controller Admin/CategoryController --resource</code></pre>
+        <pre><code class="language-bash">php artisan make:controller --model=Category Admin/CategoryController </code></pre>
 
-        <p>De optie <code>--resource</code> zorgt ervoor dat Laravel het bestand alvast vult met de 7 standaard methodes (index, create, store, show, edit, update, destroy).</p>
+        <p>De optie <code>--model=Category</code> zorgt ervoor dat Laravel het bestand alvast vult met de 7 standaard methodes (index, create, store, show, edit, update, destroy), meteen gekoppeld aan de model Category.</p>
 
         <h3>De Index Methode</h3>
         <p>Open <code>app/Http/Controllers/Admin/CategoryController.php</code>. We gaan aan de slag met de <code>index()</code> methode.</p>
@@ -126,7 +126,10 @@ class CategoryController extends Controller
                 &lt;th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;ID&lt;/th&gt;
                 &lt;th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Naam&lt;/th&gt;
                 &lt;th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Aangemaakt op&lt;/th&gt;
-                &lt;th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Acties&lt;/th&gt;
+                &lt;th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Details&lt;/th&gt;
+                &lt;th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Edit&lt;/th&gt;
+                &lt;th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"&gt;Delete&lt;/th&gt;
+
             &lt;/tr&gt;
         &lt;/thead&gt;
         &lt;tbody class="bg-white divide-y divide-gray-200"&gt;
@@ -141,9 +144,9 @@ class CategoryController extends Controller
                     &lt;td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"&gt;
                         {{ $category-&gt;created_at-&gt;format('d-m-Y') }}
                     &lt;/td&gt;
-                    &lt;td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"&gt;
-                        &lt;a href="#" class="text-indigo-600 hover:text-indigo-900"&gt;Bewerk&lt;/a&gt;
-                    &lt;/td&gt;
+                    &lt;td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"&gt;Details&lt;/td&gt;
+                    &lt;td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"&gt;Edit&lt;/td&gt;
+                    &lt;td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"&gt;Delete&lt;/td&gt;
                 &lt;/tr&gt;
             @endforeach
         &lt;/tbody&gt;
